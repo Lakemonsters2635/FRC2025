@@ -9,25 +9,33 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
-  private final SparkMax m_driveMotor;
-  public final SparkMax m_turningMotor;
+  private final TalonFX m_driveMotor;
+  public final TalonFX m_turningMotor;
 
-  private final SparkMaxConfig m_driveMotorConfig;
-  private final SparkMaxConfig m_turningMotorConfig;
+  // private final SparkMaxConfig m_driveMotorConfig;
+  // private final SparkMaxConfig m_turningMotorConfig;
 
-  public final RelativeEncoder m_driveEncoder;
-  public final AnalogInput m_turningEncoder;
+  public final StatusSignal<Angle> m_driveEncoder;
+  public final AnalogInput m_turningEncoderInput;
+  public final AnalogEncoder m_turningEncoder;
 
   private double turningMotorOffset;
 
@@ -54,35 +62,37 @@ public class SwerveModule {
       double driveMotorGain // tuning motor module
       ) {
 
-    m_driveMotor = new SparkMax(driveMotorChannel, MotorType.kBrushless);
-    m_turningMotor = new SparkMax(turningMotorChannel, MotorType.kBrushless);
+    m_driveMotor = new TalonFX(driveMotorChannel);
+    m_turningMotor = new TalonFX(turningMotorChannel);
 
-    m_driveMotorConfig = new SparkMaxConfig();
-    m_driveMotorConfig.idleMode(IdleMode.kBrake);
-    m_driveMotorConfig.encoder.positionConversionFactor(Constants.kDriveEncoderDistancePerPulse);
+    m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
+    m_turningMotor.setNeutralMode(NeutralModeValue.Brake);
 
-    m_turningMotorConfig = new SparkMaxConfig();
-    m_turningMotorConfig.idleMode(IdleMode.kBrake);
-    m_turningMotorConfig.encoder.velocityConversionFactor(Constants.kDriveEncoderDistancePerPulse/60.0);
 
-    m_driveMotor.configure(
-      m_driveMotorConfig, 
-      SparkBase.ResetMode.kResetSafeParameters, 
-      SparkBase.PersistMode.kPersistParameters
-    );
-    m_turningMotor.configure(
-      m_driveMotorConfig, 
-      SparkBase.ResetMode.kResetSafeParameters, 
-      SparkBase.PersistMode.kPersistParameters
-    );
+
+    // m_driveMotorConfig = new SparkMaxConfig();
+    // m_driveMotorConfig.idleMode(IdleMode.kBrake);
+    // m_driveMotorConfig.encoder.positionConversionFactor(Constants.kDriveEncoderDistancePerPulse);
+
+    // m_turningMotorConfig = new SparkMaxConfig();
+    // m_turningMotorConfig.idleMode(IdleMode.kBrake);
+    // m_turningMotorConfig.encoder.velocityConversionFactor(Constants.kDriveEncoderDistancePerPulse/60.0);
+
+    // m_driveMotor.configure(
+    //   m_driveMotorConfig, 
+    //   SparkBase.ResetMode.kResetSafeParameters, 
+    //   SparkBase.PersistMode.kPersistParameters
+    // );
+    // m_turningMotor.configure(
+    //   m_driveMotorConfig, 
+    //   SparkBase.ResetMode.kResetSafeParameters, 
+    //   SparkBase.PersistMode.kPersistParameters
+    // );
+
 
     this.turningMotorOffset = turningMotorOffset;
 
     m_driveMotorGain = driveMotorGain;
-
-    // Old code (deprecated)
-    // m_driveMotor.setIdleMode(IdleMode.kBrake);
-    // m_turningMotor.configure (IdleMode.kBrake);
 
     /**
      * Parameters can be set by calling the appropriate Set method on the CANSparkMax object
@@ -102,8 +112,12 @@ public class SwerveModule {
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_turningEncoder = new AnalogInput(analogEncoderPort);
-    m_driveEncoder = m_driveMotor.getEncoder();
+    m_turningEncoderInput = new AnalogInput(analogEncoderPort);
+    m_turningEncoder = new AnalogEncoder(m_turningEncoderInput);
+    m_driveEncoder = m_driveMotor.getPosition();
+    
+    SmartDashboard.putNumber("m_driveEncoder.get", m_driveEncoder.getValue().baseUnitMagnitude());
+    SmartDashboard.putNumber("m_turningEncoder.get", m_turningEncoder.get());
 
     // TODO: NOT WORKING, NEED TO ADD THE ENCODER CONFIG TO THE ENCODER.
 
