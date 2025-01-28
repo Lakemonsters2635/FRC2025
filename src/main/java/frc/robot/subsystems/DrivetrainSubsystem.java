@@ -331,6 +331,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 true);
       }
     }
+
+    SmartDashboard.putNumber("FL_pos", m_frontLeft.getPosition().distanceMeters);
+    SmartDashboard.putNumber("FR_pos", m_frontRight.getPosition().distanceMeters);
+    SmartDashboard.putNumber("BL_pos", m_backLeft.getPosition().distanceMeters);
+    SmartDashboard.putNumber("BR_pos", m_backRight.getPosition().distanceMeters);
     
     SmartDashboard.putNumber("rotCommanded", rotCommanded);
 

@@ -38,8 +38,9 @@ public final class Constants {
   // Switch robot's lenght to width
 
   // ROBOT WIDTH AND LENGHT
-  public static final double DRIVETRAIN_WHEELBASE_WIDTH =  25.5 / Constants.INCHES_PER_METER;
-  public static final double DRIVETRAIN_WHEELBASE_LENGTH = 21.5 / Constants.INCHES_PER_METER; 
+  // TODO: check the following values
+  public static final double DRIVETRAIN_WHEELBASE_WIDTH =  26.5 / Constants.INCHES_PER_METER;
+  public static final double DRIVETRAIN_WHEELBASE_LENGTH = 20.5 / Constants.INCHES_PER_METER; // 20.5 for batery_loc
 
   // SWERVE MODULE STATES
   public static final int FRONT_LEFT_MODULE_STATE_INDEX = 0;
@@ -49,27 +50,27 @@ public final class Constants {
 
   // FRONT LEFT
   public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 7; //1
-  public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER = 2; //1
-  public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 8; //2
-  public static final double FRONT_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); //3.0346
+  public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER = 0; //1
+  public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 6; //2
+  public static final double FRONT_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-100+180); //3.0346
 
   // FRONT RIGHT
-  public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 5; //7
-  public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER = 3; //0
-  public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 6; //8
-  public static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); //2.9835
+  public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 1; //7
+  public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER = 2; //0
+  public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 0; //8
+  public static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(146+180); //2.9835
 
   // BACK LEFT
-  public static final int DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 1; //3
-  public static final int DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER = 0; //3
-  public static final int DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 2; //10
-  public static final double BACK_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); // 3.0775
+  public static final int DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 5; //3
+  public static final int DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER = 1; //3
+  public static final int DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 4; //10
+  public static final double BACK_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-13.2); // 3.0775
 
   // BACK RIGHT
   public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR = 3; //5
-  public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER = 1;//2
-  public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 4; //6
-  public static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); //3.01
+  public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER = 3;//2
+  public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 2; //6
+  public static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-95.3); //3.01
 
   // hat constants 
   public static final int HAT_JOYSTICK_TRIM_POSITION = RIGHT_JOYSTICK_CHANNEL;

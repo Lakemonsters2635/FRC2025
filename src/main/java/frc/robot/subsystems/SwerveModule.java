@@ -4,28 +4,22 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkMax;
-import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
+@Logged
 public class SwerveModule {
   private final TalonFX m_driveMotor;
   public final TalonFX m_turningMotor;
@@ -33,7 +27,7 @@ public class SwerveModule {
   // private final SparkMaxConfig m_driveMotorConfig;
   // private final SparkMaxConfig m_turningMotorConfig;
 
-  public final StatusSignal<Angle> m_driveEncoder;
+  // public final StatusSignal<Angle> m_driveEncoder;
   public final AnalogInput m_turningEncoderInput;
   public final AnalogEncoder m_turningEncoder;
 
@@ -62,33 +56,11 @@ public class SwerveModule {
       double driveMotorGain // tuning motor module
       ) {
 
-    m_driveMotor = new TalonFX(driveMotorChannel);
-    m_turningMotor = new TalonFX(turningMotorChannel);
+    m_driveMotor = new TalonFX(driveMotorChannel, new CANBus("CANivore"));
+    m_turningMotor = new TalonFX(turningMotorChannel,  new CANBus("CANivore"));
 
-    m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
-    m_turningMotor.setNeutralMode(NeutralModeValue.Brake);
-
-
-
-    // m_driveMotorConfig = new SparkMaxConfig();
-    // m_driveMotorConfig.idleMode(IdleMode.kBrake);
-    // m_driveMotorConfig.encoder.positionConversionFactor(Constants.kDriveEncoderDistancePerPulse);
-
-    // m_turningMotorConfig = new SparkMaxConfig();
-    // m_turningMotorConfig.idleMode(IdleMode.kBrake);
-    // m_turningMotorConfig.encoder.velocityConversionFactor(Constants.kDriveEncoderDistancePerPulse/60.0);
-
-    // m_driveMotor.configure(
-    //   m_driveMotorConfig, 
-    //   SparkBase.ResetMode.kResetSafeParameters, 
-    //   SparkBase.PersistMode.kPersistParameters
-    // );
-    // m_turningMotor.configure(
-    //   m_driveMotorConfig, 
-    //   SparkBase.ResetMode.kResetSafeParameters, 
-    //   SparkBase.PersistMode.kPersistParameters
-    // );
-
+    m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
+    m_turningMotor.setNeutralMode(NeutralModeValue.Coast);
 
     this.turningMotorOffset = turningMotorOffset;
 
@@ -114,13 +86,13 @@ public class SwerveModule {
     // resolution.
     m_turningEncoderInput = new AnalogInput(analogEncoderPort);
     m_turningEncoder = new AnalogEncoder(m_turningEncoderInput);
-    m_driveEncoder = m_driveMotor.getPosition();
+    // m_driveEncoder = m_driveMotor.getPosition();
+
+    // System.out.println(m_driveMotor.getPosition().getValueAsDouble());
+    // System.out.println(m_turningEncoder.get());
     
-    SmartDashboard.putNumber("m_driveEncoder.get", m_driveEncoder.getValue().baseUnitMagnitude());
-    SmartDashboard.putNumber("m_turningEncoder.get", m_turningEncoder.get());
-
-    // TODO: NOT WORKING, NEED TO ADD THE ENCODER CONFIG TO THE ENCODER.
-
+    // SmartDashboard.putNumber("m_driveEncoder.get", m_driveMotor.getPosition().getValueAsDouble());
+    // SmartDashboard.putNumber("m_turningEncoder.get", m_turningEncoder.get());
     
     // Deprecated
     // m_driveEncoder.setPositionConversionFactor(Constants.kDriveEncoderDistancePerPulse);
@@ -143,24 +115,25 @@ public class SwerveModule {
   }
 
   public void updateSwerveTable() {
-    t_turningEncoder.setDouble(Math.toRadians(m_turningMotor.getEncoder().getPosition()));
+    t_turningEncoder.setDouble(Math.toRadians(m_turningEncoder.get()));
   }
 
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(m_driveEncoder.getPosition(), new Rotation2d(getTurningEncoderRadians()));
+    return new SwerveModulePosition(m_driveMotor.getPosition().getValueAsDouble(), new Rotation2d(getTurningEncoderRadians()));
   }
 
   public double getTurningEncoderRadians(){
-    double angle = (1.0 - (m_turningEncoder.getVoltage()/RobotController.getVoltage5V())) * 2.0 * Math.PI + turningMotorOffset;
+    double angle = (1.0 - (m_turningEncoderInput.getVoltage()/RobotController.getVoltage5V())) * 2.0 * Math.PI + turningMotorOffset;
     angle %= 2.0 * Math.PI;
     if (angle < 0.0) {
         angle += 2.0 * Math.PI;
     }
+
     return angle;
   }
 
   public double printVoltage() {
-    return m_turningEncoder.getVoltage();
+    return m_turningEncoderInput.getVoltage();
   }
 
   /**
@@ -169,11 +142,11 @@ public class SwerveModule {
    * @return The current state of the module.
    */
   public SwerveModuleState getState() {
-    return new SwerveModuleState(m_driveEncoder.getVelocity(), new Rotation2d(getTurningEncoderRadians()));
+    return new SwerveModuleState(m_driveMotor.getVelocity().getValueAsDouble(), new Rotation2d(getTurningEncoderRadians()));
   }
 
   public double getVelocity() {
-    return m_driveEncoder.getVelocity();
+    return m_driveMotor.getVelocity().getValueAsDouble();
   }
 
   public void stop(){
@@ -190,14 +163,19 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     // TODO: SwerveModuleState.optimize() is deprecated. Need to implement our own logic.
+
     SwerveModuleState state =
         SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
+
+    // SwerveModuleState state = desiredState;
+    
+    // state.optimize(new Rotation2d(getTurningEncoderRadians()));
 
     // Calculate the drive output from the drive PID controller.
     // Note: due to the drive PID constants being zero currently, this driveOutput will
     //       always be zero.
     final double driveOutput = //state.speedMetersPerSecond;
-      m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+      m_drivePIDController.calculate(m_driveMotor.getVelocity().getValueAsDouble(), state.speedMetersPerSecond);
 
     // This computes the velocity error regardless of direction of travel
     // such that >0 means too fast and <0 means too slow
@@ -214,15 +192,15 @@ public class SwerveModule {
         m_turningPIDController.calculate(getTurningEncoderRadians(), state.angle.getRadians());
 
     loopCtr++;
-    if ((loopCtr % 50 == 0) && (m_driveMotor.getDeviceId() == 8))
-    {
+    // if ((loopCtr % 50 == 0) && (m_driveMotor.getDeviceId() == 8))
+    // {
       
       // System.out.println(
       //   "Spd: " + Math.round(state.speedMetersPerSecond * 100.) / 100. + 
       //   "  getV(): " + Math.round(m_driveEncoder.getVelocity() * 100.) / 100. + 
       //   "  DO: "+ Math.round(driveOutput * 100.) / 100.
       // );
-    }
+    // }
 
     //String str1 = String.format("setDesiredState/Drive%d", m_driveMotor.getDeviceId());
     // SmartDashboard.putNumber(str1, driveOutput);
