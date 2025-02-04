@@ -71,6 +71,16 @@ public final class Constants {
   public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 4; //6
   public static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); //3.01
 
+  // INTAKE CONSTANTS
+  // TODO: figure out ids
+  public static final int ALGAE_LEFT_INTAKE_MOTOR = 0;
+  public static final int ALGAE_RIGHT_INTAKE_MOTOR = 0;
+  public static final int ALGAE_INTAKE_ROTATION_SPEED = 0;
+
+  public static final int CORAL_LEFT_INTAKE_MOTOR = 0;
+  public static final int CORAL_RIGHT_INTAKE_MOTOR = 0;
+  public static final int CORAL_INTAKE_ROTATION_SPEED = 0;
+
   // hat constants 
   public static final int HAT_JOYSTICK_TRIM_POSITION = RIGHT_JOYSTICK_CHANNEL;
   public static final int HAT_JOYSTICK_TRIM_ROTATION = LEFT_JOYSTICK_CHANNEL;
@@ -172,5 +182,10 @@ public final class Constants {
   public static final int ZERO_ODOMETRY_BUTTON = 11;
 
   // left buttons
+  //TODO: change these to better buttons
+  public static final int CORAL_INTAKE_IN_BUTTON = 3;
+  public static final int CORAL_INTAKE_OUT_BUTTON = 4;
+  public static final int ALGAE_INTAKE_IN_BUTTON = 5;
+  public static final int ALGAE_INTAKE_OUT_BUTTON = 6;
 
 }
