@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -41,7 +43,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
+    // Right Joystick Buttons, initialization
+    Trigger resetButton = new JoystickButton(rightJoystick, 9);
+
+    // Right Buttons, Run
+    resetButton.onTrue(new InstantCommand(()-> m_drivetrainSubsystem.zeroOdometry()));
   }
 
   /**

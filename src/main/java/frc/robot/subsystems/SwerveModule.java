@@ -164,12 +164,12 @@ public class SwerveModule {
     // Optimize the reference state to avoid spinning further than 90 degrees
     // TODO: SwerveModuleState.optimize() is deprecated. Need to implement our own logic.
 
-    SwerveModuleState state =
-        SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
+    // SwerveModuleState state =
+    //     SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
 
-    // SwerveModuleState state = desiredState;
+    SwerveModuleState state = desiredState;
     
-    // state.optimize(new Rotation2d(getTurningEncoderRadians()));
+    state.optimize(new Rotation2d(getTurningEncoderRadians()));
 
     // Calculate the drive output from the drive PID controller.
     // Note: due to the drive PID constants being zero currently, this driveOutput will
