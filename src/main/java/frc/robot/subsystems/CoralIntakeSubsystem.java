@@ -28,9 +28,14 @@ public class CoralIntakeSubsystem extends SubsystemBase {
 
     m_leftCoralIntakeMotorConfig = new SparkMaxConfig();
     m_leftCoralIntakeMotorConfig.idleMode(IdleMode.kBrake);
+    m_leftCoralIntakeMotorConfig.inverted(false);
+    
 
     m_rightCoralIntakeMotorConfig = new SparkMaxConfig();
     m_rightCoralIntakeMotorConfig.idleMode(IdleMode.kBrake);
+    m_rightCoralIntakeMotorConfig.inverted(false);
+
+    m_leftCoralIntakeMotorConfig.follow(m_rightCoralIntakeMotor, true);
 
     m_leftCoralIntakeMotor.configure(
       m_leftCoralIntakeMotorConfig, 
@@ -46,15 +51,11 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
   
   public void inCoralIntake() {
-    //TODO: figure out which direction motors spin
-    m_leftCoralIntakeMotor.set(Constants.CORAL_INTAKE_ROTATION_SPEED);
-    m_rightCoralIntakeMotor.set(-Constants.CORAL_INTAKE_ROTATION_SPEED);
+    m_rightCoralIntakeMotor.set(Constants.CORAL_INTAKE_ROTATION_SPEED);
   }
 
   public void outCoralIntake() {
-    //TODO: based on above intakein method, change signs
-    m_leftCoralIntakeMotor.set(-Constants.CORAL_INTAKE_ROTATION_SPEED);
-    m_rightCoralIntakeMotor.set(Constants.CORAL_INTAKE_ROTATION_SPEED);
+    m_rightCoralIntakeMotor.set(-Constants.CORAL_INTAKE_ROTATION_SPEED);
   }
 
   public void stopCoralIntake() {

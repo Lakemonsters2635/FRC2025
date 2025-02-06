@@ -77,14 +77,14 @@ public final class Constants {
   // Algea
   public static final int ALGAE_LEFT_INTAKE_MOTOR = 6;
   public static final int ALGAE_RIGHT_INTAKE_MOTOR = 5;
-  public static final int ALGAE_INTAKE_ROTATION_SPEED = 0;
+  public static final double ALGAE_INTAKE_ROTATION_SPEED = 0.3;
 
   public static final int ALGAE_ARM_MOTOR = 4;
 
   // Coral
   public static final int CORAL_LEFT_INTAKE_MOTOR = 3;
   public static final int CORAL_RIGHT_INTAKE_MOTOR = 2;
-  public static final int CORAL_INTAKE_ROTATION_SPEED = 0;
+  public static final double CORAL_INTAKE_ROTATION_SPEED = 0.3;
 
   public static final int CORAL_ARM_MOTOR = 1;
 
