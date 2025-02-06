@@ -6,7 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AlgaeIntakeInCommand;
+import frc.robot.commands.AlgaeIntakeOutCommand;
+import frc.robot.commands.CoralIntakeInCommand;
+import frc.robot.commands.CoralIntakeOutCommand;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.CoralIntakeSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,8 +23,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // Subsystems
+  public static final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
+  public static final CoralIntakeSubsystem m_coralIntakeSubsystem = new CoralIntakeSubsystem();
 
   // Commands
+  public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);
+  public static final AlgaeIntakeOutCommand m_algaeIntakeOutCommand = new AlgaeIntakeOutCommand(m_algaeIntakeSubsystem);
+  public static final CoralIntakeInCommand m_coralIntakeInCommand = new CoralIntakeInCommand(m_coralIntakeSubsystem);
+  public static final CoralIntakeOutCommand m_coralIntakeOutCommand = new CoralIntakeOutCommand(m_coralIntakeSubsystem);
 
   // Joysticks
   public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
@@ -39,7 +52,16 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
+    Trigger coralIntakeInButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
+    Trigger coralIntakeOutButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
+    Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
+    Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
+
+
+    coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
+    coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);
+    algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
+    algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
   }
 
   /**
