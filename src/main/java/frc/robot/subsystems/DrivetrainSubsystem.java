@@ -292,6 +292,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("BackLeft pos", m_backLeft.getPosition().distanceMeters);
     SmartDashboard.putNumber("FrontRight pos", m_frontRight.getPosition().distanceMeters);
     SmartDashboard.putNumber("FrontLeft pos", m_frontLeft.getPosition().distanceMeters);
+    // To stop the wheels from moving when there is no input from the joysticks
+    xPowerCommanded =0;
+    yPowerCommanded =0;
+    rotCommanded =0;
+    
     if (followJoystics) {
       if(rightJoystick.getPOV()==Constants.HAT_POV_MOVE_FORWARD ){
         yPowerCommanded = Constants.HAT_POWER_MOVE;
@@ -335,16 +340,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
       //           true,
       //           new Translation2d(0, -Constants.DRIVETRAIN_WHEELBASE_LENGTH/2));
       // } else {
-      // TODO: Fix this, testing purposes
       this.drive(
-              0,// xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
-              0,// yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
-              0, //MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
+              xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
+              yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
+              MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
               false);
-      // this.drive(xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
-      //         yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
-      //         MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
-      //         true);
       }
     // }
 
