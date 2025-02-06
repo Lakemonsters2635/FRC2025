@@ -28,9 +28,13 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     m_leftAlgaeIntakeMotorConfig = new SparkMaxConfig();
     m_leftAlgaeIntakeMotorConfig.idleMode(IdleMode.kBrake);
+    m_leftAlgaeIntakeMotorConfig.inverted(false);
 
     m_rightAlgaeIntakeMotorConfig = new SparkMaxConfig();
     m_rightAlgaeIntakeMotorConfig.idleMode(IdleMode.kBrake);
+    m_rightAlgaeIntakeMotorConfig.inverted(false);
+
+    m_leftAlgaeIntakeMotorConfig.follow(m_rightAlgaeIntakeMotor, true);
 
     m_leftAlgaeIntakeMotor.configure(
       m_leftAlgaeIntakeMotorConfig, 
@@ -46,14 +50,10 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   }
   
   public void inAlgaeIntake() {
-    //TODO: figure out which direction motors spin
-    m_leftAlgaeIntakeMotor.set(Constants.ALGAE_INTAKE_ROTATION_SPEED);
     m_rightAlgaeIntakeMotor.set(-Constants.ALGAE_INTAKE_ROTATION_SPEED);
   }
 
   public void outAlgaeIntake() {
-    //TODO: based on above intakein method, change signs
-    m_leftAlgaeIntakeMotor.set(-Constants.ALGAE_INTAKE_ROTATION_SPEED);
     m_rightAlgaeIntakeMotor.set(Constants.ALGAE_INTAKE_ROTATION_SPEED);
   }
 
