@@ -67,7 +67,7 @@ public class RobotContainer {
     algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
     algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
     // Right Joystick Buttons, initialization
-    Trigger resetButton = new JoystickButton(rightJoystick, 9);
+    Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
 
     // Right Buttons, Run
     resetButton.onTrue(new InstantCommand(()-> m_drivetrainSubsystem.zeroOdometry()));

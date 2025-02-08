@@ -190,7 +190,7 @@ public final class Constants {
   //BUTTON BINDINGS
 
   // right buttons
-  public static final int SWERVE_RESET_BUTTON = 7;
+  public static final int SWERVE_RESET_BUTTON = 9;
   public static final int ZERO_ODOMETRY_BUTTON = 11;
 
   // left buttons
