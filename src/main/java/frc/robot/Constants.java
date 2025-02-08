@@ -40,8 +40,9 @@ public final class Constants {
   // Switch robot's lenght to width
 
   // ROBOT WIDTH AND LENGHT
-  public static final double DRIVETRAIN_WHEELBASE_WIDTH =  25.5 / Constants.INCHES_PER_METER;
-  public static final double DRIVETRAIN_WHEELBASE_LENGTH = 21.5 / Constants.INCHES_PER_METER; 
+  // TODO: check the following values
+  public static final double DRIVETRAIN_WHEELBASE_WIDTH =  26.5 / Constants.INCHES_PER_METER;
+  public static final double DRIVETRAIN_WHEELBASE_LENGTH = 20.5 / Constants.INCHES_PER_METER; // 20.5 for batery_loc
 
   // SWERVE MODULE STATES
   public static final int FRONT_LEFT_MODULE_STATE_INDEX = 0;
@@ -51,27 +52,27 @@ public final class Constants {
 
   // FRONT LEFT
   public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR = 7; //1
-  public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER = 2; //1
-  public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 8; //2
-  public static final double FRONT_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); //3.0346
+  public static final int DRIVETRAIN_FRONT_LEFT_ANGLE_ENCODER = 0; //1
+  public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 6; //2
+  public static final double FRONT_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-100+180); //3.0346
 
   // FRONT RIGHT
-  public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 5; //7
-  public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER = 3; //0
-  public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 6; //8
-  public static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); //2.9835
+  public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR = 1; //7
+  public static final int DRIVETRAIN_FRONT_RIGHT_ANGLE_ENCODER = 2; //0
+  public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 0; //8
+  public static final double FRONT_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(146+180); //2.9835
 
   // BACK LEFT
-  public static final int DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 1; //3
-  public static final int DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER = 0; //3
-  public static final int DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 2; //10
-  public static final double BACK_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); // 3.0775
+  public static final int DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR = 5; //3
+  public static final int DRIVETRAIN_BACK_LEFT_ANGLE_ENCODER = 1; //3
+  public static final int DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 4; //10
+  public static final double BACK_LEFT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-13.2); // 3.0775
 
   // BACK RIGHT
   public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR = 3; //5
-  public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER = 1;//2
-  public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 4; //6
-  public static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); //3.01
+  public static final int DRIVETRAIN_BACK_RIGHT_ANGLE_ENCODER = 3;//2
+  public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 2; //6
+  public static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-95.3); //3.01
 
   // INTAKE CONSTANTS
   // Algea
@@ -122,13 +123,17 @@ public final class Constants {
   // public static final double maxModuleLinearSpeed = 3.5;
   // public static final double maxModuleLinearAccelaration = 16;
 
-  public static final int kEncoderCPR = 42; // neo encoder ticks per revolution
+  // 6.7
+
+  public static final int kEncoderCPR = 4096; // kraken encoder ticks per revolution
   public static final double kWheelDiameterMeters = 4.0 / 39.37;
-  public static final double kCalibrationFactor = 0.9; // we tested the actual traveled distance vs the distance the robot thinks it traveled to come up with this factor
+  // Divided by 100 to convert cm to m
+  public static final double kCalibrationFactor = 2.48 * 0.95 *1.03 / 100; // we tested the actual traveled distance vs the distance the robot thinks it traveled to come up with this factor
   public static final double kDriveEncoderDistancePerPulse =
       // Assumes the encoders are directly mounted on the wheel shafts
       // (kWheelDiameterMeters * Math.PI) * (1.0 / (45.0 / 15.0) / (17.0 / 27.0) / (50.0 / 14.0));  //Mark 4i L2 Gear Ratio // should be 5.14 to 1 four L4 on BunnyBot
-      (kWheelDiameterMeters * Math.PI) * 5.14 * kCalibrationFactor;  //Mark 4i L2 Gear Ratio // should be 5.14 to 1 four L4 on BunnyBot
+      (kWheelDiameterMeters * Math.PI) * 6.7 * kCalibrationFactor;  //Mark 4i L2 Gear Ratio // should be 5.14 to 1 four L4 on BunnyBot
+      // (kWheelDiameterMeters * Math.PI) * 5.14 * kCalibrationFactor;  //Mark 4i L2 Gear Ratio // should be 5.14 to 1 four L4 on BunnyBot
       // 0.0014785364645989762;
 
       // Some additional notes... 
