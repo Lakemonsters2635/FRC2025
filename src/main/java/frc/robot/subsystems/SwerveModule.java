@@ -59,8 +59,8 @@ public class SwerveModule {
     m_driveMotor = new TalonFX(driveMotorChannel, new CANBus("CANivore"));
     m_turningMotor = new TalonFX(turningMotorChannel,  new CANBus("CANivore"));
 
-    m_driveMotor.setNeutralMode(NeutralModeValue.Coast);
-    m_turningMotor.setNeutralMode(NeutralModeValue.Coast);
+    m_driveMotor.setNeutralMode(NeutralModeValue.Brake);
+    m_turningMotor.setNeutralMode(NeutralModeValue.Brake);
 
     this.turningMotorOffset = turningMotorOffset;
 
@@ -119,7 +119,7 @@ public class SwerveModule {
   }
 
   public SwerveModulePosition getPosition() {
-    return new SwerveModulePosition(m_driveMotor.getPosition().getValueAsDouble(), new Rotation2d(getTurningEncoderRadians()));
+    return new SwerveModulePosition(m_driveMotor.getPosition().getValueAsDouble() * Constants.kDriveEncoderDistancePerPulse, new Rotation2d(getTurningEncoderRadians()));
   }
 
   public double getTurningEncoderRadians(){

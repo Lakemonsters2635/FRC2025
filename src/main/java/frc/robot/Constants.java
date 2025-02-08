@@ -106,13 +106,17 @@ public final class Constants {
   // public static final double maxModuleLinearSpeed = 3.5;
   // public static final double maxModuleLinearAccelaration = 16;
 
-  public static final int kEncoderCPR = 42; // neo encoder ticks per revolution
+  // 6.7
+
+  public static final int kEncoderCPR = 4096; // kraken encoder ticks per revolution
   public static final double kWheelDiameterMeters = 4.0 / 39.37;
-  public static final double kCalibrationFactor = 0.9; // we tested the actual traveled distance vs the distance the robot thinks it traveled to come up with this factor
+  // Divided by 100 to convert cm to m
+  public static final double kCalibrationFactor = 2.48 * 0.95 *1.03 / 100; // we tested the actual traveled distance vs the distance the robot thinks it traveled to come up with this factor
   public static final double kDriveEncoderDistancePerPulse =
       // Assumes the encoders are directly mounted on the wheel shafts
       // (kWheelDiameterMeters * Math.PI) * (1.0 / (45.0 / 15.0) / (17.0 / 27.0) / (50.0 / 14.0));  //Mark 4i L2 Gear Ratio // should be 5.14 to 1 four L4 on BunnyBot
-      (kWheelDiameterMeters * Math.PI) * 5.14 * kCalibrationFactor;  //Mark 4i L2 Gear Ratio // should be 5.14 to 1 four L4 on BunnyBot
+      (kWheelDiameterMeters * Math.PI) * 6.7 * kCalibrationFactor;  //Mark 4i L2 Gear Ratio // should be 5.14 to 1 four L4 on BunnyBot
+      // (kWheelDiameterMeters * Math.PI) * 5.14 * kCalibrationFactor;  //Mark 4i L2 Gear Ratio // should be 5.14 to 1 four L4 on BunnyBot
       // 0.0014785364645989762;
 
       // Some additional notes... 
