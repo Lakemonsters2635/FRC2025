@@ -74,6 +74,9 @@ public final class Constants {
   public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 2; //6
   public static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-95.3); //3.01
 
+  //Elevator Constants
+  public static final int ElEVATOR_MOTOR_ID = 9;
+
   // INTAKE CONSTANTS
   // Algea
   public static final int ALGAE_LEFT_INTAKE_MOTOR = 6;
