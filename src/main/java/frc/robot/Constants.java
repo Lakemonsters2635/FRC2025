@@ -74,12 +74,13 @@ public final class Constants {
   public static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(0); //3.01
 
   // INTAKE CONSTANTS
-  // Algea
+  // Algae
   public static final int ALGAE_LEFT_INTAKE_MOTOR = 6;
   public static final int ALGAE_RIGHT_INTAKE_MOTOR = 5;
   public static final double ALGAE_INTAKE_ROTATION_SPEED = 0.3;
 
   public static final int ALGAE_ARM_MOTOR = 4;
+  public static final double CORAL_ARM_ENCODER_OFFSET = 57.3;
 
   // Coral
   public static final int CORAL_LEFT_INTAKE_MOTOR = 3;
