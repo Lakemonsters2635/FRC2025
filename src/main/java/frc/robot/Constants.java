@@ -76,6 +76,13 @@ public final class Constants {
 
   //Elevator Constants
   public static final int ElEVATOR_MOTOR_ID = 9;
+  public static final int INNER_ELEVATOR_ENCODER_A = 0;
+  public static final int INNER_ELEVATOR_ENCODER_B = 1;
+
+  public static final int OUTER_ELEVATOR_ENCODER_A = 8;
+  public static final int OUTER_ELEVATOR_ENCODER_B = 9;
+
+
 
   // INTAKE CONSTANTS
   // Algea

@@ -17,6 +17,7 @@ import frc.robot.commands.CoralIntakeOutCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -29,6 +30,7 @@ public class RobotContainer {
   DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   public static final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   public static final CoralIntakeSubsystem m_coralIntakeSubsystem = new CoralIntakeSubsystem();
+  public static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   // Commands
   public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);

@@ -5,21 +5,47 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
+  public static final Encoder m_encoderInner = new Encoder(Constants.INNER_ELEVATOR_ENCODER_A, Constants.INNER_ELEVATOR_ENCODER_B);
+  public static final Encoder m_encoderOuter = new Encoder(Constants.OUTER_ELEVATOR_ENCODER_A, Constants.OUTER_ELEVATOR_ENCODER_B);
+
   TalonFX m_elevatorMotor;
+
   public ElevatorSubsystem() {
     m_elevatorMotor = new TalonFX(Constants.ElEVATOR_MOTOR_ID);
+    m_elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
   }
   //negative up
   //positive down
 
+  public void setElevatorMotorPower(double power){
+    m_elevatorMotor.setVoltage(power * 11); //11 volts
+  }
+
+  public double innerEncoderRotations(){
+    return m_encoderInner.get();
+  }
+  
+  public double outerEncoderRotations(){
+    return m_encoderOuter.get();
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // This method will be called once per schedu
+    SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
+    SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
+    SmartDashboard.putNumber("Motor Power (-1 to 1)", m_elevatorMotor.get());
+    SmartDashboard.putNumber("Motor Power Voltage", m_elevatorMotor.get() * 11);
+
+
   }
 }
