@@ -14,7 +14,9 @@ import frc.robot.commands.AlgaeIntakeInCommand;
 import frc.robot.commands.AlgaeIntakeOutCommand;
 import frc.robot.commands.CoralIntakeInCommand;
 import frc.robot.commands.CoralIntakeOutCommand;
+import frc.robot.commands.UpClimbCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -29,12 +31,16 @@ public class RobotContainer {
   DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   public static final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   public static final CoralIntakeSubsystem m_coralIntakeSubsystem = new CoralIntakeSubsystem();
+  public static final ClimberSubsystem m_climberSystem = new ClimberSubsystem();
 
   // Commands
   public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);
   public static final AlgaeIntakeOutCommand m_algaeIntakeOutCommand = new AlgaeIntakeOutCommand(m_algaeIntakeSubsystem);
   public static final CoralIntakeInCommand m_coralIntakeInCommand = new CoralIntakeInCommand(m_coralIntakeSubsystem);
   public static final CoralIntakeOutCommand m_coralIntakeOutCommand = new CoralIntakeOutCommand(m_coralIntakeSubsystem);
+  public static final UpClimbCommand m_upClimbCommand = new UpClimbCommand(m_climberSystem);
+  public static final UpClimbCommand m_downClimbCommand = new UpClimbCommand(m_climberSystem); 
+  
 
   // Joysticks
   public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
@@ -61,11 +67,18 @@ public class RobotContainer {
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
 
+    Trigger climberDownButton = new JoystickButton(leftJoystick, Constants.DOWN_CLIMBER_BUTTON);
+    Trigger climberUpButton = new JoystickButton(leftJoystick, Constants.UP_CLIMBER_BUTTON);
+
+
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);
     algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
     algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
+
+    climberDownButton.whileTrue(m_downClimbCommand);
+    climberUpButton.whileTrue(m_upClimbCommand);
     // Right Joystick Buttons, initialization
     Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
 

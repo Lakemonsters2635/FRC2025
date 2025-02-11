@@ -89,6 +89,9 @@ public final class Constants {
 
   public static final int CORAL_ARM_MOTOR = 1;
 
+  //Climber Constants
+  public static final int CLIMBER_MOTOR_ID = 8;
+
   // hat constants 
   public static final int HAT_JOYSTICK_TRIM_POSITION = RIGHT_JOYSTICK_CHANNEL;
   public static final int HAT_JOYSTICK_TRIM_ROTATION = LEFT_JOYSTICK_CHANNEL;
@@ -199,5 +202,10 @@ public final class Constants {
   public static final int CORAL_INTAKE_OUT_BUTTON = 4;
   public static final int ALGAE_INTAKE_IN_BUTTON = 5;
   public static final int ALGAE_INTAKE_OUT_BUTTON = 6;
+
+  public static final int DOWN_CLIMBER_BUTTON = 7;
+  public static final int UP_CLIMBER_BUTTON = 8;
+
+
 
 }
