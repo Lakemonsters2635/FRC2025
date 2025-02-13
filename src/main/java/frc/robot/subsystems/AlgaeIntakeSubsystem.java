@@ -29,10 +29,12 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     m_leftAlgaeIntakeMotorConfig = new SparkMaxConfig();
     m_leftAlgaeIntakeMotorConfig.idleMode(IdleMode.kBrake);
     m_leftAlgaeIntakeMotorConfig.inverted(false);
+    m_leftAlgaeIntakeMotorConfig.smartCurrentLimit(10);
 
     m_rightAlgaeIntakeMotorConfig = new SparkMaxConfig();
     m_rightAlgaeIntakeMotorConfig.idleMode(IdleMode.kBrake);
     m_rightAlgaeIntakeMotorConfig.inverted(false);
+    m_rightAlgaeIntakeMotorConfig.smartCurrentLimit(10);
 
     m_leftAlgaeIntakeMotorConfig.follow(m_rightAlgaeIntakeMotor, true);
 
@@ -46,20 +48,22 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
       SparkBase.ResetMode.kResetSafeParameters, 
       SparkBase.PersistMode.kPersistParameters
     );
+  }
 
+  public void holdAlgaeIntake() {
+    m_rightAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_HOLD);
   }
   
   public void inAlgaeIntake() {
-    m_rightAlgaeIntakeMotor.set(-Constants.ALGAE_INTAKE_ROTATION_SPEED);
+    m_rightAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_IN);
   }
 
   public void outAlgaeIntake() {
-    m_rightAlgaeIntakeMotor.set(Constants.ALGAE_INTAKE_ROTATION_SPEED);
+    m_rightAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_OUT);
   }
 
   public void stopAlgaeIntake() {
-    m_leftAlgaeIntakeMotor.set(0);
-    m_rightAlgaeIntakeMotor.set(0);
+    m_rightAlgaeIntakeMotor.setVoltage(0);
   }  
   
   @Override
