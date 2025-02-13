@@ -5,7 +5,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.servohub.ServoHub.ResetMode;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -22,7 +25,7 @@ public class CoralArmSubsystem extends SubsystemBase {
   double ff;
   double fb;
   double motorPower;
-  double gain = 0.06378;
+  double gain = 0.052755904197693;
   PIDController m_coralArmController;
   double theta;
   double m_poseTarget;
@@ -32,10 +35,13 @@ public class CoralArmSubsystem extends SubsystemBase {
     m_coralArmMotorConfig = new SparkMaxConfig();
     m_coralArmMotorConfig.idleMode(IdleMode.kBrake);
     m_coralArmController = new PIDController(0, 0, 0);
+    m_coralArmMotorConfig.smartCurrentLimit(10);
+    m_coralArmMotor.getEncoder().setPosition(0); // reset encoder
+    m_coralArmMotor.configure(m_coralArmMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
   }
 
   public void setArmPower(double armPower){
-    m_coralArmMotor.setVoltage(armPower * 11);
+    m_coralArmMotor.setVoltage(armPower * 12);
   }
 
   public void stopArmPower(){
@@ -47,7 +53,8 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   public double getDegrees() {
-    double degrees = ((getEncoderCounts()-Constants.CORAL_ARM_ENCODER_OFFSET)/28)*360;
+    // encoder offset should be zero since the relative encoder is resetted and setup correctly before deploy
+    double degrees = ((getEncoderCounts()-Constants.CORAL_ARM_ENCODER_OFFSET)/160)*360;
     degrees%=360;
     return degrees;
   }
@@ -58,7 +65,7 @@ public class CoralArmSubsystem extends SubsystemBase {
 
   public void controlArmThrottle() {
     Joystick leftJoystick = new Joystick(0);
-    m_coralArmMotor.setVoltage(leftJoystick.getThrottle()*0.3*11);
+    m_coralArmMotor.setVoltage(leftJoystick.getThrottle()*0.1*12);
     SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle() * 0.3);
   }
 
@@ -72,6 +79,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     theta = getDegrees();
     controlArmThrottle();
     ff = gain*Math.sin(Math.toRadians(getDegrees()));
+    //setArmPower(ff);
     fb = m_coralArmController.calculate(theta, m_poseTarget);
     SmartDashboard.putNumber("Encoder Counts", getEncoderCounts());
     SmartDashboard.putNumber("Degrees", getDegrees());

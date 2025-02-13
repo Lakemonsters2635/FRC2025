@@ -80,7 +80,7 @@ public final class Constants {
   public static final double ALGAE_INTAKE_ROTATION_SPEED = 0.3;
 
   public static final int ALGAE_ARM_MOTOR = 4;
-  public static final double CORAL_ARM_ENCODER_OFFSET = 57.3;
+  public static final double CORAL_ARM_ENCODER_OFFSET = 0;//15.309518814086914;
 
   // Coral
   public static final int CORAL_LEFT_INTAKE_MOTOR = 3;
