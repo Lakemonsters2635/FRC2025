@@ -1,0 +1,88 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.subsystems;
+
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
+public class AlgaeArmSubsystem extends SubsystemBase {
+  private final SparkMax m_algaeArmMotor;
+  private final SparkMaxConfig m_algaeArmConfig;
+  double ff, fb, motorPower, theta, m_poseTarget;
+  double GAIN = 0.0; // TODO: Measure this value
+  PIDController m_algaeArmController;
+
+  public AlgaeArmSubsystem() {
+    m_algaeArmMotor = new SparkMax(Constants.ALGAE_ARM_MOTOR, SparkMax.MotorType.kBrushless);
+
+    // Configuration
+    m_algaeArmConfig = new SparkMaxConfig();
+    m_algaeArmConfig.inverted(false);
+    m_algaeArmConfig.idleMode(IdleMode.kBrake);
+    m_algaeArmConfig.smartCurrentLimit(10);
+    m_algaeArmMotor.configure(
+      m_algaeArmConfig, 
+      SparkBase.ResetMode.kNoResetSafeParameters, 
+      SparkBase.PersistMode.kPersistParameters
+    );
+
+    m_algaeArmController = new PIDController(0,0,0); // TODO: Tune these values
+
+    resetEncoder(); // Reset encoder, since we start from the 0 position
+
+  }
+
+  public void setArmPowerVolts(double volts) {
+    m_algaeArmMotor.setVoltage(volts);
+  }
+
+  public double getEncoderCounts() {
+    return m_algaeArmMotor.getEncoder().getPosition();
+  }
+
+  public double getDegrees() {
+    double degrees = (getEncoderCounts() /160) * 360;
+    degrees %= 360;
+    return degrees;
+  }
+
+  public void resetEncoder() {
+    m_algaeArmMotor.getEncoder().setPosition(0);
+  }
+
+  public void controlArmThrottle() {
+    Joystick leftJoystick = new Joystick(0);
+    m_algaeArmMotor.setVoltage(leftJoystick.getThrottle()*0.1*12);
+    SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle() * 0.3);
+  }
+
+  public void setArmPosition(double position) {
+    m_poseTarget = position;
+  }
+
+  @Override
+  public void periodic() {
+    theta = getDegrees();
+    controlArmThrottle();
+
+    ff = GAIN * Math.sin(Math.toRadians(theta));
+    fb = m_algaeArmController.calculate(theta, m_poseTarget);
+
+    SmartDashboard.putNumber("Encoder Counts", getEncoderCounts());
+    SmartDashboard.putNumber("Degrees", getDegrees());
+    SmartDashboard.putNumber("Motor Power", m_algaeArmMotor.get());
+    SmartDashboard.putNumber("Motor Power Volts", m_algaeArmMotor.get()*11);
+    SmartDashboard.putNumber("Feed Forward", ff);
+    SmartDashboard.putNumber("Feed Back", fb);
+  }
+}
