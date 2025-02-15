@@ -27,7 +27,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   //positive down
 
   public void setElevatorMotorPower(double power){
-    m_elevatorMotor.setVoltage(power * 11); //11 volts
+    // m_elevatorMotor.setVoltage(power * 11); //11 volts
+    m_elevatorMotor.setVoltage(0);
   }
 
   public double innerEncoderRotations(){
