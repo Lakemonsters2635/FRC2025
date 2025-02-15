@@ -282,6 +282,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     //Hat Power Overides for Trimming Position and Rotation
     // System.out.println("X: "+getPose().getX()+"\tY: "+getPose().getY()+"\tRot: "+getPose().getRotation().getDegrees());
+
+    SmartDashboard.putNumber("BackRight turn", m_backRight.getTurningEncoderRadians());
+    SmartDashboard.putNumber("BackLeft turn", m_backLeft.getTurningEncoderRadians());
+    SmartDashboard.putNumber("FrontRight turn", m_frontRight.getTurningEncoderRadians());
+    SmartDashboard.putNumber("FrontLeft turn", m_frontLeft.getTurningEncoderRadians());
+
+    SmartDashboard.putNumber("BackRight pos", m_backRight.getPosition().distanceMeters);
+    SmartDashboard.putNumber("BackLeft pos", m_backLeft.getPosition().distanceMeters);
+    SmartDashboard.putNumber("FrontRight pos", m_frontRight.getPosition().distanceMeters);
+    SmartDashboard.putNumber("FrontLeft pos", m_frontLeft.getPosition().distanceMeters);
+    // To stop the wheels from moving when there is no input from the joysticks
+    xPowerCommanded =0;
+    yPowerCommanded =0;
+    rotCommanded =0;
+    
     if (followJoystics) {
       if(rightJoystick.getPOV()==Constants.HAT_POV_MOVE_FORWARD ){
         yPowerCommanded = Constants.HAT_POWER_MOVE;
@@ -318,19 +333,25 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
       // TODO: document how to use this button to reset various robot centers of rotation
       // Note: you can have multiple buttons for defining multiple centers of rotation.
-      if (customCenterControlButton.getAsBoolean()) {
-        this.drive(-xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
-                yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
-                MathUtil.applyDeadband(-rotCommanded * this.kMaxAngularSpeed, 0.2), 
-                true,
-                new Translation2d(0, -Constants.DRIVETRAIN_WHEELBASE_LENGTH/2));
-      } else {
-        this.drive(xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
-                yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
-                MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
-                true);
+      // if (customCenterControlButton.getAsBoolean()) {
+      //   this.drive(-xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
+      //           yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
+      //           MathUtil.applyDeadband(-rotCommanded * this.kMaxAngularSpeed, 0.2), 
+      //           true,
+      //           new Translation2d(0, -Constants.DRIVETRAIN_WHEELBASE_LENGTH/2));
+      // } else {
+      this.drive(
+              xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
+              yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
+              MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
+              true);
       }
-    }
+    // }
+
+    SmartDashboard.putNumber("FL_pos", m_frontLeft.getPosition().distanceMeters);
+    SmartDashboard.putNumber("FR_pos", m_frontRight.getPosition().distanceMeters);
+    SmartDashboard.putNumber("BL_pos", m_backLeft.getPosition().distanceMeters);
+    SmartDashboard.putNumber("BR_pos", m_backRight.getPosition().distanceMeters);
     
     SmartDashboard.putNumber("rotCommanded", rotCommanded);
 

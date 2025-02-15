@@ -10,6 +10,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -26,16 +27,18 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     m_leftCoralIntakeMotor = new SparkMax(Constants.CORAL_LEFT_INTAKE_MOTOR, MotorType.kBrushless);
     m_rightCoralIntakeMotor = new SparkMax(Constants.CORAL_RIGHT_INTAKE_MOTOR, MotorType.kBrushless);    
 
+    // Configurations
     m_leftCoralIntakeMotorConfig = new SparkMaxConfig();
     m_leftCoralIntakeMotorConfig.idleMode(IdleMode.kBrake);
     m_leftCoralIntakeMotorConfig.inverted(false);
-    
+    m_leftCoralIntakeMotorConfig.smartCurrentLimit(10); // TODO: calculate current limit
 
     m_rightCoralIntakeMotorConfig = new SparkMaxConfig();
     m_rightCoralIntakeMotorConfig.idleMode(IdleMode.kBrake);
     m_rightCoralIntakeMotorConfig.inverted(false);
+    m_rightCoralIntakeMotorConfig.smartCurrentLimit(10);
 
-    m_leftCoralIntakeMotorConfig.follow(m_rightCoralIntakeMotor, true);
+    // m_leftCoralIntakeMotorConfig.follow(m_rightCoralIntakeMotor, true);
 
     m_leftCoralIntakeMotor.configure(
       m_leftCoralIntakeMotorConfig, 
@@ -51,19 +54,22 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
   
   public void inCoralIntake() {
-    m_rightCoralIntakeMotor.set(Constants.CORAL_INTAKE_ROTATION_SPEED);
+    m_rightCoralIntakeMotor.setVoltage(Constants.CORAL_INTAKE_VOLTAGE_IN);
+    m_leftCoralIntakeMotor.setVoltage(Constants.CORAL_INTAKE_VOLTAGE_IN);
   }
 
   public void outCoralIntake() {
-    m_rightCoralIntakeMotor.set(-Constants.CORAL_INTAKE_ROTATION_SPEED);
+    m_rightCoralIntakeMotor.setVoltage(Constants.CORAL_INTAKE_VOLTAGE_OUT);
+    m_leftCoralIntakeMotor.setVoltage(Constants.CORAL_INTAKE_VOLTAGE_OUT);
   }
 
   public void stopCoralIntake() {
-    m_leftCoralIntakeMotor.set(0);
-    m_rightCoralIntakeMotor.set(0);
-  }  
+    m_rightCoralIntakeMotor.setVoltage(0);
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("coralMotorCurrent", m_rightCoralIntakeMotor.getOutputCurrent());
   }
 }
