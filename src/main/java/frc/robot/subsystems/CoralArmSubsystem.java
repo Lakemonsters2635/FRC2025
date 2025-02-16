@@ -5,13 +5,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.servohub.ServoHub.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,23 +24,25 @@ public class CoralArmSubsystem extends SubsystemBase {
   double ff;
   double fb;
   double motorPower;
-  double gain = 0.052755904197693;
+  private final double GAIN_CORRAL = 0.416; // Holds with corral in horizontal position
+  private final double GAIN_WITHOUT_CORRAL = 0.1;
+  double gain = GAIN_CORRAL;
   PIDController m_coralArmController;
   double theta;
   double m_poseTarget;
 
   public CoralArmSubsystem() {
-    m_coralArmMotor = new SparkMax(1, MotorType.kBrushless); 
+    m_coralArmMotor = new SparkMax(Constants.CORAL_ARM_MOTOR, MotorType.kBrushless); 
     m_coralArmMotorConfig = new SparkMaxConfig();
     m_coralArmMotorConfig.idleMode(IdleMode.kBrake);
-    m_coralArmController = new PIDController(0, 0, 0);
+    m_coralArmController = new PIDController(.1, 0, 0);
     m_coralArmMotorConfig.smartCurrentLimit(10);
     m_coralArmMotor.getEncoder().setPosition(0); // reset encoder
     m_coralArmMotor.configure(m_coralArmMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
   }
 
   public void setArmPower(double armPower){
-    m_coralArmMotor.setVoltage(armPower * 12);
+    m_coralArmMotor.setVoltage(armPower);
   }
 
   public void stopArmPower(){
@@ -63,10 +64,18 @@ public class CoralArmSubsystem extends SubsystemBase {
     m_coralArmMotor.getEncoder().setPosition(0);
   }
 
-  public void controlArmThrottle() {
+  public double controlArmThrottle() {
     Joystick leftJoystick = new Joystick(0);
-    m_coralArmMotor.setVoltage(leftJoystick.getThrottle()*0.1*12);
-    SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle() * 0.3);
+    SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle()*0.1*12);
+    return leftJoystick.getThrottle() * 0.1 * 12;
+  }
+
+  public boolean isAtTarget(){
+    if (Math.abs(getDegrees()-m_poseTarget)< 4) {
+      return true;
+    }
+
+    return false;
   }
 
   public void setPoseTarget(double poseTarget) {
@@ -75,17 +84,17 @@ public class CoralArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     theta = getDegrees();
-    controlArmThrottle();
-    ff = gain*Math.sin(Math.toRadians(getDegrees()));
+
+    ff = gain*Math.abs(Math.sin(Math.toRadians(getDegrees()))); // Getdegrees is negative as the corral arm goes down from initial position
+    fb = MathUtil.clamp(m_coralArmController.calculate(theta, m_poseTarget), -2, 2);
+    SmartDashboard.putNumber("coralArm Encoder Counts", getEncoderCounts());
+    SmartDashboard.putNumber("coralArm Degrees", getDegrees());
+    SmartDashboard.putNumber("coralArm Motor Power Volts", m_coralArmMotor.getAppliedOutput());
+    SmartDashboard.putNumber("coralArm Feed Forward", ff);
+    SmartDashboard.putNumber("coralArm Feed Back", fb);
+
     //setArmPower(ff);
-    fb = m_coralArmController.calculate(theta, m_poseTarget);
-    SmartDashboard.putNumber("Encoder Counts", getEncoderCounts());
-    SmartDashboard.putNumber("Degrees", getDegrees());
-    SmartDashboard.putNumber("Motor Power", m_coralArmMotor.get());
-    SmartDashboard.putNumber("Motor Power Volts", m_coralArmMotor.get()*11);
-    SmartDashboard.putNumber("Feed Forward", ff);
-    SmartDashboard.putNumber("Feed Back", fb);
+    setArmPower(ff+fb);
   }
 }

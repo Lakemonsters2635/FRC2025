@@ -63,6 +63,11 @@ public class RobotContainer {
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
 
+    Trigger coralArm90 = new JoystickButton(rightJoystick, 3);
+    Trigger coralArm125 = new JoystickButton(rightJoystick, 4);
+
+    coralArm90.onTrue(new InstantCommand(() -> m_coralArmSubsystem.setPoseTarget(-90)));
+    coralArm125.onTrue(new InstantCommand(() -> m_coralArmSubsystem.setPoseTarget(-125)));
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);

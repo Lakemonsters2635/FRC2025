@@ -38,7 +38,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     m_rightCoralIntakeMotorConfig.inverted(false);
     m_rightCoralIntakeMotorConfig.smartCurrentLimit(10);
 
-    // m_leftCoralIntakeMotorConfig.follow(m_rightCoralIntakeMotor, true);
+    m_leftCoralIntakeMotorConfig.follow(m_rightCoralIntakeMotor, true);
 
     m_leftCoralIntakeMotor.configure(
       m_leftCoralIntakeMotorConfig, 
@@ -55,12 +55,10 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   
   public void inCoralIntake() {
     m_rightCoralIntakeMotor.setVoltage(Constants.CORAL_INTAKE_VOLTAGE_IN);
-    m_leftCoralIntakeMotor.setVoltage(Constants.CORAL_INTAKE_VOLTAGE_IN);
   }
 
   public void outCoralIntake() {
     m_rightCoralIntakeMotor.setVoltage(Constants.CORAL_INTAKE_VOLTAGE_OUT);
-    m_leftCoralIntakeMotor.setVoltage(Constants.CORAL_INTAKE_VOLTAGE_OUT);
   }
 
   public void stopCoralIntake() {
