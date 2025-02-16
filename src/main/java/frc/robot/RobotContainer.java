@@ -14,6 +14,10 @@ import frc.robot.commands.AlgaeIntakeInCommand;
 import frc.robot.commands.AlgaeIntakeOutCommand;
 import frc.robot.commands.CoralIntakeInCommand;
 import frc.robot.commands.CoralIntakeOutCommand;
+import frc.robot.commands.ElevatorFirstStageDownCommand;
+import frc.robot.commands.ElevatorFirstStageUpCommand;
+import frc.robot.commands.ElevatorSecondStageDownCommand;
+import frc.robot.commands.ElevatorSecondStageUpCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -37,6 +41,10 @@ public class RobotContainer {
   public static final AlgaeIntakeOutCommand m_algaeIntakeOutCommand = new AlgaeIntakeOutCommand(m_algaeIntakeSubsystem);
   public static final CoralIntakeInCommand m_coralIntakeInCommand = new CoralIntakeInCommand(m_coralIntakeSubsystem);
   public static final CoralIntakeOutCommand m_coralIntakeOutCommand = new CoralIntakeOutCommand(m_coralIntakeSubsystem);
+  public static final ElevatorFirstStageDownCommand m_elevatorFirstStageDownCommand = new ElevatorFirstStageDownCommand(m_elevatorSubsystem);
+  public static final ElevatorFirstStageUpCommand m_elevatorFirstStageUpCommand = new ElevatorFirstStageUpCommand(m_elevatorSubsystem);
+  public static final ElevatorSecondStageDownCommand m_elevatorSecondStageDownCommand = new ElevatorSecondStageDownCommand(m_elevatorSubsystem);
+  public static final ElevatorSecondStageUpCommand m_elevatorSecondStageUpCommand = new ElevatorSecondStageUpCommand(m_elevatorSubsystem);
 
   // Joysticks
   public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
@@ -58,21 +66,34 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    //LEFT BUTTONS
     Trigger coralIntakeInButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
     Trigger coralIntakeOutButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
+
+    //RIGHT BUTTONS
+    Trigger elevatorFirstStageUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
+    Trigger elevatorFirstStageDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
+    Trigger elevatorSecondStageUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_SECOND_STAGE_UP_BUTTON);
+    Trigger elevatorSecondStageDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_SECOND_STAGE_DOWN_BUTTON);
+    Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
+    Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON);
 
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);
     algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
     algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
-    // Right Joystick Buttons, initialization
-    Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
 
-    // Right Buttons, Run
+    elevatorFirstStageUpButton.whileTrue(m_elevatorFirstStageUpCommand);
+    elevatorFirstStageDownButton.whileTrue(m_elevatorFirstStageDownCommand);
+    elevatorSecondStageUpButton.whileTrue(m_elevatorSecondStageUpCommand);
+    elevatorSecondStageDownButton.whileTrue(m_elevatorSecondStageDownCommand);
+
     resetButton.onTrue(new InstantCommand(()-> m_drivetrainSubsystem.zeroOdometry()));
+    zeroElevatorPowerButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.zeroElevatorPower()));
+
   }
 
   /**

@@ -235,6 +235,12 @@ public final class Constants {
   // right buttons
   public static final int SWERVE_RESET_BUTTON = 9;
   public static final int ZERO_ODOMETRY_BUTTON = 11;
+  public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;
+  public static final int ELEVATOR_FIRST_STAGE_DOWN_BUTTON = 3;
+  public static final int ELEVATOR_SECOND_STAGE_UP_BUTTON = 6;
+  public static final int ELEVATOR_SECOND_STAGE_DOWN_BUTTON = 4;
+  public static final int ELEVATOR_ZERO_POWER_BUTTON = 2;
+
 
   // left buttons
   //TODO: change these to better buttons
@@ -242,5 +248,6 @@ public final class Constants {
   public static final int CORAL_INTAKE_OUT_BUTTON = 4;
   public static final int ALGAE_INTAKE_IN_BUTTON = 5;
   public static final int ALGAE_INTAKE_OUT_BUTTON = 6;
+
 
 }
