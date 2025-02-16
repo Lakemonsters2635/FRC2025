@@ -14,11 +14,13 @@ import frc.robot.commands.AlgaeIntakeInCommand;
 import frc.robot.commands.AlgaeIntakeOutCommand;
 import frc.robot.commands.CoralIntakeInCommand;
 import frc.robot.commands.CoralIntakeOutCommand;
+import frc.robot.commands.MoveCoralArmToPosition;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.StreamDeckSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,12 +35,14 @@ public class RobotContainer {
   public static final CoralIntakeSubsystem m_coralIntakeSubsystem = new CoralIntakeSubsystem();
   public static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   public static final CoralArmSubsystem m_coralArmSubsystem = new CoralArmSubsystem();
+  public static final StreamDeckSubsystem m_streamDeckSubsystem = new StreamDeckSubsystem();
 
   // Commands
   public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);
   public static final AlgaeIntakeOutCommand m_algaeIntakeOutCommand = new AlgaeIntakeOutCommand(m_algaeIntakeSubsystem);
   public static final CoralIntakeInCommand m_coralIntakeInCommand = new CoralIntakeInCommand(m_coralIntakeSubsystem);
   public static final CoralIntakeOutCommand m_coralIntakeOutCommand = new CoralIntakeOutCommand(m_coralIntakeSubsystem);
+  public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem);
 
   // Joysticks
   public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
@@ -61,15 +65,17 @@ public class RobotContainer {
    */
   private void configureBindings() {
     Trigger coralIntakeInButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
-    Trigger coralIntakeOutButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
 
     Trigger coralArm90 = new JoystickButton(rightJoystick, 3);
     Trigger coralArm125 = new JoystickButton(rightJoystick, 4);
+    Trigger coralIntakeOutButton = new JoystickButton(rightJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
+    Trigger moveCoralArmPos = new JoystickButton(rightJoystick, 6);
 
     coralArm90.onTrue(new InstantCommand(() -> m_coralArmSubsystem.setPoseTarget(-90)));
     coralArm125.onTrue(new InstantCommand(() -> m_coralArmSubsystem.setPoseTarget(-125)));
+    moveCoralArmPos.onTrue(m_moveCoralArmToPosition);
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);

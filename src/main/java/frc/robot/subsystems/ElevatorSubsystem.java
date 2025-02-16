@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -20,7 +21,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   TalonFX m_elevatorMotor;
 
   public ElevatorSubsystem() {
-    m_elevatorMotor = new TalonFX(Constants.ElEVATOR_MOTOR_ID);
+    m_elevatorMotor = new TalonFX(Constants.ElEVATOR_MOTOR_ID, new CANBus("CANivore"));
     m_elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
   }
   //negative up
