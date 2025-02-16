@@ -48,7 +48,7 @@ public class RobotContainer {
   public static final CoralIntakeOutCommand m_coralIntakeOutCommand = new CoralIntakeOutCommand(m_coralIntakeSubsystem);
   public static final ElevatorDownCommand m_elevatorFirstStageDownCommand = new ElevatorDownCommand(m_elevatorSubsystem);
   public static final ElevatorUpCommand m_elevatorFirstStageUpCommand = new ElevatorUpCommand(m_elevatorSubsystem);
-  public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem);
+  public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem);
 
   // Joysticks
   public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);

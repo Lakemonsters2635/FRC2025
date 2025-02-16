@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.StreamDeckSubsystem;
 
@@ -16,11 +17,13 @@ public class MoveCoralArmToPosition extends Command {
 
   CoralArmSubsystem m_cas;
   StreamDeckSubsystem m_sds;
+  AlgaeArmSubsystem m_aas;
   Constants.ElevatorState constant;
-  public MoveCoralArmToPosition(CoralArmSubsystem cas, StreamDeckSubsystem sds) {
+  public MoveCoralArmToPosition(CoralArmSubsystem cas, StreamDeckSubsystem sds, AlgaeArmSubsystem aas) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_cas = cas;
     m_sds = sds;
+    m_aas = aas;
     constant = Constants.E_STATE_CORAL_SOURCE;
   }
 
@@ -63,6 +66,7 @@ public class MoveCoralArmToPosition extends Command {
     }
 
     m_cas.setPoseTarget(constant.CORAL_ARM_ANGLE);
+    m_aas.setArmPosition(constant.ALGAE_ARM_ANGLE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

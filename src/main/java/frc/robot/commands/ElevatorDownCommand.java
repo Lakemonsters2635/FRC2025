@@ -30,7 +30,7 @@ public class ElevatorDownCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_elevatorSubsystem.setFirstStageHoldPower();
+    m_elevatorSubsystem.setStageHoldPower();
   }
 
   // Returns true when the command should end.

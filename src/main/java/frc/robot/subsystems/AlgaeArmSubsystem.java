@@ -40,7 +40,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_algaeArmController = new PIDController(0.02,0,0); // TODO: Tune these values
 
     resetEncoder(); // Reset encoder, since we start from the 0 position
-    setArmPosition(-90);
   }
 
   public void setArmPowerVolts(double volts) {
@@ -77,7 +76,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
     // setArmPowerVolts(controlArmThrottle());
 
-    ff = GAIN_ALGAE * Math.abs(Math.sin(Math.toRadians(theta)));
+    ff = GAIN * Math.abs(Math.sin(Math.toRadians(theta)));
     fb = m_algaeArmController.calculate(theta, m_poseTarget);
 
     SmartDashboard.putNumber("Encoder Counts", getEncoderCounts());
@@ -87,6 +86,6 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Feed Forward", ff);
     SmartDashboard.putNumber("Feed Back", fb);
 
-    setArmPowerVolts(ff + controlArmThrottle());
+    setArmPowerVolts(ff + fb);
   }
 }

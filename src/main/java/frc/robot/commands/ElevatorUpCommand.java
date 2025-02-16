@@ -20,7 +20,7 @@ public class ElevatorUpCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_elevatorSubsystem.setFirstStageRaisePower();
+    m_elevatorSubsystem.setRaisePower();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,7 +30,7 @@ public class ElevatorUpCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_elevatorSubsystem.setFirstStageHoldPower();
+    m_elevatorSubsystem.setStageHoldPower();
   }
 
   // Returns true when the command should end.
