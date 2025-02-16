@@ -17,6 +17,7 @@ import frc.robot.commands.CoralIntakeOutCommand;
 import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.MoveCoralArmToPosition;
+import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
@@ -35,6 +36,7 @@ public class RobotContainer {
   DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   public static final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   public static final CoralIntakeSubsystem m_coralIntakeSubsystem = new CoralIntakeSubsystem();
+  public static final AlgaeArmSubsystem m_algaeArmSubsystem = new AlgaeArmSubsystem();
   public static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   public static final CoralArmSubsystem m_coralArmSubsystem = new CoralArmSubsystem();
   public static final StreamDeckSubsystem m_streamDeckSubsystem = new StreamDeckSubsystem();
