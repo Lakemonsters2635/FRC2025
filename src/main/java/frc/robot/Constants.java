@@ -178,6 +178,24 @@ public final class Constants {
 
   public static final int TARGET_TRIGGER_DISTANCE_APRIL_TAG = 0;
 
+  // STREAMDECK CONSTANTS
+  public static final String SD_SOURCE = "0";
+  public static final String SD_REEF_LEVEL_1 = "1";
+  public static final String SD_REEF_LEVEL_2 = "2";
+  public static final String SD_REEF_LEVEL_3 = "3";
+  public static final String SD_REEF_LEVEL_4 = "4";
+
+  public static final String SD_REEF_POS_1 = "1";
+  public static final String SD_REEF_POS_2 = "2";
+  public static final String SD_REEF_POS_3 = "3";
+  public static final String SD_REEF_POS_4 = "4";
+  public static final String SD_REEF_POS_5 = "5";
+  public static final String SD_REEF_POS_6 = "6";
+
+
+  public static final String SD_REEF_LEFT = "L";
+  public static final String SD_REEF_RIGHT = "R";
+
   // AUTO CONSTANTS
   
   // AUTOMOVESWERVE CONSTANTS
