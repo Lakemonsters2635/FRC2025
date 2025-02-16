@@ -19,7 +19,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   private final SparkMax m_algaeArmMotor;
   private final SparkMaxConfig m_algaeArmConfig;
   double ff, fb, motorPower, theta, m_poseTarget;
-  double GAIN = 0.0; // TODO: Measure this value
+  double GAIN = -0.412; // TODO: Measure this value
+  double GAIN_ALGAE = - 0.78;
   PIDController m_algaeArmController;
 
   public AlgaeArmSubsystem() {
@@ -36,10 +37,10 @@ public class AlgaeArmSubsystem extends SubsystemBase {
       SparkBase.PersistMode.kPersistParameters
     );
 
-    m_algaeArmController = new PIDController(0,0,0); // TODO: Tune these values
+    m_algaeArmController = new PIDController(0.02,0,0); // TODO: Tune these values
 
     resetEncoder(); // Reset encoder, since we start from the 0 position
-
+    setArmPosition(-90);
   }
 
   public void setArmPowerVolts(double volts) {
@@ -60,10 +61,10 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_algaeArmMotor.getEncoder().setPosition(0);
   }
 
-  public void controlArmThrottle() {
+  public double controlArmThrottle() {
     Joystick leftJoystick = new Joystick(0);
-    m_algaeArmMotor.setVoltage(leftJoystick.getThrottle()*0.1*12);
-    SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle() * 0.3);
+    SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle() * 0.1 * 12);
+    return leftJoystick.getThrottle() * 0.1 * 12;
   }
 
   public void setArmPosition(double position) {
@@ -73,9 +74,10 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     theta = getDegrees();
-    controlArmThrottle();
 
-    ff = GAIN * Math.sin(Math.toRadians(theta));
+    // setArmPowerVolts(controlArmThrottle());
+
+    ff = GAIN_ALGAE * Math.abs(Math.sin(Math.toRadians(theta)));
     fb = m_algaeArmController.calculate(theta, m_poseTarget);
 
     SmartDashboard.putNumber("Encoder Counts", getEncoderCounts());
@@ -84,5 +86,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Motor Power Volts", m_algaeArmMotor.get()*11);
     SmartDashboard.putNumber("Feed Forward", ff);
     SmartDashboard.putNumber("Feed Back", fb);
+
+    setArmPowerVolts(ff + controlArmThrottle());
   }
 }

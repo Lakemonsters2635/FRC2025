@@ -14,6 +14,7 @@ import frc.robot.commands.AlgaeIntakeInCommand;
 import frc.robot.commands.AlgaeIntakeOutCommand;
 import frc.robot.commands.CoralIntakeInCommand;
 import frc.robot.commands.CoralIntakeOutCommand;
+import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -29,6 +30,7 @@ public class RobotContainer {
   DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   public static final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   public static final CoralIntakeSubsystem m_coralIntakeSubsystem = new CoralIntakeSubsystem();
+  public static final AlgaeArmSubsystem m_algaeArmSubsystem = new AlgaeArmSubsystem();
 
   // Commands
   public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);
