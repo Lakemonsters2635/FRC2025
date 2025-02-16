@@ -15,6 +15,7 @@ import frc.robot.commands.AlgaeIntakeOutCommand;
 import frc.robot.commands.CoralIntakeInCommand;
 import frc.robot.commands.CoralIntakeOutCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -29,6 +30,7 @@ public class RobotContainer {
   DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   public static final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   public static final CoralIntakeSubsystem m_coralIntakeSubsystem = new CoralIntakeSubsystem();
+  public static final CoralArmSubsystem m_coralArmSubsystem = new CoralArmSubsystem();
 
   // Commands
   public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);
@@ -61,6 +63,11 @@ public class RobotContainer {
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
 
+    Trigger coralArm90 = new JoystickButton(rightJoystick, 3);
+    Trigger coralArm125 = new JoystickButton(rightJoystick, 4);
+
+    coralArm90.onTrue(new InstantCommand(() -> m_coralArmSubsystem.setPoseTarget(-90)));
+    coralArm125.onTrue(new InstantCommand(() -> m_coralArmSubsystem.setPoseTarget(-125)));
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);
