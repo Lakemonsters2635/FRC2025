@@ -40,29 +40,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     return m_encoderOuter.get();
   }
 
-  public void setFirstStageRaisePower(){
-    m_elevatorMotor.setVoltage(-2.5);
+  public void setRaisePower(){
+    m_elevatorMotor.setVoltage(-1);
   }
 
-  public void setFirstStageHoldPower(){
+  public void setStageHoldPower(){
     m_elevatorMotor.setVoltage(-.85);
-  }
-
-  public void setSecondStageRaisePower(){
-    m_elevatorMotor.setVoltage(-1.5);
-  }
-
-  public void setSecondStageHoldPower(){
-    m_elevatorMotor.setVoltage(-1.25);
   }
 
   public void setFirstStageLowerPower(){
     m_elevatorMotor.setVoltage(1);
   }
 
-  public void setSecondStageLowerPower(){
-    m_elevatorMotor.setVoltage(-0.5);
-  }
 
   public void zeroElevatorPower(){
     m_elevatorMotor.setVoltage(0);

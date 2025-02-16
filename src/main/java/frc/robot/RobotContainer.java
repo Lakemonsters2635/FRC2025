@@ -9,16 +9,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeIntakeInCommand;
 import frc.robot.commands.AlgaeIntakeOutCommand;
 import frc.robot.commands.CoralIntakeInCommand;
 import frc.robot.commands.CoralIntakeOutCommand;
-import frc.robot.commands.ElevatorFirstStageDownCommand;
-import frc.robot.commands.ElevatorFirstStageUpCommand;
-import frc.robot.commands.ElevatorSecondStageDownCommand;
-import frc.robot.commands.ElevatorSecondStageUpCommand;
+import frc.robot.commands.ElevatorDownCommand;
+import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.MoveCoralArmToPosition;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
@@ -47,10 +44,8 @@ public class RobotContainer {
   public static final AlgaeIntakeOutCommand m_algaeIntakeOutCommand = new AlgaeIntakeOutCommand(m_algaeIntakeSubsystem);
   public static final CoralIntakeInCommand m_coralIntakeInCommand = new CoralIntakeInCommand(m_coralIntakeSubsystem);
   public static final CoralIntakeOutCommand m_coralIntakeOutCommand = new CoralIntakeOutCommand(m_coralIntakeSubsystem);
-  public static final ElevatorFirstStageDownCommand m_elevatorFirstStageDownCommand = new ElevatorFirstStageDownCommand(m_elevatorSubsystem);
-  public static final ElevatorFirstStageUpCommand m_elevatorFirstStageUpCommand = new ElevatorFirstStageUpCommand(m_elevatorSubsystem);
-  public static final ElevatorSecondStageDownCommand m_elevatorSecondStageDownCommand = new ElevatorSecondStageDownCommand(m_elevatorSubsystem);
-  public static final ElevatorSecondStageUpCommand m_elevatorSecondStageUpCommand = new ElevatorSecondStageUpCommand(m_elevatorSubsystem);
+  public static final ElevatorDownCommand m_elevatorFirstStageDownCommand = new ElevatorDownCommand(m_elevatorSubsystem);
+  public static final ElevatorUpCommand m_elevatorFirstStageUpCommand = new ElevatorUpCommand(m_elevatorSubsystem);
   public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem);
 
   // Joysticks

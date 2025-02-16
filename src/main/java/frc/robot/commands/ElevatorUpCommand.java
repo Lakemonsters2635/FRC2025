@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorFirstStageDownCommand extends Command {
-  /** Creates a new ElevatorFirstStageDownCommand. */
+public class ElevatorUpCommand extends Command {
+  /** Creates a new ElevatorFirstStageUpCommand. */
   ElevatorSubsystem m_elevatorSubsystem;
-  public ElevatorFirstStageDownCommand(ElevatorSubsystem elevatorSubsystem) {
+  public ElevatorUpCommand(ElevatorSubsystem elevatorSubsystem) {
     m_elevatorSubsystem = elevatorSubsystem;
     addRequirements(m_elevatorSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -20,7 +20,7 @@ public class ElevatorFirstStageDownCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_elevatorSubsystem.setFirstStageLowerPower();
+    m_elevatorSubsystem.setFirstStageRaisePower();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
