@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -85,7 +86,10 @@ public class RobotContainer {
     Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
 
     // Right Buttons, Run
-    resetButton.onTrue(new InstantCommand(()-> m_drivetrainSubsystem.zeroOdometry()));
+    resetButton.onTrue(new SequentialCommandGroup(
+      new InstantCommand(()-> m_drivetrainSubsystem.zeroOdometry()),
+      new InstantCommand(()-> m_drivetrainSubsystem.resetAngle())
+      ));
   }
 
   /**
