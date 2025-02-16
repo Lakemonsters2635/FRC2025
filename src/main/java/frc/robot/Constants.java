@@ -74,6 +74,49 @@ public final class Constants {
   public static final int DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR = 2; //6
   public static final double BACK_RIGHT_ANGLE_OFFSET_COMPETITION = Math.toRadians(-95.3); //3.01
 
+  //Elevator Constants
+  public static final int ElEVATOR_MOTOR_ID = 9;
+  public static final int INNER_ELEVATOR_ENCODER_A = 0;
+  public static final int INNER_ELEVATOR_ENCODER_B = 1;
+
+  public static final int OUTER_ELEVATOR_ENCODER_A = 8;
+  public static final int OUTER_ELEVATOR_ENCODER_B = 9;
+
+  public static class ElevatorState {
+    public double ELEVATOR_POSITION;
+    public double CORAL_ARM_ANGLE;
+    public double ALGAE_ARM_ANGLE;
+
+    ElevatorState(double elevatorPosition, double coralArmAngle, double algaeArmAngle) {
+      ELEVATOR_POSITION = elevatorPosition;
+      CORAL_ARM_ANGLE = coralArmAngle;
+      ALGAE_ARM_ANGLE = algaeArmAngle;
+    }
+  }
+
+  public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(0, 0, 0);
+  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(0, 0, 0);
+  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(0, 0, 0);
+  public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(0, 0, 0);
+
+  //TODO: test these values
+  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(0, 35, 0);
+  public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(0, 0, 0); // TODO: figure out coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(0, 125, 0);
+  public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(0, 125, 0);
+  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(0, 180, 0); // TODO: find maximum angle for the coralArmAngle
+
+  /*
+   * E_STATE_ALGAE_LOW
+   * E_STATE_ALGAE_HIGH
+   * E_STATE_ALGAE_PROCESSOR
+   * 
+   * E_STATE_CORAL_SOURCE
+   * E_STATE_CORAL_REEF_1
+   * E_STATE_CORAL_REEF_2
+   * E_STATE_CORAL_REEF_3
+   * E_STATE_CORAL_REEF_4
+   */
   // INTAKE CONSTANTS
   // Algae
   public static final int ALGAE_LEFT_INTAKE_MOTOR = 6;
