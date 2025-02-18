@@ -20,7 +20,6 @@ import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.MoveCoralArmToPosition;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -42,7 +41,6 @@ public class RobotContainer {
   public static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   public static final CoralArmSubsystem m_coralArmSubsystem = new CoralArmSubsystem();
   public static final StreamDeckSubsystem m_streamDeckSubsystem = new StreamDeckSubsystem();
-  public static final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
   // Commands
   public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);
@@ -92,9 +90,6 @@ public class RobotContainer {
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
     algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    test.whileTrue(new InstantCommand(()->m_climberSubsystem.configure()));
-    test.whileFalse(new InstantCommand(()->m_climberSubsystem.motor.setVoltage(0)));
-
     // algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
     // algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
 

@@ -24,8 +24,8 @@ public class CoralArmSubsystem extends SubsystemBase {
   double ff;
   double fb;
   double motorPower;
-  private final double GAIN_CORRAL = 0.416; // Holds with corral in horizontal position
-  private final double GAIN_WITHOUT_CORRAL = 0.1;
+  private final double GAIN_CORRAL = 0.416 * 1.6; // Holds with corral in horizontal position
+  private final double GAIN_WITHOUT_CORRAL = 0.1 *1.6;
   double gain = GAIN_CORRAL;
   PIDController m_coralArmController;
   double theta;
@@ -50,12 +50,14 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   public double getEncoderCounts() {
+    // getEncoderCounts() is in revolutions
     return m_coralArmMotor.getEncoder().getPosition();
   }
 
   public double getDegrees() {
     // encoder offset should be zero since the relative encoder is resetted and setup correctly before deploy
-    double degrees = ((getEncoderCounts()-Constants.CORAL_ARM_ENCODER_OFFSET)/160)*360;
+    // 100 is the gear ratio
+    double degrees = ((getEncoderCounts()-Constants.CORAL_ARM_ENCODER_OFFSET)/100)*360;
     degrees%=360;
     return degrees;
   }

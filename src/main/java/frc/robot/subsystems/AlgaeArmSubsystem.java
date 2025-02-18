@@ -47,11 +47,13 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public double getEncoderCounts() {
+    // getEncoderCounts() is in revolutions
     return m_algaeArmMotor.getEncoder().getPosition();
   }
 
   public double getDegrees() {
-    double degrees = (getEncoderCounts() /160) * 360;
+    // 100 is the gear ratio
+    double degrees = (getEncoderCounts() /100) * 360;
     degrees %= 360;
     return degrees;
   }
