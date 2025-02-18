@@ -18,12 +18,14 @@ import frc.robot.commands.CoralIntakeOutCommand;
 import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.MoveCoralArmToPosition;
+import frc.robot.commands.VisionAutoCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ObjectTrackerSubsystem;
 import frc.robot.subsystems.StreamDeckSubsystem;
 
 /**
@@ -34,13 +36,14 @@ import frc.robot.subsystems.StreamDeckSubsystem;
  */
 public class RobotContainer {
   // Subsystems
-  DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   public static final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   public static final CoralIntakeSubsystem m_coralIntakeSubsystem = new CoralIntakeSubsystem();
   public static final AlgaeArmSubsystem m_algaeArmSubsystem = new AlgaeArmSubsystem();
   public static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   public static final CoralArmSubsystem m_coralArmSubsystem = new CoralArmSubsystem();
   public static final StreamDeckSubsystem m_streamDeckSubsystem = new StreamDeckSubsystem();
+  public static final ObjectTrackerSubsystem m_objectTrackerSubsystem = new ObjectTrackerSubsystem("MonsterVision");
 
   // Commands
   public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);
@@ -50,7 +53,8 @@ public class RobotContainer {
   public static final ElevatorDownCommand m_elevatorFirstStageDownCommand = new ElevatorDownCommand(m_elevatorSubsystem);
   public static final ElevatorUpCommand m_elevatorFirstStageUpCommand = new ElevatorUpCommand(m_elevatorSubsystem);
   public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem);
-  public Autos m_autos = new Autos(m_drivetrainSubsystem);
+  public static final VisionAutoCommand m_visionAutoCommand = new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem);
+  public static final Autos m_autos = new Autos(m_drivetrainSubsystem);
 
   // Joysticks
   public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
