@@ -24,12 +24,13 @@ public class CoralArmSubsystem extends SubsystemBase {
   double ff;
   double fb;
   double motorPower;
-  private final double GAIN_CORRAL = 0.416 * 1.6; // Holds with corral in horizontal position
+  private final double GAIN_CORRAL = 0.416; // Holds with corral in horizontal position
   private final double GAIN_WITHOUT_CORRAL = 0.1 *1.6;
   double gain = GAIN_CORRAL;
   PIDController m_coralArmController;
   double theta;
   double m_poseTarget;
+  Joystick leftJoystick = new Joystick(0);
 
   public CoralArmSubsystem() {
     m_coralArmMotor = new SparkMax(Constants.CORAL_ARM_MOTOR, MotorType.kBrushless); 
@@ -67,8 +68,8 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   public double controlArmThrottle() {
-    Joystick leftJoystick = new Joystick(0);
-    SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle()*0.1*12);
+    
+    
     return leftJoystick.getThrottle() * 0.1 * 12;
   }
 
@@ -95,8 +96,10 @@ public class CoralArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("coralArm Motor Power Volts", m_coralArmMotor.getAppliedOutput());
     SmartDashboard.putNumber("coralArm Feed Forward", ff);
     SmartDashboard.putNumber("coralArm Feed Back", fb);
+    SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle()*0.1*12);
 
-    //setArmPower(ff);
+    // setArmPower(ff + controlArmThrottle());
+    
     setArmPower(ff+fb);
   }
 }
