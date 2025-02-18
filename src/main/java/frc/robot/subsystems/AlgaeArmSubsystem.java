@@ -60,6 +60,13 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_algaeArmMotor.getEncoder().setPosition(0);
   }
 
+  public void moveArmUp(){
+    setArmPosition(m_poseTarget+5);
+  }
+  public void moveArmDown(){
+    setArmPosition(m_poseTarget-5);
+  }
+
   public double controlArmThrottle() {
     Joystick leftJoystick = new Joystick(0);
     SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle() * 0.1 * 12);

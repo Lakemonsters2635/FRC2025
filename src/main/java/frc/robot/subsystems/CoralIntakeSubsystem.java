@@ -62,7 +62,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
 
   public void holdCoralIntake() {
-    m_rightCoralIntakeMotor.setVoltage(0.5);
+    m_rightCoralIntakeMotor.setVoltage(1.0);
   }
 
   public void stopCoralIntake() {
