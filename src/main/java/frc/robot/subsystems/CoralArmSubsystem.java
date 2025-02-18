@@ -98,5 +98,7 @@ public class CoralArmSubsystem extends SubsystemBase {
 
     //setArmPower(ff);
     setArmPower(ff+fb);
+
+    
   }
 }
