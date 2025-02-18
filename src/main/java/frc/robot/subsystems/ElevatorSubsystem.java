@@ -41,7 +41,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setRaisePower(){
-    m_elevatorMotor.setVoltage(-1);
+    m_elevatorMotor.setVoltage(-1.8);
   }
 
   public void setStageHoldPower(){

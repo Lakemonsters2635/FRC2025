@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeIntakeInCommand;
 import frc.robot.commands.AlgaeIntakeOutCommand;
+import frc.robot.commands.Autos;
 import frc.robot.commands.CoralIntakeInCommand;
 import frc.robot.commands.CoralIntakeOutCommand;
 import frc.robot.commands.ElevatorDownCommand;
@@ -49,6 +50,7 @@ public class RobotContainer {
   public static final ElevatorDownCommand m_elevatorFirstStageDownCommand = new ElevatorDownCommand(m_elevatorSubsystem);
   public static final ElevatorUpCommand m_elevatorFirstStageUpCommand = new ElevatorUpCommand(m_elevatorSubsystem);
   public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem);
+  public Autos m_autos = new Autos(m_drivetrainSubsystem);
 
   // Joysticks
   public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
@@ -74,6 +76,7 @@ public class RobotContainer {
     Trigger coralIntakeInButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
+    Trigger test = new JoystickButton(leftJoystick, 5);
 
     //RIGHT BUTTONS
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
@@ -85,8 +88,10 @@ public class RobotContainer {
 
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
-    algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
-    algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
+    algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
+    algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
+    // algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
+    // algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(
@@ -107,6 +112,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
+    // return m_autos.goStraight();
     return new Command() {
       
     };

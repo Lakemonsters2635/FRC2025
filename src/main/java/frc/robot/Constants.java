@@ -100,11 +100,13 @@ public final class Constants {
   public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(0, 0, 0);
 
   //TODO: test these values
-  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(0, -45, -55);
+  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(0, -45, -70);
   public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(0, -90, -90); // TODO: figure out coralArmAngle
-  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(0, -90, -55);
-  public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(0, -90, -55);
-  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(0, -130, -55); // TODO: find maximum angle for the coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(0, -90, -70);
+  public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(0, -90, -70);
+  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(0, -25, -70); // TODO: find maximum angle for the coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_TRANSIT = new Constants.ElevatorState(0, -25, -70); // TODO: find maximum angle for the coralArmAngle
+  
 
   /*
    * E_STATE_ALGAE_LOW
@@ -271,7 +273,7 @@ public final class Constants {
   // left buttons
   //TODO: change these to better buttons
   public static final int CORAL_INTAKE_IN_BUTTON = 1;
-  public static final int ALGAE_INTAKE_IN_BUTTON = 5;
+  public static final int ALGAE_INTAKE_IN_BUTTON = 4; //TODO: 5
   public static final int ALGAE_INTAKE_OUT_BUTTON = 6;
 
 
