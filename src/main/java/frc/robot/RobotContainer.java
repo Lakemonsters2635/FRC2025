@@ -86,10 +86,10 @@ public class RobotContainer {
 
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
-    algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
-    algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    // algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
-    // algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
+    // algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
+    // algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
+    algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
+    algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(

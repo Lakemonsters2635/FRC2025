@@ -98,8 +98,8 @@ public class CoralArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("coralArm Feed Back", fb);
     SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle()*0.1*12);
 
-    setArmPower(ff + controlArmThrottle());
+    // setArmPower(ff + controlArmThrottle());
     
-    // setArmPower(ff+fb);
+    setArmPower(ff+fb);
   }
 }

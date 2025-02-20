@@ -341,10 +341,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
       //           new Translation2d(0, -Constants.DRIVETRAIN_WHEELBASE_LENGTH/2));
       // } else {
       this.drive(
-              xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
-              yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
-              MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
-              true);
+              0//xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
+              ,0 //yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
+              ,0//MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
+              ,true);
       }
     // }
 
