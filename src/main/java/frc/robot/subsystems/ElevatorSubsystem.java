@@ -37,7 +37,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
   
   public double outerEncoderRotations(){
-    return m_encoderOuter.get();
+    return -m_encoderOuter.get();
+  }
+
+  public double elevatorHeight() {
+    return innerEncoderRotations() + outerEncoderRotations();
   }
 
   public void setRaisePower(){
@@ -61,9 +65,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     // This method will be called once per schedu
     SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
     SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
+    SmartDashboard.putNumber("elevatorHeight", elevatorHeight());
     SmartDashboard.putNumber("Motor Power (-1 to 1)", m_elevatorMotor.get());
     SmartDashboard.putNumber("Motor Power Voltage", m_elevatorMotor.get() * 11);
 
-
+    if(elevatorHeight() < 12000 || elevatorHeight() > 35000){
+      zeroElevatorPower();
+    }
   }
 }
