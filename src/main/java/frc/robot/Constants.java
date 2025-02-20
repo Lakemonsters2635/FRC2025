@@ -101,11 +101,11 @@ public final class Constants {
 
   //TODO: test these values
   public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(0, -45, 0);
-  public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(0, -90, 0); // TODO: figure out coralArmAngle
-  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(0, -90, -70);
+  public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(0, -90, -30); // TODO: figure out coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(0, -90, -50);
   public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(0, -90, -70);
-  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(0, -25, -70); // TODO: find maximum angle for the coralArmAngle
-  public static final ElevatorState E_STATE_CORAL_TRANSIT = new Constants.ElevatorState(0, -25, -70); // TODO: find maximum angle for the coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(0, -25, -90); // TODO: find maximum angle for the coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_TRANSIT = new Constants.ElevatorState(0, -25, 0); // TODO: find maximum angle for the coralArmAngle
   
 
   /*
@@ -265,8 +265,6 @@ public final class Constants {
   public static final int ZERO_ODOMETRY_BUTTON = 11;
   public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;
   public static final int ELEVATOR_FIRST_STAGE_DOWN_BUTTON = 3;
-  public static final int ELEVATOR_SECOND_STAGE_UP_BUTTON = 6;
-  public static final int ELEVATOR_SECOND_STAGE_DOWN_BUTTON = 4;
   public static final int ELEVATOR_ZERO_POWER_BUTTON = 2;
 
 

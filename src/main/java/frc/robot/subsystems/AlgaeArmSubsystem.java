@@ -30,7 +30,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     // Configuration
     m_algaeArmConfig = new SparkMaxConfig();
     m_algaeArmConfig.inverted(false);
-    m_algaeArmConfig.idleMode(IdleMode.kBrake);
+    // m_algaeArmConfig.idleMode(IdleMode.kBrake);
+    m_algaeArmConfig.idleMode(IdleMode.kCoast);
     m_algaeArmConfig.smartCurrentLimit(10);
     m_algaeArmMotor.configure(
       m_algaeArmConfig, 
@@ -73,7 +74,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   public double controlArmThrottle() {
     
     
-    return leftJoystick.getThrottle() * 0.2 * 12;
+    return leftJoystick.getThrottle() * 0.1 * 12;
   }
 
   public void setArmPosition(double position) {
@@ -96,7 +97,10 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Feed Forward", ff);
     SmartDashboard.putNumber("Feed Back", fb);
     SmartDashboard.putNumber("Algae Throttle Motor Power", leftJoystick.getThrottle() * 0.2 * 12);
+    SmartDashboard.putNumber("Algae AppliedVoltage", m_algaeArmMotor.getAppliedOutput());
+    SmartDashboard.putNumber("Algae CurrentOutput", m_algaeArmMotor.getOutputCurrent());
 
-    setArmPowerVolts(ff + controlArmThrottle());
+    // setArmPowerVolts(ff + controlArmThrottle());
+    
   }
 }
