@@ -76,8 +76,6 @@ public class RobotContainer {
     Trigger coralIntakeInButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
-    Trigger test = new JoystickButton(leftJoystick, 5);
-
     //RIGHT BUTTONS
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
@@ -88,10 +86,10 @@ public class RobotContainer {
 
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
-    algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
-    algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    // algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
-    // algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
+    // algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
+    // algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
+    algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
+    algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(

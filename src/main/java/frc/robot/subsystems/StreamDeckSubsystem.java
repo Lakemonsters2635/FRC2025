@@ -48,6 +48,14 @@ public class StreamDeckSubsystem extends SubsystemBase {
 
   public String[] getCorralInfo(){
     String[] getValue = corralInfoEntry.get();
+    try{
+      SmartDashboard.putString("StreamdeckCoralInfo[0]", getValue[0]);
+      SmartDashboard.putString("StreamdeckCoralInfo[1]", getValue[1]);
+      SmartDashboard.putString("StreamdeckCoralInfo[2]", getValue[2]);
+    }
+    catch(Exception e){
+      
+    }
     return getValue;
   }
 
