@@ -94,10 +94,11 @@ public final class Constants {
     }
   }
 
-  public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(0, 0, 0);
-  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(0, 0, 0);
-  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(0, 0, 0);
-  public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(0, 0, 0);
+  public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(-2942, 0, -87.3);
+  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(-8864, 0, -73.9);
+  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(18623, 0, -64.3);
+  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(33502, 0, -69.8);
+  public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(-6582, 0, -88.9);
 
   //TODO: test these values
   public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(0, -45, 0);
@@ -125,9 +126,10 @@ public final class Constants {
   public static final int ALGAE_RIGHT_INTAKE_MOTOR = 5;
   public static final double ALGAE_INTAKE_ROTATION_SPEED = 0.3;
   // voltage values for algae intake
-  public static final double ALGAE_INTAKE_VOLTAGE_OUT = -0.5;
-  public static final double ALGAE_INTAKE_VOLTAGE_IN = 3;
-  public static final double ALGAE_INTAKE_VOLTAGE_HOLD = 0.5;
+  // positive is out, negative is in
+  public static final double ALGAE_INTAKE_VOLTAGE_OUT = 1.5;
+  public static final double ALGAE_INTAKE_VOLTAGE_IN = -6;
+  public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.5;
 
   public static final int ALGAE_ARM_MOTOR = 4;
   public static final double CORAL_ARM_ENCODER_OFFSET = 0;//15.309518814086914;
