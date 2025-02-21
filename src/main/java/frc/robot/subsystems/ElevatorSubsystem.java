@@ -98,7 +98,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // m_poseTarget = leftJoystick.getThrottle()*10000;
 
     fb = -1 * m_elevatorController.calculate(elevatorHeight(), m_poseTarget);
-    setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 2));
+    setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5));
 
     if(elevatorHeight() > 34000){
       setElevatorMotorPower(0.5);

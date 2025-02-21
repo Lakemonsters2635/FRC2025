@@ -39,8 +39,8 @@ public class MoveCoralArmToPosition extends Command {
       SmartDashboard.putString("level", level);
       switch (level) {
         case Constants.SD_SOURCE:
-          constant = Constants.E_STATE_CLIMB;
-          // constant = Constants.E_STATE_ALGAE_PROCESSOR;
+          // constant = Constants.E_STATE_CLIMB;
+          constant = Constants.E_STATE_ALGAE_PROCESSOR;
           break;
         
         case Constants.SD_REEF_LEVEL_1:
