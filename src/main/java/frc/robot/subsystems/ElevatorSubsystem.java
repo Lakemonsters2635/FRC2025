@@ -8,7 +8,10 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,11 +21,19 @@ public class ElevatorSubsystem extends SubsystemBase {
   public static final Encoder m_encoderInner = new Encoder(Constants.INNER_ELEVATOR_ENCODER_A, Constants.INNER_ELEVATOR_ENCODER_B);
   public static final Encoder m_encoderOuter = new Encoder(Constants.OUTER_ELEVATOR_ENCODER_A, Constants.OUTER_ELEVATOR_ENCODER_B);
 
+  double fb, m_poseTarget;
+  double ff = -.5;
+  PIDController m_elevatorController;
+
+  Joystick leftJoystick = new Joystick(0);
+
   TalonFX m_elevatorMotor;
 
   public ElevatorSubsystem() {
     m_elevatorMotor = new TalonFX(Constants.ElEVATOR_MOTOR_ID, new CANBus("CANivore"));
     m_elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
+
+    m_elevatorController = new PIDController(0.001, 0, 0);
   }
   //negative up
   //positive down
@@ -60,6 +71,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void zeroElevatorPower(){
     m_elevatorMotor.setVoltage(0);
   }
+
+  public void setElevatorTarget(double targetPos){
+    m_poseTarget = targetPos;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per schedu
@@ -69,7 +85,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Motor Power (-1 to 1)", m_elevatorMotor.get());
     SmartDashboard.putNumber("Motor Power Voltage", m_elevatorMotor.get() * 11);
 
-    if(elevatorHeight() > 35000){
+    // m_poseTarget = leftJoystick.getThrottle()*10000;
+
+    fb = -1 * m_elevatorController.calculate(elevatorHeight(), m_poseTarget);
+    setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 2));
+
+    if(elevatorHeight() > 34000){
       setElevatorMotorPower(0.5);
     }
     if(elevatorHeight() < -12000){
