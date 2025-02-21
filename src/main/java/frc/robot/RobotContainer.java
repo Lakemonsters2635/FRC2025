@@ -18,6 +18,7 @@ import frc.robot.commands.CoralIntakeOutCommand;
 import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.MoveCoralArmToPosition;
+import frc.robot.commands.MoveElevatorToPoseCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
@@ -83,7 +84,7 @@ public class RobotContainer {
     Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON);
     Trigger coralIntakeOutButton = new JoystickButton(rightJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
     Trigger moveCoralArmPos = new JoystickButton(rightJoystick, 6);
-
+    Trigger moveElevatorToPos = new JoystickButton(rightJoystick, 10);
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
     // algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
@@ -100,7 +101,7 @@ public class RobotContainer {
     elevatorUpButton.whileTrue(m_elevatorFirstStageUpCommand);
     elevatorDownButton.whileTrue(m_elevatorFirstStageDownCommand);
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);
-
+    moveElevatorToPos.onTrue(new MoveElevatorToPoseCommand(m_elevatorSubsystem, 20000));
   }
 
   /**

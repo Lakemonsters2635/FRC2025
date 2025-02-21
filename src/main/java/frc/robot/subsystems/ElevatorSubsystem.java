@@ -45,11 +45,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setRaisePower(){
-    m_elevatorMotor.setVoltage(-1.8);
+    m_elevatorMotor.setVoltage(-3);
   }
 
   public void setStageHoldPower(){
-    m_elevatorMotor.setVoltage(-.85);
+    m_elevatorMotor.setVoltage(-.5);
   }
 
   public void setFirstStageLowerPower(){
@@ -69,8 +69,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Motor Power (-1 to 1)", m_elevatorMotor.get());
     SmartDashboard.putNumber("Motor Power Voltage", m_elevatorMotor.get() * 11);
 
-    // if(elevatorHeight() < 12000 || elevatorHeight() > 35000){
-    //   zeroElevatorPower();
-    // }
+    if(elevatorHeight() > 35000){
+      setStageHoldPower()*0.5;
+    }
   }
 }
