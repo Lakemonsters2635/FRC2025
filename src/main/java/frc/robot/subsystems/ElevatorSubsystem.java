@@ -34,6 +34,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
 
     m_elevatorController = new PIDController(0.001, 0, 0);
+
+    m_encoderInner.reset();
+    m_encoderOuter.reset();
   }
   //negative up
   //positive down
@@ -67,6 +70,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.setVoltage(1);
   }
 
+  public void upTargetPos(double increase){
+    m_poseTarget+= increase;
+  }
+
+  public void downTargetPos(double decrease){
+    m_poseTarget-= decrease;
+  }
 
   public void zeroElevatorPower(){
     m_elevatorMotor.setVoltage(0);
