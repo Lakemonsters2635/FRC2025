@@ -69,8 +69,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Motor Power (-1 to 1)", m_elevatorMotor.get());
     SmartDashboard.putNumber("Motor Power Voltage", m_elevatorMotor.get() * 11);
 
-    if(elevatorHeight() < 12000 || elevatorHeight() > 35000){
-      zeroElevatorPower();
-    }
+    // if(elevatorHeight() < 12000 || elevatorHeight() > 35000){
+    //   zeroElevatorPower();
+    // }
   }
 }
