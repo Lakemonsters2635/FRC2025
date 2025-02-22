@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -33,31 +34,31 @@ import frc.robot.models.VisionObject;
  * bog down the code and create clock over-runs.
  */ 
 public class ObjectTrackerSubsystem extends SubsystemBase {
-    // TODO: Harmonize Detection and VisionObject and refactor code
-    public class Detection{
-        public String objectLabel;
-        public double x;
-        public double y;
-        public double z;
-        public double confidence;
-        public double xa;
-        public double ya;
-        public double za;
-    }
-    class DetectionList extends ArrayList<Detection> {
-        @Override
-        public boolean add(Detection detec) {
-            return super.add(detec);
-        }
-        @Override
-        public Detection get(int index) {
-            return super.get(index);
-        }
-        @Override
-        public Detection remove(int index) {
-            return super.remove(index);
-        }
-    }
+    // // TODO: Harmonize Detection and VisionObject and refactor code
+    // public class Detection{
+    //     public String objectLabel;
+    //     public double x;
+    //     public double y;
+    //     public double z;
+    //     public double confidence;
+    //     public double xa;
+    //     public double ya;
+    //     public double za;
+    // }
+    // class DetectionList extends ArrayList<Detection> {
+    //     @Override
+    //     public boolean add(Detection detec) {
+    //         return super.add(detec);
+    //     }
+    //     @Override
+    //     public Detection get(int index) {
+    //         return super.get(index);
+    //     }
+    //     @Override
+    //     public Detection remove(int index) {
+    //         return super.remove(index);
+    //     }
+    // }
 
 	NetworkTable monsterVision; 
     public VisionObject[] foundObjects; 
@@ -124,11 +125,12 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         }
         // default to an empty list of detections if nothing is found: 
         jsonString = entry.getString("[]");
-        // TODO: call updateDetections with detectionsString = jsonString to populate yoloObjects and aprilTags
-        updateDetections(jsonString, gson);
-        // use the getClosestAprilTag() to get the detection for the closest april tag
-        // Use smart dashboarf to display the x, y, z and ya values
         try {
+            // TODO: call updateDetections with detectionsString = jsonString to populate yoloObjects and aprilTags
+            updateDetections(jsonString, gson);
+            // use the getClosestAprilTag() to get the detection for the closest april tag
+            // Use smart dashboarf to display the x, y, z and ya values
+
             SmartDashboard.putNumber("VisionX", getNearestAprilTagDetection().x);
             SmartDashboard.putNumber("VisionY", getNearestAprilTagDetection().y);
             SmartDashboard.putNumber("VisionZ", getNearestAprilTagDetection().z);
@@ -594,8 +596,9 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
     // }
 
     public void updateDetections(String detectionsString, Gson gson) {
-        // DetectionList gsonOut = gson.fromJson(detectionsString, DetectionList.class);
-        DetectionList gsonOut = gson.fromJson(detectionsString, new TypeToken<ArrayList<Detection>>(){}.getType());
+        // System.out.println(detectionsString);
+        DetectionList gsonOut = gson.fromJson(detectionsString, DetectionList.class);
+
         // Initialy grab fps from gsonOut, only update april tags and Yolo objects only if fps is above 25
         String fpsString = monsterVision.getEntry("ObjectTracker-fps").getString("").substring(5);
         double fps = Double.valueOf(fpsString);
