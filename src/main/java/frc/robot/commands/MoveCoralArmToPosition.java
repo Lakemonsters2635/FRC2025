@@ -37,58 +37,58 @@ public class MoveCoralArmToPosition extends Command {
     try{
       String level = m_sds.getCorralInfo()[2];
       SmartDashboard.putString("level", level);
-      switch (level) {
-        case Constants.SD_SOURCE:
-          // constant = Constants.E_STATE_CLIMB;
-          constant = Constants.E_STATE_ALGAE_PROCESSOR;
-          break;
-        
-        case Constants.SD_REEF_LEVEL_1:
-          constant = Constants.E_STATE_ALGAE_PICKUP_GROUND;
-          break;
-    
-        case Constants.SD_REEF_LEVEL_2:
-          constant = Constants.E_STATE_ALGAE_PICKUP;
-          break;
-      
-        case Constants.SD_REEF_LEVEL_3:
-          constant = Constants.E_STATE_ALGAE_LOW;
-          break;
-      
-        case Constants.SD_REEF_LEVEL_4:
-          constant = Constants.E_STATE_ALGAE_HIGH;
-          break;
-          
-      
-        default:
-          System.out.println("DEFAULT VALUE !!!!!!!!!!!!!!!");
-          break;
-      }
       // switch (level) {
       //   case Constants.SD_SOURCE:
-      //     constant = Constants.E_STATE_CORAL_SOURCE;
+      //     // constant = Constants.E_STATE_CLIMB;
+      //     constant = Constants.E_STATE_ALGAE_PROCESSOR;
       //     break;
         
       //   case Constants.SD_REEF_LEVEL_1:
-      //     constant = Constants.E_STATE_CORAL_REEF_1;
+      //     constant = Constants.E_STATE_ALGAE_PICKUP_GROUND;
       //     break;
     
       //   case Constants.SD_REEF_LEVEL_2:
-      //     constant = Constants.E_STATE_CORAL_REEF_2;
+      //     constant = Constants.E_STATE_ALGAE_PICKUP;
       //     break;
       
       //   case Constants.SD_REEF_LEVEL_3:
-      //     constant = Constants.E_STATE_CORAL_REEF_3;
+      //     constant = Constants.E_STATE_ALGAE_LOW;
       //     break;
       
       //   case Constants.SD_REEF_LEVEL_4:
-      //     constant = Constants.E_STATE_CORAL_REEF_4;
+      //     constant = Constants.E_STATE_ALGAE_HIGH;
       //     break;
+          
       
       //   default:
       //     System.out.println("DEFAULT VALUE !!!!!!!!!!!!!!!");
       //     break;
       // }
+      switch (level) {
+        case Constants.SD_SOURCE:
+          constant = Constants.E_STATE_CORAL_SOURCE;
+          break;
+        
+        case Constants.SD_REEF_LEVEL_1:
+          constant = Constants.E_STATE_CORAL_REEF_1;
+          break;
+    
+        case Constants.SD_REEF_LEVEL_2:
+          constant = Constants.E_STATE_CORAL_REEF_2;
+          break;
+      
+        case Constants.SD_REEF_LEVEL_3:
+          constant = Constants.E_STATE_CORAL_REEF_3;
+          break;
+      
+        case Constants.SD_REEF_LEVEL_4:
+          constant = Constants.E_STATE_CORAL_REEF_4;
+          break;
+      
+        default:
+          System.out.println("DEFAULT VALUE !!!!!!!!!!!!!!!");
+          break;
+      }
     } catch(Exception e){
       System.out.println(e);
       System.out.println("Exception !!!!!!!!!!!!!!!!!!!!!!!!!!");
