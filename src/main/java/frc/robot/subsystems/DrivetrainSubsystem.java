@@ -29,8 +29,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.SwerveControllerCommand2635;
@@ -43,7 +41,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static Joystick rightJoystick = RobotContainer.rightJoystick;
     public static Joystick leftJoystick = RobotContainer.leftJoystick;
 
-    public static Trigger customCenterControlButton = new JoystickButton(leftJoystick, 4);
+    // public static Trigger customCenterControlButton = new JoystickButton(leftJoystick, 4);
     
 
     public final double m_drivetrainWheelbaseWidth =  Constants.DRIVETRAIN_WHEELBASE_WIDTH;  //Calibrated for 2024 BunnyBots

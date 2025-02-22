@@ -35,6 +35,10 @@ import frc.robot.subsystems.StreamDeckSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  // Joysticks
+  public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
+  public static Joystick leftJoystick = new Joystick(Constants.LEFT_JOYSTICK_CHANNEL);
+
   // Subsystems
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   public static final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
@@ -43,7 +47,7 @@ public class RobotContainer {
   public static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   public static final CoralArmSubsystem m_coralArmSubsystem = new CoralArmSubsystem();
   public static final StreamDeckSubsystem m_streamDeckSubsystem = new StreamDeckSubsystem();
-  public static final ObjectTrackerSubsystem m_objectTrackerSubsystem = new ObjectTrackerSubsystem("MonsterVision");
+  public static final ObjectTrackerSubsystem m_objectTrackerSubsystem = new ObjectTrackerSubsystem("front");
 
   // Commands
   public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);
@@ -55,10 +59,6 @@ public class RobotContainer {
   public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem);
   public static final VisionAutoCommand m_visionAutoCommand = new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem);
   public static final Autos m_autos = new Autos(m_drivetrainSubsystem);
-
-  // Joysticks
-  public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
-  public static Joystick leftJoystick = new Joystick(Constants.LEFT_JOYSTICK_CHANNEL);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

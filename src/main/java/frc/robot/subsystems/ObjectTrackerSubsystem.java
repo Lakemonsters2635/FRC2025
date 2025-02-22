@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -69,6 +70,10 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
     public double visionY;
     public double visionYa;
 
+    private final double CAMERA_PITCH_FRONT = 23;
+    private final double CAMERA_PITCH_BACK = 0;
+    private double m_cameraPitch; 
+
     // rotation matrix
     private double cameraTilt= 0.0 * Math.PI / 180.0;
     private double[] cameraOffset = {0.0, 0.0}; // goes {x, y, z} // In inches // TODO: figure this offset
@@ -87,12 +92,15 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         monsterVision = inst.getTable("MonsterVision");
         jsonString = "";
 
-        if (source == "Balloon") { // TODO: figure our these source names from vision code
+        if (source == "back") { // Network Table that MonsterVision writes to
             cameraOffset = Constants.VISION_BALLOON_CAM_OFFSET;
+            m_cameraPitch = CAMERA_PITCH_BACK;
         }
-        else if(source == "Eclipse"){ // TODO: This name should be changed to "Tote" but left as "Eclipse for testing purposes"
+        else if(source == "front"){ //Network Table that MonsterVision writes to
             cameraOffset=Constants.VISION_TOTE_CAM_OFFSET;
+            m_cameraPitch = CAMERA_PITCH_FRONT;
         }
+
 
         sinTheta = Math.sin(cameraTilt);
         cosTheta = Math.cos(cameraTilt);
@@ -302,19 +310,25 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         return detections[minIndex];
     }
 
-    private void applyRotationTranslationMatrix() {
-        // sets reference to be the CENTER of the robot 
+    // private void applyRotationTranslationMatrix() {
+    //     // sets reference to be the CENTER of the robot 
         
-        for (int i = 0; i < foundObjects.length; i++) {
-            double x = foundObjects[i].x; 
-            double y = foundObjects[i].y; 
-            double z = foundObjects[i].z; 
+    //     for (int i = 0; i < foundObjects.length; i++) {
+    //         double x = foundObjects[i].x; 
+    //         double y = foundObjects[i].y; 
+    //         double z = foundObjects[i].z; 
 
-            // rotation + translation
-            foundObjects[i].x = x + cameraOffset[0]; 
-            foundObjects[i].y = y * cosTheta - z * sinTheta + cameraOffset[1]; 
-            foundObjects[i].z = y * sinTheta + z * cosTheta + cameraOffset[2];
-        }
+    //         // rotation + translation
+    //         foundObjects[i].x = x + cameraOffset[0]; 
+    //         foundObjects[i].y = y * cosTheta - z * sinTheta + cameraOffset[1]; 
+    //         foundObjects[i].z = y * sinTheta + z * cosTheta + cameraOffset[2];
+    //     }
+    // }
+
+    public double applyPitchCorrection(double pitchDegrees, double y, double z){
+        //Corrects for a positive pitch up camera angle
+        double alpha = Math.atan(y/z); //angle in camera coordinate system from center of camera to detected object (fraction of the field view)
+        return (z * Math.cos(Math.toRadians(pitchDegrees) + alpha))/Math.cos(alpha);
     }
     
     public String getObjectsJson()
@@ -554,8 +568,34 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         return radius;
     }
 
+    //  // Iterate through the JSON array and convert each element to a Detection object
+        // import org.json.JSONArray;
+        // import org.json.JSONObject;
+        // Parse the JSON string
+        // JSONArray jsonArray = new JSONArray(jsonString);
+        
+        // // Create an ArrayList to hold the Detection objects
+        // ArrayList<Detection> detections = new ArrayList<>();
+    //  for (int i = 0; i < jsonArray.length(); i++) {
+    //     JSONObject jsonObject = jsonArray.getJSONObject(i);
+    //     // Extract values from the JSON object
+    //     String objectLabel = jsonObject.getString("objectLabel");
+    //     double x = jsonObject.getDouble("x");
+    //     double y = jsonObject.getDouble("y");
+    //     double z = jsonObject.getDouble("z");
+    //     double confidence = jsonObject.getDouble("confidence");
+    //     double xa = jsonObject.getDouble("xa");
+    //     double ya = jsonObject.getDouble("ya");
+    //     double za = jsonObject.getDouble("za");
+
+    //     // Create a new Detection object and add it to the ArrayList
+    //     Detection detection = new Detection(objectLabel, x, y, z, confidence, xa, ya, za);
+    //     detections.add(detection);
+    // }
+
     public void updateDetections(String detectionsString, Gson gson) {
-        DetectionList gsonOut = gson.fromJson(detectionsString, DetectionList.class);
+        // DetectionList gsonOut = gson.fromJson(detectionsString, DetectionList.class);
+        DetectionList gsonOut = gson.fromJson(detectionsString, new TypeToken<ArrayList<Detection>>(){}.getType());
         // Initialy grab fps from gsonOut, only update april tags and Yolo objects only if fps is above 25
         String fpsString = monsterVision.getEntry("ObjectTracker-fps").getString("").substring(5);
         double fps = Double.valueOf(fpsString);
@@ -572,12 +612,14 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         
         // Seperate out the detections with rotation
         for (int i = 0; i < gsonOut.size(); i++) { // Maybe change later
-            if (gsonOut.get(i).objectLabel.substring(0,3).equals("tag")) {
-                aprilTags.add(gsonOut.get(i));
+            Detection detectionObject = (Detection)gsonOut.get(i);
+            detectionObject.z = applyPitchCorrection(m_cameraPitch, detectionObject.y , detectionObject.z);
+            if (detectionObject.objectLabel.substring(0,3).equals("tag")) {
+                aprilTags.add(detectionObject);
                 // aprilTags.add(adjustCamOffset(gsonOut.get(i)));
                 // System.out.println("UpdateDetections(: found apriltag");
             } else {
-                yoloObjects.add(gsonOut.get(i));
+                yoloObjects.add(detectionObject);
                 // yoloObjects.add(adjustCamOffset(gsonOut.get(i)));
                 // System.out.println("yolo object");
             }
