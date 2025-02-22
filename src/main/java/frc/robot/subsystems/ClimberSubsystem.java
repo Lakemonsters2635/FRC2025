@@ -22,23 +22,31 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void up(){
-    motor.setVoltage(0);
+    motor.setVoltage(2.5);
   }
 
   public void down(){
+    motor.setVoltage(-2.5);
+  }
+
+  public void stop(){
     motor.setVoltage(0);
   }
 
-  public void configure(){
-    motor.setVoltage(leftJoystick.getThrottle() * 3);
-    SmartDashboard.putNumber("Throttle", leftJoystick.getThrottle()* 2);
+  public void hold(){
+    motor.setVoltage(0);
   }
+
+  // public void configure(){
+  //   motor.setVoltage(leftJoystick.getThrottle() * 3);
+  //   SmartDashboard.putNumber("Throttle", leftJoystick.getThrottle()* 2);
+  // }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // motor.setVoltage(lefJoystick.getThrottle()* 2.5);
-    // SmartDashboard.putNumber("Throttle", lefJoystick.getThrottle()* 2.5);
+    // motor.setVoltage(leftJoystick.getThrottle()* 2.5);
+    // SmartDashboard.putNumber("Throttle", leftJoystick.getThrottle()* 2.5);
   }
 }
 
