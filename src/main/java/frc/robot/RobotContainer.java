@@ -20,6 +20,7 @@ import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.MoveCoralArmToPosition;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -41,6 +42,7 @@ public class RobotContainer {
   public static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   public static final CoralArmSubsystem m_coralArmSubsystem = new CoralArmSubsystem();
   public static final StreamDeckSubsystem m_streamDeckSubsystem = new StreamDeckSubsystem();
+  public static final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
   // Commands
   public static final AlgaeIntakeInCommand m_algaeIntakeInCommand = new AlgaeIntakeInCommand(m_algaeIntakeSubsystem);
@@ -76,6 +78,8 @@ public class RobotContainer {
     Trigger coralIntakeInButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
+    Trigger climberTestButton = new JoystickButton(leftJoystick, 5);
+    
     //RIGHT BUTTONS
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
@@ -83,6 +87,7 @@ public class RobotContainer {
     Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON);
     Trigger coralIntakeOutButton = new JoystickButton(rightJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
     Trigger moveCoralArmPos = new JoystickButton(rightJoystick, 6);
+   
 
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
@@ -90,6 +95,8 @@ public class RobotContainer {
     // algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
     algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
     algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
+    climberTestButton.whileTrue(new InstantCommand(()->m_climberSubsystem.configure()));
+    climberTestButton.whileFalse(new InstantCommand(()->m_climberSubsystem.motor.setVoltage(0)));
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(
