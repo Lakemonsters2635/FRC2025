@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ClimberSubsystem extends SubsystemBase {
   /** Creates a new ClimberSubsystem. */
   public TalonFX motor;
-  Joystick lefJoystick = new Joystick(0);
+  Joystick leftJoystick = new Joystick(0);
   public ClimberSubsystem() {
     motor = new TalonFX(8, "CANivore");
   }
@@ -30,8 +30,8 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void configure(){
-    motor.setVoltage(lefJoystick.getThrottle() * 3);
-    SmartDashboard.putNumber("Throttle", lefJoystick.getThrottle()* 2);
+    motor.setVoltage(leftJoystick.getThrottle() * 3);
+    SmartDashboard.putNumber("Throttle", leftJoystick.getThrottle()* 2);
   }
 
   @Override
