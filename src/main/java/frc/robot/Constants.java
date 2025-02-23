@@ -144,7 +144,7 @@ public final class Constants {
   // hat constants 
   public static final int HAT_JOYSTICK_TRIM_POSITION = RIGHT_JOYSTICK_CHANNEL;
   public static final int HAT_JOYSTICK_TRIM_ROTATION = LEFT_JOYSTICK_CHANNEL;
-  public static final double HAT_POWER_MOVE = 0.1;
+  public static final double HAT_POWER_MOVE = 0.1/2;
   public static final double HAT_POWER_ROTATE = 0.3;
   // Hat trim target speed is 15 degrees per second
   // One time step is 0.02 seconds
