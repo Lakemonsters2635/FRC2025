@@ -26,6 +26,7 @@ public class StreamDeckSubsystem extends SubsystemBase {
   private StringEntry selectedProgramEntry;
 
   private StringArrayEntry corralInfoEntry;
+  private StringEntry algaeEntry;
 
   public StreamDeckSubsystem() {
     ntinst = NetworkTableInstance.getDefault();
@@ -44,6 +45,7 @@ public class StreamDeckSubsystem extends SubsystemBase {
 
   private void getEntries(){
     corralInfoEntry = table.getStringArrayTopic("coralInfo").getEntry(new String[3]);
+    algaeEntry = table.getStringTopic("algae").getEntry("");
   }
 
   public String[] getCorralInfo(){
@@ -52,6 +54,17 @@ public class StreamDeckSubsystem extends SubsystemBase {
       SmartDashboard.putString("StreamdeckCoralInfo[0]", getValue[0]);
       SmartDashboard.putString("StreamdeckCoralInfo[1]", getValue[1]);
       SmartDashboard.putString("StreamdeckCoralInfo[2]", getValue[2]);
+    }
+    catch(Exception e){
+      
+    }
+    return getValue;
+  }
+
+  public String getAlgaeInfo(){
+    String getValue = algaeEntry.get();
+    try{
+      SmartDashboard.putString("Algae", getValue);
     }
     catch(Exception e){
       

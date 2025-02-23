@@ -248,9 +248,15 @@ public final class Constants {
   public static final String SD_REEF_POS_5 = "5";
   public static final String SD_REEF_POS_6 = "6";
 
-
   public static final String SD_REEF_LEFT = "L";
   public static final String SD_REEF_RIGHT = "R";
+
+
+  public static final String SD_ALGAE_LOW = "AL";
+  public static final String SD_ALGAE_HIGH = "AH";
+  public static final String SD_ALGAE_CORRAL = "AC";
+  public static final String SD_ALGAE_GROUND = "AG";
+  public static final String SD_ALGAE_PROCESS = "AP";
 
   // AUTO CONSTANTS
   
