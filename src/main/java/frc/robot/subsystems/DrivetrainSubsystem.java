@@ -318,18 +318,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
         rotCommanded = Constants.HAT_POWER_ROTATE;
       }
 
-      // if (rightJoystick.getY()>0.05 || rightJoystick.getY()<-0.05) {
-      //   yPowerCommanded = rightJoystick.getY() * -1;
-      // }
+      if (rightJoystick.getY()>0.05 || rightJoystick.getY()<-0.05) {
+        yPowerCommanded = rightJoystick.getY() * -1;
+      }
 
-      // if (rightJoystick.getX()>0.05 || rightJoystick.getX()<-0.05) {
-      //   xPowerCommanded = rightJoystick.getX();
-      // }
+      if (rightJoystick.getX()>0.05 || rightJoystick.getX()<-0.05) {
+        xPowerCommanded = rightJoystick.getX();
+      }
 
-      // // TODO: look at the deadband below
-      // if (Math.pow(rightJoystick.getTwist(),3)>0.05 || Math.pow(rightJoystick.getTwist(),3)<-0.05) {
-      //   rotCommanded = rightJoystick.getTwist()*-1;
-      // }
+      // TODO: look at the deadband below
+      if (Math.pow(rightJoystick.getTwist(),3)>0.05 || Math.pow(rightJoystick.getTwist(),3)<-0.05) {
+        rotCommanded = rightJoystick.getTwist()*-1;
+      }
 
       // TODO: document how to use this button to reset various robot centers of rotation
       // Note: you can have multiple buttons for defining multiple centers of rotation.

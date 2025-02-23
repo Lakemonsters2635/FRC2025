@@ -95,15 +95,15 @@ public final class Constants {
   }
 
   public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(-2942-3000, 0, -87.3);
-  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(-8864-3000, 0, -73.9);
+  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(-8864-3000, 0, -73.9+10);
   public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(18623-3000, 0, -64.3);
-  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(33502-3000, 0, -69.8);
+  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(33502, 0, -69.8+10);
   public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(-6582, 0, -88.9);
 
   public static final ElevatorState E_STATE_CLIMB = new Constants.ElevatorState(0, 0, 0);
 
   //TODO: test these values
-  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(-6067, -45, -40);
+  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(-6067, -45, -30);
   public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(0, -90, -30); // TODO: figure out coralArmAngle
   public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(0, -90, -50);
   public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(0, -90, -70);
@@ -286,3 +286,4 @@ public final class Constants {
 
 
 }
+

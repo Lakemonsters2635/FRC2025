@@ -34,7 +34,7 @@ public class MoveAlgaeToPose extends Command {
   public void initialize() {
     try{
       String level = m_sds.getAlgaeInfo();
-      SmartDashboard.putString("level", level);
+      SmartDashboard.putString("algaeLevel", level);
       switch (level) {
         case Constants.SD_ALGAE_HIGH:
           constant = Constants.E_STATE_ALGAE_HIGH;
@@ -81,6 +81,6 @@ public class MoveAlgaeToPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
