@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.SwerveControllerCommand2635;
@@ -209,7 +210,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //   // instrumentation for shuffleboard logging goes here.
     // }
     PIDController xController = new PIDController(3.2, 3, 2);
-    PIDController yController = new PIDController(3.2, 3, 2);
+    PIDController yController = new PIDController(.6, 0, 1); // 3.2, 3, 2
     // kp = 0.4, ki = 3.3, kd = 1 integral overshot
     // Note: We reduced Kp to 2 so that rottion control loop doesn't saturate the module motor speed during autos
     // This however makes it so that robot cannot turn quickly, which is not good however it enables more acurate and consistent auto paths
@@ -226,7 +227,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // as a target heading?
     SwerveControllerCommand2635 swerveControllerCommand = new SwerveControllerCommand2635(
       trajectory,
-      this::getPoseMeters,
+      this::getPose,
       m_kinematics,
       xController,
       yController,
@@ -449,10 +450,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
 
-  public Pose2d getPoseMeters() {
-    Pose2d currentPose = getPose();
-    return new Pose2d(currentPose.getTranslation().div(39.37), currentPose.getRotation());
-  }
+  // public Pose2d getPoseMeters() {
+  //   Pose2d currentPose = getPose();
+  //   return new Pose2d(currentPose.getTranslation().div(39.37), currentPose.getRotation());
+  // }
 
   public SwerveDriveKinematics getSwerveDriveKinematics() {
     return m_kinematics; 

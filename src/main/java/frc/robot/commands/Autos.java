@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /** Add your docs here. */
@@ -19,10 +21,11 @@ public class Autos {
     }
 
     public Command goStraight(){
-        return m_dts.createPath(
+        return new SequentialCommandGroup(m_dts.createPath(
             new Pose2d(0,0, new Rotation2d(Units.degreesToRadians(90))), 
-            new Translation2d(0, 0.75), 
-            new Pose2d(0, 1.5, new Rotation2d(Units.degreesToRadians(90)))
-        );
+            new Translation2d(0, 0.5), 
+            new Pose2d(0, 1, new Rotation2d(Units.degreesToRadians(90)))
+        ),
+        new InstantCommand(()->m_dts.stopMotors()));
     }
 }
