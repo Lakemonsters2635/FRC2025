@@ -93,6 +93,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    m_poseTarget = MathUtil.clamp(m_poseTarget, -12000, 36000);
     // This method will be called once per schedu
     SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
     SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
