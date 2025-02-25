@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     RobotContainer.m_objectTrackerSubsystem.data();
 
+    new Timer();
     SmartDashboard.putNumber("Match_time", Timer.getMatchTime());
   }
 

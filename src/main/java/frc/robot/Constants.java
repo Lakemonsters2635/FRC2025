@@ -96,18 +96,21 @@ public final class Constants {
     }
   }
 
-  public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(0, 0, 0);
-  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(0, 0, 0);
-  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(0, 0, 0);
-  public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(0, 0, 0);
+  public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(-2942-3000, 0, -87.3);
+  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(-8864-3000, 0, -73.9+10);
+  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(18623-3000, 0, -64.3);
+  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(33502, 0, -69.8+10);
+  public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(-6582, 0, -88.9);
+
+  public static final ElevatorState E_STATE_CLIMB = new Constants.ElevatorState(250, 0, 10);
 
   //TODO: test these values
-  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(0, -45, -70);
-  public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(0, -90, -90); // TODO: figure out coralArmAngle
-  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(0, -90, -70);
-  public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(0, -90, -70);
-  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(0, -25, -70); // TODO: find maximum angle for the coralArmAngle
-  public static final ElevatorState E_STATE_CORAL_TRANSIT = new Constants.ElevatorState(0, -25, -70); // TODO: find maximum angle for the coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(-4906, -45, -30);
+  public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(0, -90, -30); // TODO: figure out coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(-3479, -90, -20);
+  public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(12000, -90, -20);
+  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(33000, -90, 0); // TODO: find maximum angle for the coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_TRANSIT = new Constants.ElevatorState(0, -25, 0); // TODO: find maximum angle for the coralArmAngle
   
 
   /*
@@ -127,9 +130,10 @@ public final class Constants {
   public static final int ALGAE_RIGHT_INTAKE_MOTOR = 5;
   public static final double ALGAE_INTAKE_ROTATION_SPEED = 0.3;
   // voltage values for algae intake
-  public static final double ALGAE_INTAKE_VOLTAGE_OUT = -0.5;
-  public static final double ALGAE_INTAKE_VOLTAGE_IN = 1.5;
-  public static final double ALGAE_INTAKE_VOLTAGE_HOLD = 0.5;
+  // positive is out, negative is in
+  public static final double ALGAE_INTAKE_VOLTAGE_OUT = 1.5;
+  public static final double ALGAE_INTAKE_VOLTAGE_IN = -6;
+  public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.5;
 
   public static final int ALGAE_ARM_MOTOR = 4;
   public static final double CORAL_ARM_ENCODER_OFFSET = 0;//15.309518814086914;
@@ -146,7 +150,7 @@ public final class Constants {
   // hat constants 
   public static final int HAT_JOYSTICK_TRIM_POSITION = RIGHT_JOYSTICK_CHANNEL;
   public static final int HAT_JOYSTICK_TRIM_ROTATION = LEFT_JOYSTICK_CHANNEL;
-  public static final double HAT_POWER_MOVE = 0.1;
+  public static final double HAT_POWER_MOVE = 0.025; // 0.05
   public static final double HAT_POWER_ROTATE = 0.3;
   // Hat trim target speed is 15 degrees per second
   // One time step is 0.02 seconds
@@ -250,9 +254,15 @@ public final class Constants {
   public static final String SD_REEF_POS_5 = "5";
   public static final String SD_REEF_POS_6 = "6";
 
-
   public static final String SD_REEF_LEFT = "L";
   public static final String SD_REEF_RIGHT = "R";
+
+
+  public static final String SD_ALGAE_LOW = "AL";
+  public static final String SD_ALGAE_HIGH = "AH";
+  public static final String SD_ALGAE_CORRAL = "AC";
+  public static final String SD_ALGAE_GROUND = "AG";
+  public static final String SD_ALGAE_PROCESS = "AP";
 
   // AUTO CONSTANTS
   
@@ -271,8 +281,6 @@ public final class Constants {
   public static final int ZERO_ODOMETRY_BUTTON = 11;
   public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;
   public static final int ELEVATOR_FIRST_STAGE_DOWN_BUTTON = 3;
-  public static final int ELEVATOR_SECOND_STAGE_UP_BUTTON = 6;
-  public static final int ELEVATOR_SECOND_STAGE_DOWN_BUTTON = 4;
   public static final int ELEVATOR_ZERO_POWER_BUTTON = 2;
 
 
@@ -284,3 +292,4 @@ public final class Constants {
 
 
 }
+

@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,9 +20,10 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   private final SparkMax m_algaeArmMotor;
   private final SparkMaxConfig m_algaeArmConfig;
   double ff, fb, motorPower, theta, m_poseTarget;
-  double GAIN = -0.412; // TODO: Measure this value
+  double GAIN = - 0.412; // TODO: Measure this value
   double GAIN_ALGAE = - 0.78;
   PIDController m_algaeArmController;
+  Joystick leftJoystick = new Joystick(0);
 
   public AlgaeArmSubsystem() {
     m_algaeArmMotor = new SparkMax(Constants.ALGAE_ARM_MOTOR, SparkMax.MotorType.kBrushless);
@@ -29,15 +31,17 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     // Configuration
     m_algaeArmConfig = new SparkMaxConfig();
     m_algaeArmConfig.inverted(false);
-    m_algaeArmConfig.idleMode(IdleMode.kBrake);
-    m_algaeArmConfig.smartCurrentLimit(10);
+    // m_algaeArmConfig.idleMode(IdleMode.kBrake);
+    m_algaeArmConfig.idleMode(IdleMode.kCoast);
+    m_algaeArmConfig.smartCurrentLimit(20);
     m_algaeArmMotor.configure(
       m_algaeArmConfig, 
       SparkBase.ResetMode.kNoResetSafeParameters, 
       SparkBase.PersistMode.kPersistParameters
     );
 
-    m_algaeArmController = new PIDController(0.02,0,0); // TODO: Tune these values
+    m_algaeArmController = new PIDController(0.08,0,0); // TODO: Tune these values
+    // m_algaeArmController = new PIDController(0.02,0,0); // TODO: Tune these values
 
     resetEncoder(); // Reset encoder, since we start from the 0 position
   }
@@ -52,8 +56,9 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public double getDegrees() {
-    // 100 is the gear ratio
-    double degrees = (getEncoderCounts() /100) * 360;
+    // 160 is the gear ratio
+    double degrees = (getEncoderCounts() /160) * 360;
+    degrees += 10; // Calibration offset required with the setup
     degrees %= 360;
     return degrees;
   }
@@ -70,8 +75,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public double controlArmThrottle() {
-    Joystick leftJoystick = new Joystick(0);
-    SmartDashboard.putNumber("Throttle Motor Power", leftJoystick.getThrottle() * 0.1 * 12);
+    
+    
     return leftJoystick.getThrottle() * 0.1 * 12;
   }
 
@@ -85,16 +90,25 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
     // setArmPowerVolts(controlArmThrottle());
 
-    ff = GAIN * Math.abs(Math.sin(Math.toRadians(theta)));
-    fb = m_algaeArmController.calculate(theta, m_poseTarget);
+    ff = GAIN_ALGAE * Math.abs(Math.sin(Math.toRadians(theta)));
+    fb = MathUtil.clamp(m_algaeArmController.calculate(theta, m_poseTarget), -6, 6);
+    // fb = MathUtil.clamp(m_algaeArmController.calculate(theta, m_poseTarget), -6, 6);
 
     SmartDashboard.putNumber("Encoder Counts", getEncoderCounts());
-    SmartDashboard.putNumber("Degrees", getDegrees());
+    SmartDashboard.putNumber("Algae Degrees", getDegrees());
     SmartDashboard.putNumber("Motor Power", m_algaeArmMotor.get());
     SmartDashboard.putNumber("Motor Power Volts", m_algaeArmMotor.get()*11);
     SmartDashboard.putNumber("Feed Forward", ff);
     SmartDashboard.putNumber("Feed Back", fb);
+    SmartDashboard.putNumber("Algae Throttle Motor Power", leftJoystick.getThrottle() * 0.2 * 12);
+    SmartDashboard.putNumber("Algae AppliedVoltage", m_algaeArmMotor.getAppliedOutput());
+    SmartDashboard.putNumber("Algae CurrentOutput", m_algaeArmMotor.getOutputCurrent());
+
+    // setArmPosition(-Math.abs(leftJoystick.getThrottle()*90));
+    SmartDashboard.putNumber("Throttle angle", -Math.abs(leftJoystick.getThrottle()*90));
 
     setArmPowerVolts(ff + fb);
+    // setArmPowerVolts(ff + controlArmThrottle());
+    
   }
 }

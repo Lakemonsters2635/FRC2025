@@ -5,23 +5,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralIntakeSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralIntakeInCommand extends Command {
-  /** Creates a new CoralIntakeInCommand. */
-  private CoralIntakeSubsystem m_coralIntakeSubsystem;
-  public CoralIntakeInCommand(CoralIntakeSubsystem coralIntakeSubsystem) {
-
-    m_coralIntakeSubsystem = coralIntakeSubsystem;
-    addRequirements(m_coralIntakeSubsystem);    
+public class ClimberUpCommand extends Command {
+  /** Creates a new ClimberUp. */
+  ClimberSubsystem m_climberSubsystem;
+  public ClimberUpCommand(ClimberSubsystem climberSubsystem){
+    m_climberSubsystem = climberSubsystem;
+    addRequirements(m_climberSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      m_coralIntakeSubsystem.inCoralIntake();
+    System.out.println("ClimberUpCommand.initialize()");
+    m_climberSubsystem.up();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,11 +31,7 @@ public class CoralIntakeInCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_coralIntakeSubsystem.holdCoralIntake();
-
-    
-    // m_coralIntakeSubsystem.stopCoralIntake();
-    
+    m_climberSubsystem.stop();
   }
 
   // Returns true when the command should end.
