@@ -26,7 +26,8 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void down(){
-    motor.setVoltage(-2.5);
+    // motor.setVoltage((leftJoystick.getThrottle() - 1) *3);
+    motor.setVoltage(-3.0);
   }
 
   public void stop(){
@@ -37,10 +38,10 @@ public class ClimberSubsystem extends SubsystemBase {
     motor.setVoltage(0);
   }
 
-  // public void configure(){
-  //   motor.setVoltage(leftJoystick.getThrottle() * 3);
-  //   SmartDashboard.putNumber("Throttle", leftJoystick.getThrottle()* 2);
-  // }
+  public void configure(){
+    motor.setVoltage(leftJoystick.getThrottle() * 2);
+    SmartDashboard.putNumber("Throttle", leftJoystick.getThrottle()* 2);
+  }
 
   @Override
   public void periodic() {

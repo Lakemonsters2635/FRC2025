@@ -19,7 +19,10 @@ import frc.robot.commands.CoralIntakeInCommand;
 import frc.robot.commands.CoralIntakeOutCommand;
 import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.ElevatorUpCommand;
+import frc.robot.commands.MoveAlgaeToPose;
+import frc.robot.commands.MoveClimbPos;
 import frc.robot.commands.MoveCoralArmToPosition;
+import frc.robot.commands.MoveElevatorToPoseCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -53,10 +56,12 @@ public class RobotContainer {
   public static final CoralIntakeOutCommand m_coralIntakeOutCommand = new CoralIntakeOutCommand(m_coralIntakeSubsystem);
   public static final ElevatorDownCommand m_elevatorFirstStageDownCommand = new ElevatorDownCommand(m_elevatorSubsystem);
   public static final ElevatorUpCommand m_elevatorFirstStageUpCommand = new ElevatorUpCommand(m_elevatorSubsystem);
-  public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem);
+  public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
+  public static final MoveAlgaeToPose m_moveAlgaeToPose = new MoveAlgaeToPose(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
   public Autos m_autos = new Autos(m_drivetrainSubsystem);
   public static final ClimberUpCommand m_climberUpCommand = new ClimberUpCommand(m_climberSubsystem);
   public static final ClimberDownCommand m_climberDownCommand = new ClimberDownCommand(m_climberSubsystem);
+  public static final MoveClimbPos m_moveClimbPos = new MoveClimbPos(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
 
   // Joysticks
   public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
@@ -85,6 +90,7 @@ public class RobotContainer {
     //Trigger climberTestButton = new JoystickButton(leftJoystick, 5);
     Trigger climberUpButton = new JoystickButton(leftJoystick, 5);
     Trigger climberDownButton = new JoystickButton(leftJoystick, 3);
+    Trigger climbPos = new JoystickButton(leftJoystick, 2);
     
     //RIGHT BUTTONS
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
@@ -93,7 +99,8 @@ public class RobotContainer {
     Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON);
     Trigger coralIntakeOutButton = new JoystickButton(rightJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
     Trigger moveCoralArmPos = new JoystickButton(rightJoystick, 6);
-   
+    Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
+    Trigger moveElevatorToPos = new JoystickButton(rightJoystick, 10);   
 
 
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
@@ -103,8 +110,10 @@ public class RobotContainer {
     algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
     //climberTestButton.whileTrue(new InstantCommand(()->m_climberSubsystem.configure()));
     //climberTestButton.whileFalse(new InstantCommand(()->m_climberSubsystem.motor.setVoltage(0)));
-    climberUpButton.whileTrue(m_climberUpCommand);
-    climberDownButton.whileTrue(m_climberDownCommand);
+    // climberUpButton.whileTrue(m_climberUpCommand);
+    // climberDownButton.whileTrue(m_climberDownCommand);
+    climberUpButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.configure()));
+    climberUpButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(
@@ -112,10 +121,13 @@ public class RobotContainer {
       new InstantCommand(()-> m_drivetrainSubsystem.resetAngle())));
     zeroElevatorPowerButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.zeroElevatorPower()));
     moveCoralArmPos.onTrue(m_moveCoralArmToPosition);
-    elevatorUpButton.whileTrue(m_elevatorFirstStageUpCommand);
-    elevatorDownButton.whileTrue(m_elevatorFirstStageDownCommand);
+    elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000)));
+    elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000)));
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);
+    moveElevatorToPos.onTrue(new MoveElevatorToPoseCommand(m_elevatorSubsystem, 20000));
+    moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
 
+    climbPos.onTrue(m_moveClimbPos);
   }
 
   /**
@@ -126,8 +138,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m_autos.goStraight();
-    return new Command() {
-      
-    };
+    return m_autos.goStraight();
   }
 }

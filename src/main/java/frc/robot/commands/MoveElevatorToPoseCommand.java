@@ -5,41 +5,49 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ClimberDownCommand extends Command {
-  /** Creates a new ClimberDown. */
-  ClimberSubsystem m_climberSubsystem;
-
-  public ClimberDownCommand(ClimberSubsystem climberSubsystem) {
-    m_climberSubsystem = climberSubsystem;
-    addRequirements(m_climberSubsystem);
+public class MoveElevatorToPoseCommand extends Command {
+  /** Creates a new MoveElevatorToPoseCommand. */
+  ElevatorSubsystem m_elevatorSubsystem;
+  int targetHeight;
+  public MoveElevatorToPoseCommand(ElevatorSubsystem elevatorSubsystem, int target) {
+    m_elevatorSubsystem = elevatorSubsystem;
+    targetHeight = target;
+    addRequirements(m_elevatorSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("ClimberDownCommand.initialize()");
-    m_climberSubsystem.down();
+    if(targetHeight > m_elevatorSubsystem.elevatorHeight()){
+      m_elevatorSubsystem.setRaisePower();
+    }
+    else{
+      m_elevatorSubsystem.setFirstStageLowerPower();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_climberSubsystem.down();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climberSubsystem.hold();
+    m_elevatorSubsystem.setStageHoldPower();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (Math.abs(m_elevatorSubsystem.elevatorHeight() - targetHeight) < 150 ) {
+      return true;
+    }
+
     return false;
   }
 }
+

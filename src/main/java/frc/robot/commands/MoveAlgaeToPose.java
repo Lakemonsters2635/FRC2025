@@ -13,16 +13,15 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.StreamDeckSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class MoveCoralArmToPosition extends Command {
-  /** Creates a new MoveCoralArmToPosition. */
-
-  CoralArmSubsystem m_cas;
+public class MoveAlgaeToPose extends Command {
+  /** Creates a new MoveAlgaeToPose. */
   StreamDeckSubsystem m_sds;
   AlgaeArmSubsystem m_aas;
+  CoralArmSubsystem m_cas;
   ElevatorSubsystem m_es;
+
   Constants.ElevatorState constant;
-  public MoveCoralArmToPosition(CoralArmSubsystem cas, StreamDeckSubsystem sds, AlgaeArmSubsystem aas, ElevatorSubsystem es) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public MoveAlgaeToPose(CoralArmSubsystem cas, StreamDeckSubsystem sds, AlgaeArmSubsystem aas, ElevatorSubsystem es) {
     m_cas = cas;
     m_sds = sds;
     m_aas = aas;
@@ -33,56 +32,28 @@ public class MoveCoralArmToPosition extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
     try{
-      String level = m_sds.getCorralInfo()[2];
-      SmartDashboard.putString("level", level);
-      // switch (level) {
-      //   case Constants.SD_SOURCE:
-      //     // constant = Constants.E_STATE_CLIMB;
-      //     constant = Constants.E_STATE_ALGAE_PROCESSOR;
-      //     break;
-        
-      //   case Constants.SD_REEF_LEVEL_1:
-      //     constant = Constants.E_STATE_ALGAE_PICKUP_GROUND;
-      //     break;
-    
-      //   case Constants.SD_REEF_LEVEL_2:
-      //     constant = Constants.E_STATE_ALGAE_PICKUP;
-      //     break;
-      
-      //   case Constants.SD_REEF_LEVEL_3:
-      //     constant = Constants.E_STATE_ALGAE_LOW;
-      //     break;
-      
-      //   case Constants.SD_REEF_LEVEL_4:
-      //     constant = Constants.E_STATE_ALGAE_HIGH;
-      //     break;
-          
-      
-      //   default:
-      //     System.out.println("DEFAULT VALUE !!!!!!!!!!!!!!!");
-      //     break;
-      // }
+      String level = m_sds.getAlgaeInfo();
+      SmartDashboard.putString("algaeLevel", level);
       switch (level) {
-        case Constants.SD_SOURCE:
-          constant = Constants.E_STATE_CORAL_SOURCE;
+        case Constants.SD_ALGAE_HIGH:
+          constant = Constants.E_STATE_ALGAE_HIGH;
           break;
         
-        case Constants.SD_REEF_LEVEL_1:
-          constant = Constants.E_STATE_CORAL_REEF_1;
+        case Constants.SD_ALGAE_LOW:
+          constant = Constants.E_STATE_ALGAE_LOW;
           break;
     
-        case Constants.SD_REEF_LEVEL_2:
-          constant = Constants.E_STATE_CORAL_REEF_2;
+        case Constants.SD_ALGAE_CORRAL:
+          constant = Constants.E_STATE_ALGAE_PICKUP;
           break;
       
-        case Constants.SD_REEF_LEVEL_3:
-          constant = Constants.E_STATE_CORAL_REEF_3;
+        case Constants.SD_ALGAE_GROUND:
+          constant = Constants.E_STATE_ALGAE_PICKUP_GROUND;
           break;
       
-        case Constants.SD_REEF_LEVEL_4:
-          constant = Constants.E_STATE_CORAL_REEF_4;
+        case Constants.SD_ALGAE_PROCESS:
+          constant = Constants.E_STATE_ALGAE_PROCESSOR;
           break;
       
         default:
