@@ -11,6 +11,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ObjectTrackerSubsystem;
 
@@ -35,6 +36,42 @@ public class Autos {
     public Command visionAuto() {
         return new SequentialCommandGroup(
             new VisionAutoCommand(m_dts, m_ots)
+        );
+    } 
+
+
+    // Source line-up auto
+    public Command sourceLineup(){
+        return new SequentialCommandGroup(
+            new VisionAutoCommand(m_dts, m_ots, Constants.SOURCE_TAG_IDS, 0.0, 0.0, 0.0) // TODO: determine these values
+        );
+    }
+
+    // Corral line-up left
+    public Command reefCorralLeft(){
+        return new SequentialCommandGroup(
+            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, Units.inchesToMeters(6.5), 0.0, 0.0)
+        );
+    }
+
+    // Corral line-up right
+    public Command reefCorralRight(){
+        return new SequentialCommandGroup(
+            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, -Units.inchesToMeters(6.5), 0, 0) // TODO
+        );
+    }
+
+    // Corral line-up algae
+    public Command reefAlgae(){
+        return new SequentialCommandGroup(
+            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, 0, 0, 0)
+        );
+    }
+
+    // Line-up processor
+    public Command processorAlgae(){
+        return new SequentialCommandGroup(
+            new VisionAutoCommand(m_dts, m_ots, Constants.PROCESSOR_TAG_IDS, 0, 0, 0)
         );
     }
 }

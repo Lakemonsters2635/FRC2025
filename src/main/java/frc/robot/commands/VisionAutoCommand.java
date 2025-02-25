@@ -287,6 +287,7 @@ public class VisionAutoCommand extends Command {
       ),
       new InstantCommand(()->m_dts.stopMotors()),
       new InstantCommand(()->m_dts.restoreAngle()),
+      new InstantCommand(()->m_dts.setFollowJoystick(true)),
       new InstantCommand(()->SmartDashboard.putNumber("dts.getPose() x after",m_dts.getPose().getX())),
       new InstantCommand(()->SmartDashboard.putNumber("dts.getPose() y after",m_dts.getPose().getY())),
       new InstantCommand(()->SmartDashboard.putNumber("dts.getPose() rotation after",m_dts.getPose().getRotation().getDegrees()))
