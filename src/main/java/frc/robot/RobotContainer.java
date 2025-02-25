@@ -65,14 +65,11 @@ public class RobotContainer {
   public static final ElevatorUpCommand m_elevatorFirstStageUpCommand = new ElevatorUpCommand(m_elevatorSubsystem);
   public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
   public static final MoveAlgaeToPose m_moveAlgaeToPose = new MoveAlgaeToPose(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
-  public Autos m_autos = new Autos(m_drivetrainSubsystem);
+  public Autos m_autos = new Autos(m_drivetrainSubsystem, m_objectTrackerSubsystem);
+  public static final VisionAutoCommand m_visionAutoCommand = new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem); // TODO: Change this later
   public static final ClimberUpCommand m_climberUpCommand = new ClimberUpCommand(m_climberSubsystem);
   public static final ClimberDownCommand m_climberDownCommand = new ClimberDownCommand(m_climberSubsystem);
   public static final MoveClimbPos m_moveClimbPos = new MoveClimbPos(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
-
-  // Joysticks
-  public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
-  public static Joystick leftJoystick = new Joystick(Constants.LEFT_JOYSTICK_CHANNEL);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
