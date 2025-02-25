@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
 import com.revrobotics.servohub.config.ServoChannelConfig.PulseRange;
 
 import edu.wpi.first.math.util.Units;
@@ -229,6 +231,10 @@ public final class Constants {
   public static final double[] VISION_BALLOON_CAM_OFFSET = {};
 
   public static final int TARGET_TRIGGER_DISTANCE_APRIL_TAG = 0;
+
+  public static int[] REEF_TAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22}; //RED: 6,7,8,9,10,11 BLUE: 17, 18, 19, 20, 21, 22 
+  public static int[] SOURCE_TAG_IDS = {1, 2, 12, 13}; //RED: 1, 2  BLUE: 12, 13
+  public static int[] CAGE_TAG_IDS = {5, 15, 14, 4}; //RED: 5, (15) BLUE: 14, (4)
 
   // STREAMDECK CONSTANTS
   public static final String SD_SOURCE = "0";

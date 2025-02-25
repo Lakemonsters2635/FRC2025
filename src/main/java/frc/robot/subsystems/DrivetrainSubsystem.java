@@ -48,6 +48,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public final double m_drivetrainWheelbaseWidth =  Constants.DRIVETRAIN_WHEELBASE_WIDTH;  //Calibrated for 2024 BunnyBots
     public final double m_drivetrainWheelbaseLength = Constants.DRIVETRAIN_WHEELBASE_LENGTH; //Calibrated for 2024 BunnyBots
 
+    private double m_angleCache = 180; // This is used to stash the angle before reset, in degrees
+
     // x is forward       robot is long in the x-direction, i.e. wheelbase length
     // y is to the left   robot is short in the y-direction, i.e. wheelbase width
     // robot front as currently labled on the motors (requires -x trajectory to go out into the +x field direction)
@@ -118,6 +120,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_frontLeft.stop();
     m_backRight.stop();
     m_frontRight.stop();
+  }
+
+  public void stashAngle(){
+    m_angleCache = getPose().getRotation().getDegrees();
+  }
+
+  public void restoreAngle(){
+    resetAngle((m_angleCache + getPose().getRotation().getDegrees()) % 360);
   }
 
   // We previously had this toRedHead() in here for converting heading for auto usage
@@ -247,7 +257,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
   // do we use resetAngle(degree) when starting the auto from some angle which is not aligned with 
   // the front of the robot pointing downfield?
-  public void resetAngle(int degree){
+  public void resetAngle(double degree){
     //Use this method if you want to reset the angle to something not 0
     m_gyro.reset();
     m_gyro.setAngleAdjustment(degree);

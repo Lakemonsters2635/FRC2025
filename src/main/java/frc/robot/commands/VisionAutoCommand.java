@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -28,7 +30,8 @@ public class VisionAutoCommand extends Command {
   Pose2d fieldDeltaPose;
   double fieldX;
   double fieldY;
-  int m_tagID;
+  int m_tagID = -2; // When initialized at -2 so that if the user wants to input tagIDs, it is going to chose multiple instead of a sigular tagID
+  int[] m_tagIDs;
 
   double m_xPrime;
   double m_zPrime;
@@ -77,6 +80,17 @@ public class VisionAutoCommand extends Command {
     addRequirements(m_dts, m_ots);
   }
 
+  public VisionAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, int[] tagIDs, double xPrime, double zPrime, double finalYa) {
+    m_dts = dts;
+    m_ots = ots;
+    m_tagIDs = tagIDs;
+    m_xPrime = xPrime;
+    m_zPrime = zPrime;
+    m_finalYa = finalYa;
+
+    addRequirements(m_dts, m_ots);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -93,7 +107,12 @@ public class VisionAutoCommand extends Command {
       SmartDashboard.putNumber("Robot rot", m_dts.getPose().getRotation().getDegrees());
 
       // no need to add a small value for xPrime since visionCreatePath takes care of it
-      visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
+      if (m_tagID == -2) {
+        visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
+      }
+      else{
+        visionCreatePath(m_xPrime, m_zPrime, m_finalYa, Integer.valueOf(m_ots.getNearestAprilTagDetection(m_tagIDs).objectLabel.substring(10)));
+      }
       System.out.println("Scheduled " + m_tagID + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
     catch(Exception e) {
@@ -220,6 +239,7 @@ public class VisionAutoCommand extends Command {
     return visionCreatePath(xPrime, zPrime, finalYa, -1);
   }
 
+
   /*
    * Uses the visionAutoData function to create a path for the robot the robot to move to a certain position from a specific april tag
    * @param xPrime the x distance from the april tag
@@ -242,6 +262,10 @@ public class VisionAutoCommand extends Command {
       new InstantCommand(()->SmartDashboard.putNumber("dts.getPose() x before",m_dts.getPose().getX())),
       new InstantCommand(()->SmartDashboard.putNumber("dts.getPose() y before",m_dts.getPose().getY())),
       new InstantCommand(()->SmartDashboard.putNumber("dts.getPose() rotation before",m_dts.getPose().getRotation().getDegrees())),
+      new InstantCommand(()->m_dts.stashAngle()),
+      new InstantCommand(()->m_dts.setFollowJoystick(false)),
+      new InstantCommand(()->m_dts.resetAngle()),
+      new InstantCommand(()->m_dts.zeroOdometry()),
       m_dts.createVisionPath(
         new Pose2d(
           0, //botPose.getX(), 
@@ -262,6 +286,7 @@ public class VisionAutoCommand extends Command {
         // ,true
       ),
       new InstantCommand(()->m_dts.stopMotors()),
+      new InstantCommand(()->m_dts.restoreAngle()),
       new InstantCommand(()->SmartDashboard.putNumber("dts.getPose() x after",m_dts.getPose().getX())),
       new InstantCommand(()->SmartDashboard.putNumber("dts.getPose() y after",m_dts.getPose().getY())),
       new InstantCommand(()->SmartDashboard.putNumber("dts.getPose() rotation after",m_dts.getPose().getRotation().getDegrees()))

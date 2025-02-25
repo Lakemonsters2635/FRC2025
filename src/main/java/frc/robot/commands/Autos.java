@@ -12,12 +12,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ObjectTrackerSubsystem;
 
 /** Add your docs here. */
 public class Autos {
     DrivetrainSubsystem m_dts;
-    public Autos(DrivetrainSubsystem dts) {
+    ObjectTrackerSubsystem m_ots;
+    public Autos(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots) {
         m_dts = dts;
+        m_ots = ots;
     }
 
     public Command goStraight(){
@@ -27,5 +30,11 @@ public class Autos {
             new Pose2d(0, 1, new Rotation2d(Units.degreesToRadians(90)))
         ),
         new InstantCommand(()->m_dts.stopMotors()));
+    }
+
+    public Command visionAuto() {
+        return new SequentialCommandGroup(
+            new VisionAutoCommand(m_dts, m_ots)
+        );
     }
 }
