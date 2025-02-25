@@ -33,14 +33,15 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_algaeArmConfig.inverted(false);
     // m_algaeArmConfig.idleMode(IdleMode.kBrake);
     m_algaeArmConfig.idleMode(IdleMode.kCoast);
-    m_algaeArmConfig.smartCurrentLimit(10);
+    m_algaeArmConfig.smartCurrentLimit(20);
     m_algaeArmMotor.configure(
       m_algaeArmConfig, 
       SparkBase.ResetMode.kNoResetSafeParameters, 
       SparkBase.PersistMode.kPersistParameters
     );
 
-    m_algaeArmController = new PIDController(0.02,0,0); // TODO: Tune these values
+    m_algaeArmController = new PIDController(0.08,0,0); // TODO: Tune these values
+    // m_algaeArmController = new PIDController(0.02,0,0); // TODO: Tune these values
 
     resetEncoder(); // Reset encoder, since we start from the 0 position
   }
@@ -90,7 +91,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     // setArmPowerVolts(controlArmThrottle());
 
     ff = GAIN_ALGAE * Math.abs(Math.sin(Math.toRadians(theta)));
-    fb = MathUtil.clamp(m_algaeArmController.calculate(theta, m_poseTarget), -4, 4);
+    fb = MathUtil.clamp(m_algaeArmController.calculate(theta, m_poseTarget), -6, 6);
+    // fb = MathUtil.clamp(m_algaeArmController.calculate(theta, m_poseTarget), -6, 6);
 
     SmartDashboard.putNumber("Encoder Counts", getEncoderCounts());
     SmartDashboard.putNumber("Algae Degrees", getDegrees());

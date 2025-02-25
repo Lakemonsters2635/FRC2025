@@ -13,7 +13,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -26,6 +29,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   PIDController m_elevatorController;
 
   Joystick leftJoystick = new Joystick(0);
+  Trigger stopElevator = new JoystickButton(leftJoystick, 8);
 
   TalonFX m_elevatorMotor;
 
@@ -34,6 +38,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
 
     m_elevatorController = new PIDController(0.001, 0, 0);
+    // m_elevatorController = new PIDController(0.001, 0, 0); 
 
     m_encoderInner.reset();
     m_encoderOuter.reset();
@@ -96,15 +101,36 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Motor Power Voltage", m_elevatorMotor.get() * 11);
 
     // m_poseTarget = leftJoystick.getThrottle()*10000;
-
+    
     fb = -1 * m_elevatorController.calculate(elevatorHeight(), m_poseTarget);
-    setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5));
 
-    if(elevatorHeight() > 34000){
-      setElevatorMotorPower(0.5);
-    }
-    if(elevatorHeight() < -12000){
-      setElevatorMotorPower(-1);;
-    }
+    // stopElevator.toggleOnFalse(new InstantCommand(()->setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5))));
+    // stopElevator.toggleOnTrue(new InstantCommand(()->setStageHoldPower()));
+
+    // setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5));
+    setElevatorMotorPower(MathUtil.clamp(ff+fb, -4.5, 2));
+    // setElevatorMotorPower(MathUtil.clamp(ff+fb, -4.5, 1.5));
+
+    SmartDashboard.putNumber("ElevatorVolts", m_elevatorMotor.getMotorVoltage().getValueAsDouble());
+
+    // if () {
+    //   setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5));
+    // }
+    // else{
+    //   setStageHoldPower();
+    // }
+    // if (Math.abs(elevatorHeight() - m_poseTarget) > 1000) {
+    //   setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5));
+    // }
+    // else{
+    //   setStageHoldPower();
+    // }
+
+    // if(elevatorHeight() > 34000){
+    //   setElevatorMotorPower(0.5);
+    // }
+    // if(elevatorHeight() < -12000){
+    //   setElevatorMotorPower(-1);;
+    // }
   }
 }

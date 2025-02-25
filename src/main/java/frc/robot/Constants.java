@@ -100,14 +100,14 @@ public final class Constants {
   public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(33502, 0, -69.8+10);
   public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(-6582, 0, -88.9);
 
-  public static final ElevatorState E_STATE_CLIMB = new Constants.ElevatorState(0, 0, 0);
+  public static final ElevatorState E_STATE_CLIMB = new Constants.ElevatorState(250, 0, 10);
 
   //TODO: test these values
-  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(-6067, -45, -30);
+  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(-4906, -45, -30);
   public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(0, -90, -30); // TODO: figure out coralArmAngle
-  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(-1679, -90, -20);
-  public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(13926, -90, -20);
-  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(0, -25, -90); // TODO: find maximum angle for the coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(-3479, -90, -20);
+  public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(12000, -90, -20);
+  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(33000, -90, 0); // TODO: find maximum angle for the coralArmAngle
   public static final ElevatorState E_STATE_CORAL_TRANSIT = new Constants.ElevatorState(0, -25, 0); // TODO: find maximum angle for the coralArmAngle
   
 
@@ -148,7 +148,7 @@ public final class Constants {
   // hat constants 
   public static final int HAT_JOYSTICK_TRIM_POSITION = RIGHT_JOYSTICK_CHANNEL;
   public static final int HAT_JOYSTICK_TRIM_ROTATION = LEFT_JOYSTICK_CHANNEL;
-  public static final double HAT_POWER_MOVE = 0.1;
+  public static final double HAT_POWER_MOVE = 0.025; // 0.05
   public static final double HAT_POWER_ROTATE = 0.3;
   // Hat trim target speed is 15 degrees per second
   // One time step is 0.02 seconds
