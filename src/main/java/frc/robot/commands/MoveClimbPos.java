@@ -33,7 +33,6 @@ public class MoveClimbPos extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
     m_cas.setPoseTarget(constant.CORAL_ARM_ANGLE);
     m_aas.setArmPosition(constant.ALGAE_ARM_ANGLE);
     m_es.setElevatorTarget(constant.ELEVATOR_POSITION);

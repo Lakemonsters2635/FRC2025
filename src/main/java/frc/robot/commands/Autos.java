@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -71,9 +72,15 @@ public class Autos {
     // Corral line-up algae
     public Command reefAlgae(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, 0, 0, 0)
+            new InstantCommand(()-> SmartDashboard.putString("reefAlgae", "runs")),
+            new VisionAutoCommand(m_dts, m_ots, 8)
         );
     }
+    // public Command reefAlgae(){
+    //     return new SequentialCommandGroup(
+    //         new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, 0, 48, 0)
+    //     );
+    // }
 
     // Line-up processor
     public Command processorAlgae(){

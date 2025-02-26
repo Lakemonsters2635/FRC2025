@@ -110,6 +110,9 @@ public class VisionAutoCommand extends Command {
       if (m_tagID == -2) {
         visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
       }
+      else if(m_tagID >= -1){
+        visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
+      }
       else{
         visionCreatePath(m_xPrime, m_zPrime, m_finalYa, Integer.valueOf(m_ots.getNearestAprilTagDetection(m_tagIDs).objectLabel.substring(10)));
       }
@@ -173,8 +176,8 @@ public class VisionAutoCommand extends Command {
     double deltaRobotY = -1 * (visionZ + z_vt);
 
     // corrects for the camera position TODO: does this need to be meters for the field
-    deltaRobotX += -8.5;
-    deltaRobotY += -12.875;
+    deltaRobotX += -5;//-8.5;
+    deltaRobotY += -14;//-12.875;
 
     double botRadians = Units.degreesToRadians(m_dts.getPose().getRotation().getDegrees());
     double angleOffset = -Units.degreesToRadians(90); 
@@ -192,6 +195,9 @@ public class VisionAutoCommand extends Command {
 
     double deltaFieldX = ((deltaRobotX*Math.cos(transformationAngle))+ -(deltaRobotY*Math.sin(transformationAngle)));
     double deltaFieldY = (deltaRobotX*Math.sin(transformationAngle))+ (deltaRobotY*Math.cos(transformationAngle));
+
+    // deltaFieldX *= -1; // When the camera is on the front of the robot
+    // deltaFieldY *= -1;
 
     SmartDashboard.putNumber("x_vt", x_vt);
     SmartDashboard.putNumber("z_vt", z_vt);
