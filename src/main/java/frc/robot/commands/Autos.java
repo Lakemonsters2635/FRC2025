@@ -25,12 +25,19 @@ public class Autos {
     }
 
     public Command goStraight(){
-        return new SequentialCommandGroup(m_dts.createPath(
-            new Pose2d(0,0, new Rotation2d(Units.degreesToRadians(90))), 
-            new Translation2d(0, 0.5), 
-            new Pose2d(0, 1, new Rotation2d(Units.degreesToRadians(90)))
-        ),
-        new InstantCommand(()->m_dts.stopMotors()));
+        return new SequentialCommandGroup(
+            new InstantCommand(()-> m_dts.stopMotors()),
+            m_dts.createPath(
+                new Pose2d(0,0, new Rotation2d(Units.degreesToRadians(90))), 
+                new Translation2d(0, 1.4), 
+                new Pose2d(0, 2.8, new Rotation2d(Units.degreesToRadians(90)))
+            ),
+            m_dts.createPath(
+                new Pose2d(0,2.8, new Rotation2d(Units.degreesToRadians(90))), 
+                new Translation2d(0, 2.9), 
+                new Pose2d(0, 3, new Rotation2d(Units.degreesToRadians(90)))
+            ),
+            new InstantCommand(()->m_dts.stopMotors()));
     }
 
     public Command visionAuto() {

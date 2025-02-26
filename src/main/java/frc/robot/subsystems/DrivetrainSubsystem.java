@@ -219,8 +219,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //   super.execute()
     //   // instrumentation for shuffleboard logging goes here.
     // }
-    PIDController xController = new PIDController(0.8, 0, 1);
-    PIDController yController = new PIDController(0.8, 0, 1);
+    PIDController xController = new PIDController(4, 4, 1);
+    PIDController yController = new PIDController(4, 4, 1);
     // kp = 0.4, ki = 3.3, kd = 1 integral overshot
     // Note: We reduced Kp to 2 so that rottion control loop doesn't saturate the module motor speed during autos
     // This however makes it so that robot cannot turn quickly, which is not good however it enables more acurate and consistent auto paths
