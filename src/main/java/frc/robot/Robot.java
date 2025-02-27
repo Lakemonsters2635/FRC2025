@@ -64,6 +64,8 @@ public class Robot extends TimedRobot {
     RobotContainer.m_drivetrainSubsystem.setFollowJoystick(false);
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    
+    RobotContainer.m_objectTrackerSubsystem.data();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

@@ -68,10 +68,10 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public void moveArmUp(){
-    setArmPosition(m_poseTarget+5);
+    setArmPosition(m_poseTarget-5);
   }
   public void moveArmDown(){
-    setArmPosition(m_poseTarget-5);
+    setArmPosition(m_poseTarget+5);
   }
 
   public double controlArmThrottle() {

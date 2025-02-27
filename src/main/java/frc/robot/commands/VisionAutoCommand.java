@@ -69,7 +69,8 @@ public class VisionAutoCommand extends Command {
     addRequirements(m_dts, m_ots);
   }
 
-  public VisionAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, int tagID, double xPrime, double zPrime, double finalYa) {
+  public 
+  VisionAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, int tagID, double xPrime, double zPrime, double finalYa) {
     m_dts = dts;
     m_ots = ots;
     m_tagID = tagID;
@@ -151,22 +152,45 @@ public class VisionAutoCommand extends Command {
    */
   public Pose2d visionAutoData(double xPrime, double zPrime, double finalYa, int tagId){
     try{
-      Detection detectionObject;
-      if(tagId == -1){
-        detectionObject = m_ots.getNearestAprilTagDetection();
-      }
-      else{
-        detectionObject = m_ots.getSpecificAprilTag(tagId);
+      boolean notDone = true;
+      int i = 0;
+      while(notDone){
+        try{
+          m_ots.data();
+          Detection detectionObject;
+          if(tagId == -1){
+            detectionObject = m_ots.getNearestAprilTagDetection();
+          }
+          else{
+            detectionObject = m_ots.getSpecificAprilTag(tagId);
+          }
+          visionX = detectionObject.x;
+          visionZ = detectionObject.z;
+          visionY = detectionObject.y;
+          visionYa = detectionObject.ya;
+
+          notDone = false;
+        }  
+        catch(Exception e){
+          if(i > 1000){
+            notDone = false;
+          }
+          i++;
+        }
       }
 
-      visionX = detectionObject.x;
-      visionZ = detectionObject.z;
-      visionY = detectionObject.y;
-      visionYa = detectionObject.ya;
+
+      SmartDashboard.putBoolean("visionAutoData try_catch", true);
     }
     catch(Exception e){
+      SmartDashboard.putBoolean("visionAutoData try_catch", false);
+
       System.out.println("VisionAutoCommand.visionAutoData(): failed to get vision");
     }
+
+    SmartDashboard.putNumber("visionAuto Z", visionZ);
+    SmartDashboard.putNumber("visionAuto X", visionX);
+    SmartDashboard.putNumber("visionAuto Ya", visionYa);
 
     visionYa*=-1;
     double x_vt = xPrime * Math.cos(Math.toRadians(visionYa)) + -zPrime * Math.sin(Math.toRadians(visionYa));
@@ -196,8 +220,8 @@ public class VisionAutoCommand extends Command {
     double deltaFieldX = ((deltaRobotX*Math.cos(transformationAngle))+ -(deltaRobotY*Math.sin(transformationAngle)));
     double deltaFieldY = (deltaRobotX*Math.sin(transformationAngle))+ (deltaRobotY*Math.cos(transformationAngle));
 
-    // deltaFieldX *= -1; // When the camera is on the front of the robot
-    // deltaFieldY *= -1;
+    deltaFieldX *= -1; // When the camera is on the front of the robot
+    deltaFieldY *= -1;
 
     SmartDashboard.putNumber("x_vt", x_vt);
     SmartDashboard.putNumber("z_vt", z_vt);

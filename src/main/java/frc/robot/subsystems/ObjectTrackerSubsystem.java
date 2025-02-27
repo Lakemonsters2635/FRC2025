@@ -71,7 +71,7 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
     public double visionY;
     public double visionYa;
 
-    private final double CAMERA_PITCH_FRONT = 19; // should be 23
+    private final double CAMERA_PITCH_FRONT = 23; // should be 23
     private final double CAMERA_PITCH_BACK = 0;
     private double m_cameraPitch; 
 
@@ -329,8 +329,12 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
 
     public double applyPitchCorrection(double pitchDegrees, double y, double z){
         //Corrects for a positive pitch up camera angle
-        double alpha = Math.atan(y/z); //angle in camera coordinate system from center of camera to detected object (fraction of the field view)
-        return (z * Math.cos(Math.toRadians(pitchDegrees) + alpha))/Math.cos(alpha);
+        // In camera coordiantes y is negative from the center of the camera going up
+        double alpha = Math.atan((-y)/z); //angle in camera coordinate system from center of camera to detected object (fraction of the field view)
+        SmartDashboard.putNumber("applyPitchCorrection.alpha", alpha);
+        double adjustedZ = (z * Math.cos(Math.toRadians(pitchDegrees) + alpha))/Math.cos(alpha);
+        SmartDashboard.putNumber("applyPitchCorrection.adjustedZ", adjustedZ);
+        return adjustedZ;
     }
     
     public String getObjectsJson()
@@ -477,6 +481,7 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
 
     public Detection getSpecificAprilTag(int id){
         Detection currentAprilTag;
+        data();
         for (int i = 0; i < aprilTags.size(); i++) {
             currentAprilTag = aprilTags.get(i);
             // The .substring(10) is for this specific aprilTag family which is "tag36h11: "
@@ -604,11 +609,12 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         double fps = Double.valueOf(fpsString);
         
         
-        if (fps<25) {
-            // If the frames per second is less than 25 don't do the update
-            // TODO: debug why there is intermittent frame rate
-            return ;
-        }
+        // if (fps<25) {
+        //     // If the frames per second is less than 25 don't do the update
+        //     // TODO: debug why there is intermittent frame rate
+        //     return ;
+        // }
+
         SmartDashboard.putNumber("CameraFPS", fps);
         aprilTags.clear();
         yoloObjects.clear();
@@ -616,7 +622,9 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         // Seperate out the detections with rotation
         for (int i = 0; i < gsonOut.size(); i++) { // Maybe change later
             Detection detectionObject = (Detection)gsonOut.get(i);
+            SmartDashboard.putNumber("updateDetections: raw z", detectionObject.z);
             detectionObject.z = applyPitchCorrection(m_cameraPitch, detectionObject.y , detectionObject.z);
+            SmartDashboard.putNumber("updateDetections.detectionObject.z", detectionObject.z);
             if (detectionObject.objectLabel.substring(0,3).equals("tag")) {
                 aprilTags.add(detectionObject);
                 // aprilTags.add(adjustCamOffset(gsonOut.get(i)));
