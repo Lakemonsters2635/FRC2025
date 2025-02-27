@@ -493,6 +493,25 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         return null;
     }
 
+    public Detection getNearestAprilTagFromList(int[] ids){
+        Detection currentAprilTag;
+        data();
+        // the april tags or ordered from closest to furthest away...
+        // so we go through and check if each one is in the list.  if it is,
+        // then the first one we found is the one we want.
+        for (int i = 0; i < aprilTags.size(); i++) {
+            currentAprilTag = aprilTags.get(i);
+            for (int j = 0; j < ids.length; j++) {
+                // The .substring(10) is for this specific aprilTag family which is "tag36h11: "
+                if (currentAprilTag.objectLabel.substring(10).equals(""+ids[j])) {
+                    SmartDashboard.putString(currentAprilTag.objectLabel, ("get specific apriltag " + id));
+                    return currentAprilTag;
+                }
+            }
+        }
+        return null;
+    }
+
     public Detection[] getNearestAprilTagsDetection(int count) {
         Detection[] detections = new Detection[count];
         if (count <= aprilTags.size()) {
