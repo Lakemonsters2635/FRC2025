@@ -81,6 +81,14 @@ public class CoralArmSubsystem extends SubsystemBase {
     return false;
   }
 
+  public void moveCorralUp(){
+    m_poseTarget-=5;
+  }
+
+  public void moveCorralDown(){
+    m_poseTarget+=5;
+  }
+
   public void setPoseTarget(double poseTarget) {
     m_poseTarget = poseTarget;
   }
