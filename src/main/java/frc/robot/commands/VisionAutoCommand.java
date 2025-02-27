@@ -188,6 +188,55 @@ public class VisionAutoCommand extends Command {
       System.out.println("VisionAutoCommand.visionAutoData(): failed to get vision");
     }
 
+    return _visionAutoData(xPrime, zPrime, finalYa);
+  }
+
+  public Pose2d visionAutoData(double xPrime, double zPrime, double finalYa, int[] tagIds){
+    try{
+      boolean notDone = true;
+      int i = 0;
+      while(notDone){
+        try {
+          m_ots.data();
+          Detection detectionObject;
+          if (tagIds.length >0) {
+            // detectionObject = m_ots.getNearestAprilTagDetection(tagIds);
+            detectionObject = m_ots.getNearestAprilTagFromList(tagIds);
+            visionX = detectionObject.x;
+            visionZ = detectionObject.z;
+            visionY = detectionObject.y;
+            visionYa = detectionObject.ya;
+          }
+
+          notDone = false;
+        }  
+        catch(Exception e){
+          if(i > 1000){
+            notDone = false;
+          }
+          i++;
+        }
+      }
+
+
+      SmartDashboard.putBoolean("visionAutoData try_catch", true);
+    }
+    catch(Exception e){
+      SmartDashboard.putBoolean("visionAutoData try_catch", false);
+
+      System.out.println("VisionAutoCommand.visionAutoData(): failed to get vision");
+    }
+
+    return _visionAutoData(xPrime, zPrime, finalYa);
+  }
+
+
+  /*
+   * This function takes the delta target x, z and yaw values and returns them in terms of field coordinates
+   * Note: for the closest april tag use -1 as a parameter to tagId
+   */
+  private Pose2d _visionAutoData(double xPrime, double zPrime, double finalYa){
+
     SmartDashboard.putNumber("visionAuto Z", visionZ);
     SmartDashboard.putNumber("visionAuto X", visionX);
     SmartDashboard.putNumber("visionAuto Ya", visionYa);

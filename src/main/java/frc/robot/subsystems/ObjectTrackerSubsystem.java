@@ -493,7 +493,7 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         return null;
     }
 
-    public Detection getNearestAprilTagFromList(int[] ids){
+    public Detection getNearestAprilTagFromList(int[] tagIds){
         Detection currentAprilTag;
         data();
         // the april tags or ordered from closest to furthest away...
@@ -501,10 +501,10 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         // then the first one we found is the one we want.
         for (int i = 0; i < aprilTags.size(); i++) {
             currentAprilTag = aprilTags.get(i);
-            for (int j = 0; j < ids.length; j++) {
+            for (int j = 0; j < tagIds.length; j++) {
                 // The .substring(10) is for this specific aprilTag family which is "tag36h11: "
-                if (currentAprilTag.objectLabel.substring(10).equals(""+ids[j])) {
-                    SmartDashboard.putString(currentAprilTag.objectLabel, ("get specific apriltag " + id));
+                if (currentAprilTag.objectLabel.substring(10).equals(""+tagIds[j])) {
+                    SmartDashboard.putString(currentAprilTag.objectLabel, ("get specific apriltag " + tagIds));
                     return currentAprilTag;
                 }
             }
