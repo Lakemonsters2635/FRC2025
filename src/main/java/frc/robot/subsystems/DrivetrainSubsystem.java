@@ -183,7 +183,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
       Constants.maxModuleLinearSpeed,       // 3.5 m/s
       Constants.maxModuleLinearAccelaration // 4 m/s^2
-    ).setKinematics(m_kinematics);
+
+    ).setKinematics(m_kinematics).setReversed(true);
 
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       startPose,

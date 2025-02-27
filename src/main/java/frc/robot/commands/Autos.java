@@ -52,7 +52,8 @@ public class Autos {
     // Source line-up auto
     public Command sourceLineup(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, Constants.SOURCE_TAG_IDS, 0.0, 0.0, 0.0) // TODO: determine these values
+            // new VisionAutoCommand(m_dts, m_ots, Constants.SOURCE_TAG_IDS, 0.0, 0.0, 0.0) // TODO: determine these values
+            new VisionAutoCommand(m_dts, m_ots, 13, 0.0, -1*(5+40), 0.0) // TODO: determine these values
         );
     }
 
