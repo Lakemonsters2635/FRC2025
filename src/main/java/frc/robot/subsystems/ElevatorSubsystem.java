@@ -13,8 +13,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -28,10 +31,21 @@ public class ElevatorSubsystem extends SubsystemBase {
   double ff = -.5;
   PIDController m_elevatorController;
 
+  public boolean isPIDControl = true;
+
   Joystick leftJoystick = new Joystick(0);
-  Trigger stopElevator = new JoystickButton(leftJoystick, 8);
+  // Trigger stopElevator = new JoystickButton(leftJoystick, 8);
+
+  
 
   TalonFX m_elevatorMotor;
+
+  public Command unspoolElevator = new SequentialCommandGroup(
+    new WaitCommand(1),
+    new InstantCommand(()->m_elevatorMotor.setVoltage(0.5)),
+    new WaitCommand(1),
+    new InstantCommand(()->m_elevatorMotor.setVoltage(0))
+  );
 
   public ElevatorSubsystem() {
     m_elevatorMotor = new TalonFX(Constants.ElEVATOR_MOTOR_ID, new CANBus("CANivore"));
@@ -91,6 +105,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_poseTarget = targetPos;
   }
 
+  public boolean isAtPosition(){
+    if (Math.abs(elevatorHeight()-m_poseTarget) < 1000) {
+      return true;
+    }
+
+    return false;
+  }
+
   @Override
   public void periodic() {
     m_poseTarget = MathUtil.clamp(m_poseTarget, -12000, 36000);
@@ -109,10 +131,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     // stopElevator.toggleOnTrue(new InstantCommand(()->setStageHoldPower()));
 
     // setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5));
-    setElevatorMotorPower(MathUtil.clamp(ff+fb, -4.5, 2));
     // setElevatorMotorPower(MathUtil.clamp(ff+fb, -4.5, 1.5));
 
     SmartDashboard.putNumber("ElevatorVolts", m_elevatorMotor.getMotorVoltage().getValueAsDouble());
+
+    // if (stopElevator.getAsBoolean()) {
+    //   isPIDControl = false;
+      
+    // }
+
+    if (isPIDControl) {
+      setElevatorMotorPower(MathUtil.clamp(ff+fb, -4.5, 2));
+    }
 
     // if () {
     //   setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5));

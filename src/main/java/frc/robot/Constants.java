@@ -236,7 +236,7 @@ public final class Constants {
 
   public static final int TARGET_TRIGGER_DISTANCE_APRIL_TAG = 0;
 
-  public static int[] REEF_TAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22}; //RED: 6,7,8,9,10,11 BLUE: 17, 18, 19, 20, 21, 22 
+  public static int[] REEF_TAG_IDS = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22, 3}; //RED: 6,7,8,9,10,11 BLUE: 17, 18, 19, 20, 21, 22 
   public static int[] SOURCE_TAG_IDS = {1, 2, 12, 13}; //RED: 1, 2  BLUE: 12, 13
   public static int[] CAGE_TAG_IDS = {5, 15, 14, 4}; //RED: 5, (15) BLUE: 14, (4)
   public static int[] PROCESSOR_TAG_IDS = {3, 16}; //RED: 3 BLUE: 16

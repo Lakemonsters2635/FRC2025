@@ -108,16 +108,29 @@ public class VisionAutoCommand extends Command {
       SmartDashboard.putNumber("Robot rot", m_dts.getPose().getRotation().getDegrees());
 
       // no need to add a small value for xPrime since visionCreatePath takes care of it
-      if (m_tagID == -2) {
-        visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
-      }
-      else if(m_tagID >= -1){
+      // if (m_tagID == -2) {
+      //   visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
+      // }
+      // else 
+      int counts =0;
+      if(m_tagID >= -1){
         visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
       }
       else{
-        visionCreatePath(m_xPrime, m_zPrime, m_finalYa, Integer.valueOf(m_ots.getNearestAprilTagDetection(m_tagIDs).objectLabel.substring(10)));
+        boolean notDone = true;
+        while (notDone) {
+          try{
+          visionCreatePath(m_xPrime, m_zPrime, m_finalYa, Integer.valueOf(m_ots.getAprilTagDetections(m_tagIDs).objectLabel.substring(10)));
+          notDone = false;
+          } catch(Exception e){
+            counts++;
+          }
+          if (counts>100) {
+            notDone = false;
+          }
+        }
       }
-      System.out.println("Scheduled " + m_tagID + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      System.out.println("Scheduled " + m_tagID + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + counts);
     }
     catch(Exception e) {
       System.out.println(e);

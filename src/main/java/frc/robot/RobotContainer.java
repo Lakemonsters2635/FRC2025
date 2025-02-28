@@ -23,6 +23,7 @@ import frc.robot.commands.MoveAlgaeToPose;
 import frc.robot.commands.MoveClimbPos;
 import frc.robot.commands.MoveCoralArmToPosition;
 import frc.robot.commands.MoveElevatorToPoseCommand;
+import frc.robot.commands.RunAutoCommand;
 import frc.robot.commands.VisionAutoCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
@@ -65,7 +66,7 @@ public class RobotContainer {
   public static final ElevatorUpCommand m_elevatorFirstStageUpCommand = new ElevatorUpCommand(m_elevatorSubsystem);
   public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
   public static final MoveAlgaeToPose m_moveAlgaeToPose = new MoveAlgaeToPose(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
-  public Autos m_autos = new Autos(m_drivetrainSubsystem, m_objectTrackerSubsystem);
+  public static final Autos m_autos = new Autos(m_drivetrainSubsystem, m_objectTrackerSubsystem);
   public static final VisionAutoCommand m_visionAutoCommand = new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem); // TODO: Change this later
   public static final ClimberUpCommand m_climberUpCommand = new ClimberUpCommand(m_climberSubsystem);
   public static final ClimberDownCommand m_climberDownCommand = new ClimberDownCommand(m_climberSubsystem);
@@ -109,6 +110,7 @@ public class RobotContainer {
     // Trigger moveElevatorToPos = new JoystickButton(rightJoystick, 10);  
     Trigger algaeUpButton = new JoystickButton(rightJoystick, 10);
     Trigger algaeDownButton = new JoystickButton(rightJoystick, 12);
+    Trigger runVisionAuto = new JoystickButton(rightJoystick, 2);
 
     Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
 
@@ -138,6 +140,7 @@ public class RobotContainer {
     moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
+    runVisionAuto.onTrue(new RunAutoCommand(m_streamDeckSubsystem));
 
     visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));
 

@@ -31,8 +31,8 @@ public class Autos {
             new InstantCommand(()-> m_dts.stopMotors()),
             m_dts.createPath(
                 new Pose2d(0,0, new Rotation2d(Units.degreesToRadians(90))), 
-                new Translation2d(0, 1), 
-                new Pose2d(0, 2, new Rotation2d(Units.degreesToRadians(90)))
+                new Translation2d(0, -1), 
+                new Pose2d(0, -2, new Rotation2d(Units.degreesToRadians(90)))
             ),
             // m_dts.createPath(
             //     new Pose2d(0,2.8, new Rotation2d(Units.degreesToRadians(90))), 
@@ -53,32 +53,33 @@ public class Autos {
     public Command sourceLineup(){
         return new SequentialCommandGroup(
             // new VisionAutoCommand(m_dts, m_ots, Constants.SOURCE_TAG_IDS, 0.0, 0.0, 0.0) // TODO: determine these values
-            new VisionAutoCommand(m_dts, m_ots, 13, 0.0, -1*(5+40), 0.0) // TODO: determine these values
+            new VisionAutoCommand(m_dts, m_ots, 12, 0.0, -1*(5+30), 0.0) // TODO: determine these values
+            // new VisionAutoCommand(m_dts, m_ots, Constants.SOURCE_TAG_IDS, 0.0, -1*(5+30), 0.0) // TODO: determine these values
         );
     }
 
     // Corral line-up left
     public Command reefCorralLeft(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, Units.inchesToMeters(6.5), 0.0, 0.0)
+            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, Units.inchesToMeters(6.5), Units.inchesToMeters(-1*(20+11)), 0.0)
         );
     }
 
     // Corral line-up right
     public Command reefCorralRight(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, -Units.inchesToMeters(6.5), 0, 0) // TODO
+            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, -Units.inchesToMeters(6.5), Units.inchesToMeters(-1*(20+11)), 0) // TODO
         );
     }
 
     // Corral line-up algae
     public Command reefAlgae(){
         return new SequentialCommandGroup(
-            new InstantCommand(()-> m_dts.stopMotors()),
-            new WaitCommand(0.5),
-            new InstantCommand(()-> SmartDashboard.putString("reefAlgae", "runs")),
-            new VisionAutoCommand(m_dts, m_ots, 8)
-            // new VisionAutoCommand(m_dts, m_ots, 8, 0, -1 *(20 + 1), 0)
+            // new InstantCommand(()-> m_dts.stopMotors()),
+            // new WaitCommand(0.5),
+            // new InstantCommand(()-> SmartDashboard.putString("reefAlgae", "runs")),
+            // new VisionAutoCommand(m_dts, m_ots, 8)
+            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, 0, Units.inchesToMeters(-1 *(20 + 1)), 0)
         );
     }
     // public Command reefAlgae(){
