@@ -109,14 +109,20 @@ public class VisionPureAutoCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // TODO: need to set the field x, y, rotation target.
+    // TODO the x,y,rot will be based on the initial state + what was defined in the constructor based on desired relative positoin from the april tag.
     Pose2d fieldDeltaPose = visionAutoData(m_xPrime, m_zPrime, m_finalYa, m_tagID);
     double m_x_target = 0;
     double m_y_target = 0;
     double m_rot_target = 0;
 
+    // get the starting pose so we can calculate fade-in for speed
     double m_x_start = 0;
     double m_y_start = 0;
     double m_rot_start = 0;
+
+    // NOTE: actual pose of the robot will be updated in execute.
+
 
     // Don't need to get m_ots.data() because it is already called in Robot.java periodic
 
@@ -154,9 +160,15 @@ public class VisionPureAutoCommand extends Command {
   public void execute() {
     // Get the vision
 
+    // TODO this pose will be current pose from odemetry.
     double x_pose = 0;
     double y_pose = 0;
     double rot_pose = 0;
+
+    // TODO need something to fade-in the acceleration so we don't brown out the  robot.
+    // we can do this by remembering how far we are from the start... maybe it is better to take a hack 
+    // use m_{xy,yrot}_start for fade-in... need to figure out how far of a distance this needs to be faded in from.
+    // this fade in distance likely needs to be an initialization parameter.
 
     m_fb_x = MathUtil.clamp(
         m_visionSwerveController_x.calculate(x_pose, m_x_target), 
