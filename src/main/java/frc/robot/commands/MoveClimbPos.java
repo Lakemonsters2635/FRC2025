@@ -52,9 +52,9 @@ public class MoveClimbPos extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_es.isAtPosition()){
-      return true;
-    }
-    return false;
+    // if(m_es.isAtPosition()){
+    //   return true;
+    // }
+    return true;
   }
 }

@@ -124,8 +124,10 @@ public class RobotContainer {
     //climberTestButton.whileFalse(new InstantCommand(()->m_climberSubsystem.motor.setVoltage(0)));
     // climberUpButton.whileTrue(m_climberUpCommand);
     // climberDownButton.whileTrue(m_climberDownCommand);
-    climberUpButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.configure()));
+    climberUpButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.up()));
     climberUpButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
+    climberDownButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.down()));
+    climberDownButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(
@@ -133,6 +135,8 @@ public class RobotContainer {
       new InstantCommand(()-> m_drivetrainSubsystem.resetAngle())));
     zeroElevatorPowerButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.zeroElevatorPower()));
     moveCoralArmPos.onTrue(m_moveCoralArmToPosition);
+    // elevatorUpButton.whileTrue(m_elevatorFirstStageUpCommand);
+    // elevatorDownButton.whileTrue(m_elevatorFirstStageDownCommand);
     elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000)));
     elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000)));
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);
@@ -140,9 +144,9 @@ public class RobotContainer {
     moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    runVisionAuto.onTrue(new RunAutoCommand(m_streamDeckSubsystem));
+    // runVisionAuto.onTrue(new RunAutoCommand(m_streamDeckSubsystem));
 
-    visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));
+    // visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));
 
 
     climbPos.onTrue(m_moveClimbPos);
@@ -156,6 +160,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m_autos.goStraight();
-    return m_autos.sourceLineup();
+    return m_autos.goStraight();
   }
 }

@@ -47,6 +47,7 @@ public class VisionAutoCommand extends Command {
   public VisionAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots) {
     m_dts = dts;
     m_ots = ots;
+    m_tagID = -1;
 
     // this.xPrime = xPrime0;
     // this.zPrime = zPrime0;

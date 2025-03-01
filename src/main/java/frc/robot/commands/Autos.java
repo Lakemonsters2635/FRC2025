@@ -29,11 +29,14 @@ public class Autos {
     public Command goStraight(){
         return new SequentialCommandGroup(
             new InstantCommand(()-> m_dts.stopMotors()),
+            new InstantCommand(()->m_dts.setFollowJoystick(false)),
             m_dts.createPath(
                 new Pose2d(0,0, new Rotation2d(Units.degreesToRadians(90))), 
                 new Translation2d(0, -1), 
                 new Pose2d(0, -2, new Rotation2d(Units.degreesToRadians(90)))
             ),
+            new InstantCommand(()->m_dts.setFollowJoystick(true)),
+
             // m_dts.createPath(
             //     new Pose2d(0,2.8, new Rotation2d(Units.degreesToRadians(90))), 
             //     new Translation2d(0, 2.9), 
@@ -92,6 +95,12 @@ public class Autos {
     public Command processorAlgae(){
         return new SequentialCommandGroup(
             new VisionAutoCommand(m_dts, m_ots, Constants.PROCESSOR_TAG_IDS, 0, 0, 0)
+        );
+    }
+
+    public Command closestAprilTag(){
+        return new SequentialCommandGroup(
+            new VisionAutoCommand(m_dts, m_ots, -1, 0, Units.inchesToMeters(-30), 0)
         );
     }
 }

@@ -36,6 +36,7 @@ public class RunAutoCommand extends SequentialCommandGroup {
       default:
         break;
     }
+    autoCommand = m_autos.closestAprilTag();
     addCommands(autoCommand);
   }
 }

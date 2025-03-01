@@ -24,8 +24,8 @@ import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
-  public static final Encoder m_encoderInner = new Encoder(Constants.INNER_ELEVATOR_ENCODER_A, Constants.INNER_ELEVATOR_ENCODER_B);
-  public static final Encoder m_encoderOuter = new Encoder(Constants.OUTER_ELEVATOR_ENCODER_A, Constants.OUTER_ELEVATOR_ENCODER_B);
+  // public static final Encoder m_encoderInner = new Encoder(Constants.INNER_ELEVATOR_ENCODER_A, Constants.INNER_ELEVATOR_ENCODER_B);
+  // public static final Encoder m_encoderOuter = new Encoder(Constants.OUTER_ELEVATOR_ENCODER_A, Constants.OUTER_ELEVATOR_ENCODER_B);
 
   double fb, m_poseTarget;
   double ff = -.5;
@@ -52,10 +52,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
 
     m_elevatorController = new PIDController(0.001, 0, 0);
+
+    
     // m_elevatorController = new PIDController(0.001, 0, 0); 
 
-    m_encoderInner.reset();
-    m_encoderOuter.reset();
+    // m_encoderInner.reset();
+    // m_encoderOuter.reset();
   }
   //negative up
   //positive down
@@ -65,16 +67,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.setVoltage(power);
   }
 
-  public double innerEncoderRotations(){
-    return m_encoderInner.get();
-  }
+  // public double innerEncoderRotations(){
+  //   return m_encoderInner.get();
+  // }
   
-  public double outerEncoderRotations(){
-    return -m_encoderOuter.get();
-  }
+  // public double outerEncoderRotations(){
+  //   return -m_encoderOuter.get();
+  // }
+
 
   public double elevatorHeight() {
-    return innerEncoderRotations() + outerEncoderRotations();
+    // m_elevatorMotor
+    return (36000 * m_elevatorMotor.getPosition().getValueAsDouble())/(-92);
+    // return innerEncoderRotations() + outerEncoderRotations();
   }
 
   public void setRaisePower(){
@@ -82,7 +87,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setStageHoldPower(){
-    m_elevatorMotor.setVoltage(-.5);
+    m_elevatorMotor.setVoltage(-0.85);
   }
 
   public void setFirstStageLowerPower(){
@@ -117,8 +122,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     m_poseTarget = MathUtil.clamp(m_poseTarget, -12000, 36000);
     // This method will be called once per schedu
-    SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
-    SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
+    // SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
+    // SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
     SmartDashboard.putNumber("elevatorHeight", elevatorHeight());
     SmartDashboard.putNumber("Motor Power (-1 to 1)", m_elevatorMotor.get());
     SmartDashboard.putNumber("Motor Power Voltage", m_elevatorMotor.get() * 11);
@@ -163,5 +168,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // if(elevatorHeight() < -12000){
     //   setElevatorMotorPower(-1);;
     // }
+
+    // setElevatorMotorPower(ff);
   }
 }
