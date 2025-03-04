@@ -112,9 +112,12 @@ public class RobotContainer {
     Trigger algaeDownButton = new JoystickButton(rightJoystick, 12);
     Trigger runVisionAuto = new JoystickButton(rightJoystick, 2);
 
-    Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
+    //Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
+    Trigger coralUpButton = new JoystickButton(leftJoystick, 9);
+    Trigger coralDownButton = new JoystickButton(leftJoystick, 11);
 
-
+    coralUpButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralUp()));
+    coralDownButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralDown()));
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
     // algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     // algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
@@ -137,14 +140,14 @@ public class RobotContainer {
     moveCoralArmPos.onTrue(m_moveCoralArmToPosition);
     // elevatorUpButton.whileTrue(m_elevatorFirstStageUpCommand);
     // elevatorDownButton.whileTrue(m_elevatorFirstStageDownCommand);
-    elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000)));
-    elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000)));
+    elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000/3)));
+    elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000/3)));
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);
     // moveElevatorToPos.onTrue(new MoveElevatorToPoseCommand(m_elevatorSubsystem, 20000));
     moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    // runVisionAuto.onTrue(new RunAutoCommand(m_streamDeckSubsystem));
+    runVisionAuto.onTrue(new RunAutoCommand(m_streamDeckSubsystem));
 
     // visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));
 

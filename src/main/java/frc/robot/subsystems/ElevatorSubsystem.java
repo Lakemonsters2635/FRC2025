@@ -68,7 +68,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public double innerEncoderRotations(){
-    return m_encoderInner.get();
+    return -m_encoderInner.get();
   }
   
   public double outerEncoderRotations(){
@@ -79,7 +79,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double elevatorHeight() {
     // m_elevatorMotor
     // return (36000 * m_elevatorMotor.getPosition().getValueAsDouble())/(-92); this is for the embedded encoder
-    return (innerEncoderRotations() + outerEncoderRotations()) * (16/24);
+    return (innerEncoderRotations() + outerEncoderRotations()) * (24/16);
   }
 
   public void setRaisePower(){
@@ -120,7 +120,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_poseTarget = MathUtil.clamp(m_poseTarget, -12000, 36000);
+    m_poseTarget = MathUtil.clamp(m_poseTarget, -9000, 32500);
     // This method will be called once per schedu
     // SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
     // SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
@@ -146,7 +146,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // }
 
     if (isPIDControl) {
-      setElevatorMotorPower(MathUtil.clamp(ff+fb, -4.5, 2));
+      setElevatorMotorPower(MathUtil.clamp(ff+fb, -5.5, 4));
     }
 
     // if () {
