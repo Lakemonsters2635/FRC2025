@@ -504,7 +504,7 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
             for (int j = 0; j < ids.length; j++) {
                 // The .substring(10) is for this specific aprilTag family which is "tag36h11: "
                 if (currentAprilTag.objectLabel.substring(10).equals(""+ids[j])) {
-                    SmartDashboard.putString(currentAprilTag.objectLabel, ("get specific apriltag " + id));
+                    SmartDashboard.putString(currentAprilTag.objectLabel, ("get specific apriltag " + ids[j]));
                     return currentAprilTag;
                 }
             }
