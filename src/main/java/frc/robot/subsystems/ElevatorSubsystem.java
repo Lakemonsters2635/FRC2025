@@ -24,8 +24,8 @@ import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
-  // public static final Encoder m_encoderInner = new Encoder(Constants.INNER_ELEVATOR_ENCODER_A, Constants.INNER_ELEVATOR_ENCODER_B);
-  // public static final Encoder m_encoderOuter = new Encoder(Constants.OUTER_ELEVATOR_ENCODER_A, Constants.OUTER_ELEVATOR_ENCODER_B);
+  public static final Encoder m_encoderInner = new Encoder(Constants.INNER_ELEVATOR_ENCODER_A, Constants.INNER_ELEVATOR_ENCODER_B);
+  public static final Encoder m_encoderOuter = new Encoder(Constants.OUTER_ELEVATOR_ENCODER_A, Constants.OUTER_ELEVATOR_ENCODER_B);
 
   double fb, m_poseTarget;
   double ff = -.5;
@@ -56,8 +56,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     
     // m_elevatorController = new PIDController(0.001, 0, 0); 
 
-    // m_encoderInner.reset();
-    // m_encoderOuter.reset();
+    m_encoderInner.reset();
+    m_encoderOuter.reset();
   }
   //negative up
   //positive down
@@ -67,19 +67,19 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorMotor.setVoltage(power);
   }
 
-  // public double innerEncoderRotations(){
-  //   return m_encoderInner.get();
-  // }
+  public double innerEncoderRotations(){
+    return m_encoderInner.get();
+  }
   
-  // public double outerEncoderRotations(){
-  //   return -m_encoderOuter.get();
-  // }
+  public double outerEncoderRotations(){
+    return -m_encoderOuter.get();
+  }
 
 
   public double elevatorHeight() {
     // m_elevatorMotor
-    return (36000 * m_elevatorMotor.getPosition().getValueAsDouble())/(-92);
-    // return innerEncoderRotations() + outerEncoderRotations();
+    // return (36000 * m_elevatorMotor.getPosition().getValueAsDouble())/(-92); this is for the embedded encoder
+    return (innerEncoderRotations() + outerEncoderRotations()) * (16/24);
   }
 
   public void setRaisePower(){
