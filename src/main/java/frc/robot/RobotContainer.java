@@ -89,7 +89,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //LEFT BUTTONS
-    Trigger coralIntakeInButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
+    Trigger coralIntakeOutButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
     //Trigger climberTestButton = new JoystickButton(leftJoystick, 5);
@@ -104,7 +104,7 @@ public class RobotContainer {
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
     Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
     Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON);
-    Trigger coralIntakeOutButton = new JoystickButton(rightJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
+    Trigger coralIntakeInButton = new JoystickButton(rightJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
     Trigger moveCoralArmPos = new JoystickButton(rightJoystick, 6);
     Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
     // Trigger moveElevatorToPos = new JoystickButton(rightJoystick, 10);  

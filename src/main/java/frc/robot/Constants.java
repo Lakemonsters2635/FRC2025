@@ -105,7 +105,7 @@ public final class Constants {
   public static final ElevatorState E_STATE_CLIMB = new Constants.ElevatorState(250, 0, 10);
 
   //TODO: test these values
-  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(-3500, -48.3, -20);
+  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(-3500, -48.3, -40);
   public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(-5500, -60, -35); // TODO: figure out coralArmAngle
   public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(-2201, -88.45, -17);
   public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(11200, -87, 0);

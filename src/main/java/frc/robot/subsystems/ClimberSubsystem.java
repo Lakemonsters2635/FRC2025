@@ -27,7 +27,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void down(){
     // motor.setVoltage((leftJoystick.getThrottle() - 1) *3);
-    motor.setVoltage(-2.0);
+    motor.setVoltage(-1.125);
   }
 
   public void stop(){
