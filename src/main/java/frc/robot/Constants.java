@@ -97,19 +97,19 @@ public final class Constants {
   }
 
   public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(-2942-3000+7242, 0, -87.3);
-  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(-2942-3000+7242-11076-850, 0, -73.9+10-15);
-  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(19623, 0, -64.3-15);
-  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(33502, 0, -69.8+10-15);
+  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(-6700, 0, -82.5);
+  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395, 0, -83);
+  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500, 0, -80.5);
   public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(-2288, 0, -88.9);
 
   public static final ElevatorState E_STATE_CLIMB = new Constants.ElevatorState(250, 0, 10);
 
   //TODO: test these values
-  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(-4906, -45, -30);
+  public static final ElevatorState E_STATE_CORAL_SOURCE = new Constants.ElevatorState(-3500, -48.3, -20);
   public static final ElevatorState E_STATE_CORAL_REEF_1 = new Constants.ElevatorState(-5500, -60, -35); // TODO: figure out coralArmAngle
-  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(-3479+3000, -90, -20);
-  public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(12000+2000, -90, -20);
-  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(35000, -70, 0); // TODO: find maximum angle for the coralArmAngle
+  public static final ElevatorState E_STATE_CORAL_REEF_2 = new Constants.ElevatorState(-2201, -88.45, -17);
+  public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(11200, -87, 0);
+  public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(35000, -78, 0); // TODO: find maximum angle for the coralArmAngle
   public static final ElevatorState E_STATE_CORAL_TRANSIT = new Constants.ElevatorState(0, -25, 0); // TODO: find maximum angle for the coralArmAngle
   
 
