@@ -221,8 +221,12 @@ public class VisionAutoCommand extends Command {
     double angleOffset = -Units.degreesToRadians(90); 
 
     // double heading = Math.atan(deltaRobotX/deltaRobotY)+botRadians+ angleOffset;
-    heading = Math.atan(deltaRobotX/Math.abs(deltaRobotY))+botRadians+ angleOffset;
-    double finalAngle = visionYa + finalYa + Units.radiansToDegrees(botRadians);
+    // heading = Math.atan(deltaRobotX/Math.abs(deltaRobotY))+botRadians+ angleOffset;
+    heading = Math.atan(deltaRobotX/Math.abs(deltaRobotY))+ angleOffset;
+
+    // double finalAngle = visionYa + finalYa + Units.radiansToDegrees(botRadians);
+    double finalAngle = visionYa + finalYa;
+
 
     // double deltaFieldX = ((deltaRobotX*Math.cos(transformationAngle))+ -(deltaRobotY*Math.sin(transformationAngle)));
     // double deltaFieldY = (deltaRobotX*Math.sin(transformationAngle))+ (deltaRobotY*Math.cos(transformationAngle));
@@ -236,6 +240,9 @@ public class VisionAutoCommand extends Command {
 
     deltaFieldX *= -1; // When the camera is on the front of the robot
     deltaFieldY *= -1;
+
+    deltaRobotX *=-1;
+    deltaRobotY *=-1;
 
     SmartDashboard.putNumber("x_vt", x_vt);
     SmartDashboard.putNumber("z_vt", z_vt);
@@ -252,10 +259,16 @@ public class VisionAutoCommand extends Command {
     SmartDashboard.putNumber("botRadians degrees", Units.radiansToDegrees(botRadians));
 
     return new Pose2d(
-      Units.inchesToMeters(deltaFieldX), 
-      Units.inchesToMeters(deltaFieldY), 
+      Units.inchesToMeters(deltaRobotX),
+      Units.inchesToMeters(deltaRobotY),
       new Rotation2d(Units.degreesToRadians(finalAngle))
     );
+
+    // return new Pose2d(
+    //   Units.inchesToMeters(deltaFieldX), 
+    //   Units.inchesToMeters(deltaFieldY), 
+    //   new Rotation2d(Units.degreesToRadians(finalAngle))
+    // );
   }
 
   /*

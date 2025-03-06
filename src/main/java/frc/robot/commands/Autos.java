@@ -42,7 +42,10 @@ public class Autos {
             //     new Translation2d(0, 2.9), 
             //     new Pose2d(0, 3, new Rotation2d(Units.degreesToRadians(90)))
             // ),
-            new InstantCommand(()->m_dts.stopMotors()));
+            new InstantCommand(()->m_dts.stopMotors()),
+            new InstantCommand(()->m_dts.resetAngle(180)),
+            new InstantCommand(()->m_dts.zeroOdometry()))
+            ;
     }
 
     public Command visionAuto() {
