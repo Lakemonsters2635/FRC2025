@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -24,6 +25,7 @@ import frc.robot.commands.MoveClimbPos;
 import frc.robot.commands.MoveCoralArmToPosition;
 import frc.robot.commands.MoveElevatorToPoseCommand;
 import frc.robot.commands.VisionAutoCommand;
+import frc.robot.commands.VisionPureAutoCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -97,6 +99,7 @@ public class RobotContainer {
     Trigger climbPos = new JoystickButton(leftJoystick, 2);
     Trigger moveCorralUpButton = new JoystickButton(leftJoystick, 10);
     Trigger moveCorralDownButton = new JoystickButton(leftJoystick, 12);
+    Trigger pureVisionAutoCommandButton = new JoystickButton(leftJoystick, 7);
     
     //RIGHT BUTTONS
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
@@ -124,6 +127,7 @@ public class RobotContainer {
     // climberDownButton.whileTrue(m_climberDownCommand);
     climberUpButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.configure()));
     climberUpButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
+    pureVisionAutoCommandButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 7));
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(
