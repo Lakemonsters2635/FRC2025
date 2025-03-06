@@ -96,9 +96,6 @@ public class RobotContainer {
     Trigger climberUpButton = new JoystickButton(leftJoystick, 5);
     Trigger climberDownButton = new JoystickButton(leftJoystick, 3);
     Trigger climbPos = new JoystickButton(leftJoystick, 2);
-    Trigger moveCorralUpButton = new JoystickButton(leftJoystick, 10);
-    Trigger moveCorralDownButton = new JoystickButton(leftJoystick, 12);
-    
     //RIGHT BUTTONS
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
@@ -108,13 +105,13 @@ public class RobotContainer {
     Trigger moveCoralArmPos = new JoystickButton(rightJoystick, 6);
     Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
     // Trigger moveElevatorToPos = new JoystickButton(rightJoystick, 10);  
-    Trigger algaeUpButton = new JoystickButton(rightJoystick, 10);
-    Trigger algaeDownButton = new JoystickButton(rightJoystick, 12);
+    Trigger algaeUpButton = new JoystickButton(rightJoystick, 12);
+    Trigger algaeDownButton = new JoystickButton(rightJoystick, 10);
     Trigger runVisionAuto = new JoystickButton(rightJoystick, 2);
 
     //Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
-    Trigger coralUpButton = new JoystickButton(leftJoystick, 9);
-    Trigger coralDownButton = new JoystickButton(leftJoystick, 11);
+    Trigger coralUpButton = new JoystickButton(leftJoystick, 11);
+    Trigger coralDownButton = new JoystickButton(leftJoystick, 9);
 
     coralUpButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralUp()));
     coralDownButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralDown()));
