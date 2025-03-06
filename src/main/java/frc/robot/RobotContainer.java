@@ -147,7 +147,7 @@ public class RobotContainer {
     moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    runVisionAuto.onTrue(new RunAutoCommand(m_streamDeckSubsystem));
+    // runVisionAuto.onTrue(new RunAutoCommand(m_streamDeckSubsystem));
 
     // visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));
 
