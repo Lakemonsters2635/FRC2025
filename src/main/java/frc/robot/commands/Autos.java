@@ -14,22 +14,34 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.subsystems.AlgaeArmSubsystem;
+import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ObjectTrackerSubsystem;
 
 /** Add your docs here. */
 public class Autos {
     DrivetrainSubsystem m_dts;
     ObjectTrackerSubsystem m_ots;
-    public Autos(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots) {
+    ElevatorSubsystem m_es;
+    CoralArmSubsystem m_cas;
+    AlgaeArmSubsystem m_aas;
+    public Autos(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, ElevatorSubsystem es, CoralArmSubsystem cas, AlgaeArmSubsystem aas) {
         m_dts = dts;
         m_ots = ots;
+        m_es = es;
+        m_cas = cas;
+        m_aas = aas;
     }
 
     public Command goStraight(){
         return new SequentialCommandGroup(
             new InstantCommand(()-> m_dts.stopMotors()),
             new InstantCommand(()->m_dts.setFollowJoystick(false)),
+            new InstantCommand(()->m_es.setElevatorTarget(Constants.E_STATE_AUTO_FINAL.ELEVATOR_POSITION)),
+            new InstantCommand(()->m_cas.setPoseTarget(Constants.E_STATE_AUTO_FINAL.CORAL_ARM_ANGLE)),
+            new InstantCommand(()->m_aas.setArmPosition(Constants.E_STATE_AUTO_FINAL.ALGAE_ARM_ANGLE)),
             m_dts.createPath(
                 new Pose2d(0,0, new Rotation2d(Units.degreesToRadians(-90))), 
                 new Translation2d(0, 0.5), 
@@ -59,7 +71,7 @@ public class Autos {
     public Command sourceLineup(){
         return new SequentialCommandGroup(
             // new VisionAutoCommand(m_dts, m_ots, Constants.SOURCE_TAG_IDS, 0.0, 0.0, 0.0) // TODO: determine these values
-            new VisionAutoCommand(m_dts, m_ots, 7, 0.0, -1*(5+30), 0.0) // TODO: determine these values
+            new VisionAutoCommand(m_dts, m_ots, -1, 0.0, -1*(5+30), 0.0) // TODO: determine these values
             // new VisionAutoCommand(m_dts, m_ots, Constants.SOURCE_TAG_IDS, 0.0, -1*(5+30), 0.0) // TODO: determine these values
         );
     }
@@ -67,14 +79,14 @@ public class Autos {
     // Corral line-up left
     public Command reefCorralLeft(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, Units.inchesToMeters(6.5), Units.inchesToMeters(-1*(20+11)), 0.0)
+            new VisionAutoCommand(m_dts, m_ots, -1, Units.inchesToMeters(6.5), Units.inchesToMeters(-1*(20+11)), 0.0)
         );
     }
 
     // Corral line-up right
     public Command reefCorralRight(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, -Units.inchesToMeters(6.5), Units.inchesToMeters(-1*(20+11)), 0) // TODO
+            new VisionAutoCommand(m_dts, m_ots, -1, -Units.inchesToMeters(6.5), Units.inchesToMeters(-1*(20+11)), 0) // TODO
         );
     }
 
@@ -85,7 +97,7 @@ public class Autos {
             // new WaitCommand(0.5),
             // new InstantCommand(()-> SmartDashboard.putString("reefAlgae", "runs")),
             // new VisionAutoCommand(m_dts, m_ots, 8)
-            new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, 0, Units.inchesToMeters(-1 *(20 + 1)), 0)
+            new VisionAutoCommand(m_dts, m_ots, -1, 0, Units.inchesToMeters(-1 *(20 + 1)), 0)
         );
     }
     // public Command reefAlgae(){
@@ -97,7 +109,7 @@ public class Autos {
     // Line-up processor
     public Command processorAlgae(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, Constants.PROCESSOR_TAG_IDS, 0, 0, 0)
+            new VisionAutoCommand(m_dts, m_ots, -1, 0, 0, 0)
         );
     }
 
