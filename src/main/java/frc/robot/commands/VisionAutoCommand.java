@@ -200,6 +200,8 @@ public class VisionAutoCommand extends Command {
       SmartDashboard.putBoolean("visionAutoData try_catch", false);
 
       System.out.println("VisionAutoCommand.visionAutoData(): failed to get vision");
+
+      return new Pose2d(0,0,new Rotation2d(Units.degreesToRadians(m_dts.getPose().getRotation().getDegrees())));
     }
 
     SmartDashboard.putNumber("visionAuto Z", visionZ);

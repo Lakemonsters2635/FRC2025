@@ -44,7 +44,7 @@ public class StreamDeckSubsystem extends SubsystemBase {
   }
 
   private void getEntries(){
-    corralInfoEntry = table.getStringArrayTopic("coralInfo").getEntry(new String[3]);
+    corralInfoEntry = table.getStringArrayTopic("coralInfo").getEntry(new String[]{"", "", ""});
     algaeEntry = table.getStringTopic("algae").getEntry("");
   }
 

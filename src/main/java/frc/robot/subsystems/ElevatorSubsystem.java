@@ -111,7 +111,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPosition(){
-    if (Math.abs(elevatorHeight()-m_poseTarget) < 1000) {
+    if (Math.abs(elevatorHeight()-m_poseTarget) < 2000) {
       return true;
     }
 

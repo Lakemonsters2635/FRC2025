@@ -79,14 +79,14 @@ public class Autos {
     // Corral line-up left
     public Command reefCorralLeft(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, -1, Units.inchesToMeters(6.5), Units.inchesToMeters(-1*(20+11)), 0.0)
+            new VisionAutoCommand(m_dts, m_ots, -1, 13, -1*(20+11), 0.0)
         );
     }
 
     // Corral line-up right
     public Command reefCorralRight(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, -1, -Units.inchesToMeters(6.5), Units.inchesToMeters(-1*(20+11)), 0) // TODO
+            new VisionAutoCommand(m_dts, m_ots, -1, -13, -1*(20+11), 0) // TODO
         );
     }
 
@@ -97,7 +97,7 @@ public class Autos {
             // new WaitCommand(0.5),
             // new InstantCommand(()-> SmartDashboard.putString("reefAlgae", "runs")),
             // new VisionAutoCommand(m_dts, m_ots, 8)
-            new VisionAutoCommand(m_dts, m_ots, -1, 0, Units.inchesToMeters(-1 *(20 + 1)), 0)
+            new VisionAutoCommand(m_dts, m_ots, -1, 0, -1 *(20 + 12), 0)
         );
     }
     // public Command reefAlgae(){
@@ -115,7 +115,7 @@ public class Autos {
 
     public Command closestAprilTag(){
         return new SequentialCommandGroup(
-            new VisionAutoCommand(m_dts, m_ots, -1, 0, Units.inchesToMeters(-30), 0)
+            new VisionAutoCommand(m_dts, m_ots, -1, 0, -30, 0)
         );
     }
 }
