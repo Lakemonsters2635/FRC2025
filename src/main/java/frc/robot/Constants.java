@@ -131,7 +131,7 @@ public final class Constants {
   public static final double ALGAE_INTAKE_ROTATION_SPEED = 0.3;
   // voltage values for algae intake
   // positive is out, negative is in
-  public static final double ALGAE_INTAKE_VOLTAGE_OUT = 1.5;
+  public static final double ALGAE_INTAKE_VOLTAGE_OUT = 3;
   public static final double ALGAE_INTAKE_VOLTAGE_IN = -6;
   public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.5;
 
