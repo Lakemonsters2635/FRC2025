@@ -24,6 +24,7 @@ public class CoralArmSubsystem extends SubsystemBase {
   double ff;
   double fb;
   double motorPower;
+  double offset =0;
   private final double GAIN_CORRAL = 0.416; // Holds with corral in horizontal position
   private final double GAIN_WITHOUT_CORRAL = 0.1 *1.6;
   double gain = GAIN_CORRAL;
@@ -59,6 +60,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     // encoder offset should be zero since the relative encoder is resetted and setup correctly before deploy
     // 100 is the gear ratio
     double degrees = ((getEncoderCounts()-Constants.CORAL_ARM_ENCODER_OFFSET)/100)*360;
+    degrees +=offset;
     degrees%=360;
     return degrees;
   }
@@ -82,11 +84,13 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   public void moveCorralUp(){
-    m_poseTarget-=5;
+    // m_poseTarget-=5;
+    offset -=5;
   }
 
   public void moveCorralDown(){
-    m_poseTarget+=5;
+    // m_poseTarget+=5;
+    offset +=5;
   }
 
   public void setPoseTarget(double poseTarget) {

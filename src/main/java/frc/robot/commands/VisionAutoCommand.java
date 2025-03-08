@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // import frc.robot.subsystems.ObjectTrackerSubsystem.Detection;
 import frc.robot.subsystems.Detection;
@@ -325,24 +326,27 @@ public class VisionAutoCommand extends Command {
       new InstantCommand(()->m_dts.setFollowJoystick(false)),
       new InstantCommand(()->m_dts.resetAngle()),
       new InstantCommand(()->m_dts.zeroOdometry()),
-      m_dts.createVisionPath(
-        new Pose2d(
-          0, //botPose.getX(), 
-          0, //botPose.getY(), 
-          new Rotation2d(heading)   // TODO need to explain this rotation offset and point to docs
-        ), 
-        new Translation2d(
-          (fieldDeltaPose.getX()/2), 
-          (fieldDeltaPose.getY()/2)
-        ), 
-        new Pose2d(
-          fieldDeltaPose.getX(),
-          fieldDeltaPose.getY(), 
-          new Rotation2d(heading)
+      new ParallelRaceGroup(
+        m_dts.createVisionPath(
+          new Pose2d(
+            0, //botPose.getX(), 
+            0, //botPose.getY(), 
+            new Rotation2d(heading)   // TODO need to explain this rotation offset and point to docs
+          ), 
+          new Translation2d(
+            (fieldDeltaPose.getX()/2), 
+            (fieldDeltaPose.getY()/2)
+          ), 
+          new Pose2d(
+            fieldDeltaPose.getX(),
+            fieldDeltaPose.getY(), 
+            new Rotation2d(heading)
+          ),
+          fieldDeltaPose.getRotation().getDegrees()
+          // finalAngle //heading+(Math.PI/2)
+          // ,true
         ),
-        fieldDeltaPose.getRotation().getDegrees()
-        // finalAngle //heading+(Math.PI/2)
-        // ,true
+        new StopCommand()
       ),
       new InstantCommand(()->m_dts.stopMotors()),
       new InstantCommand(()->m_dts.restoreAngle()),

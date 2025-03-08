@@ -98,8 +98,8 @@ public final class Constants {
 
   public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(-2942-3000+7242, 0, -87.3);
   public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(-6700, 0, -82.5);
-  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395, 0, -83);
-  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000, 0, -90.5);
+  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395-1500, 0, -83);
+  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000, 0, -80.5);
   public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(-2288, 0, -88.9);
 
   public static final ElevatorState E_STATE_CLIMB = new Constants.ElevatorState(250, 0, 10);

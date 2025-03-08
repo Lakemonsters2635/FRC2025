@@ -97,9 +97,18 @@ public class Autos {
             // new WaitCommand(0.5),
             // new InstantCommand(()-> SmartDashboard.putString("reefAlgae", "runs")),
             // new VisionAutoCommand(m_dts, m_ots, 8)
-            new VisionAutoCommand(m_dts, m_ots, -1, 0, -1 *(20 + 12), 0)
+            new VisionAutoCommand(m_dts, m_ots, -1, 0, -1 *(20 + 10), 0)
         );
     }
+    // public Command reefAlgae(){
+    //     return new SequentialCommandGroup(
+    //         // new InstantCommand(()-> m_dts.stopMotors()),
+    //         // new WaitCommand(0.5),
+    //         // new InstantCommand(()-> SmartDashboard.putString("reefAlgae", "runs")),
+    //         // new VisionAutoCommand(m_dts, m_ots, 8)
+    //         new VisionAutoCommand(m_dts, m_ots, -1, 0, -1 *(20 + 12), 0)
+    //     );
+    // }
     // public Command reefAlgae(){
     //     return new SequentialCommandGroup(
     //         new VisionAutoCommand(m_dts, m_ots, Constants.REEF_TAG_IDS, 0, 48, 0)
