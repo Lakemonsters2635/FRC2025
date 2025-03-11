@@ -97,7 +97,7 @@ public class Autos {
             // new WaitCommand(0.5),
             // new InstantCommand(()-> SmartDashboard.putString("reefAlgae", "runs")),
             // new VisionAutoCommand(m_dts, m_ots, 8)
-            new VisionAutoCommand(m_dts, m_ots, -1, 0, -1 *(20 + 10), 0)
+            new VisionAutoCommand(m_dts, m_ots, -1, 0, -1 *(20 + 3), 0)
         );
     }
     // public Command reefAlgae(){
