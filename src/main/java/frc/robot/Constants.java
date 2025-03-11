@@ -138,6 +138,11 @@ public final class Constants {
   public static final int ALGAE_ARM_MOTOR = 4;
   public static final double CORAL_ARM_ENCODER_OFFSET = 0;//15.309518814086914;
 
+  //Tipping Constants
+  public static final double TIPPING_ANGLE_THRESHOLD = 5;
+  public static final int WINDOW_SIZE = 10;
+  public static final double SMOOTHING_FACTOR = 0.9;
+
   // CORAL
   public static final int CORAL_LEFT_INTAKE_MOTOR = 3;
   public static final int CORAL_RIGHT_INTAKE_MOTOR = 2;

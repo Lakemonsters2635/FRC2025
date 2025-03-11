@@ -4,10 +4,11 @@
 
 package frc.robot.subsystems;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.studica.frc.AHRS;
+  import com.studica.frc.AHRS;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -36,6 +37,12 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.SwerveControllerCommand2635;
 
 public class DrivetrainSubsystem extends SubsystemBase {
+
+    private LinkedList<Double> pitchValues = new LinkedList<>();
+    private LinkedList<Double> rollValues = new LinkedList<>();
+    double smoothedPitch = 0;
+    double smoothedRoll = 0;
+
     public static final double kMaxSpeed = 3.63; // 3.63 meters per second  Max Speed for Front, Back, Left, Right
     public final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second   Max Speed for Rotation
     private SwerveModuleState[] swerveModuleStates;
@@ -293,8 +300,65 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rotCommanded = rot;
   }
 
+  private void addPitchValue(double newValue) {
+    if (pitchValues.size() >= Constants.WINDOW_SIZE) {
+        pitchValues.removeFirst();
+    }
+    pitchValues.add(newValue);
+  }
+
+  private void addRollValue(double newValue) {
+    if (rollValues.size() >= Constants.WINDOW_SIZE) {
+      rollValues.removeFirst();
+    }
+    pitchValues.add(newValue);
+  }
+
+  private double calculateSmoothedValue(LinkedList<Double> values) {
+    double smoothedValue = 0.0;
+    double weight = 1.0;
+    double totalWeight = 0.0;
+
+    for (double value : values) {
+        smoothedValue += value * weight;
+        totalWeight += weight;
+        weight *= Constants.SMOOTHING_FACTOR;
+    }
+
+    return smoothedValue / totalWeight;
+  }
+
+  
+  
+  public boolean isTipping() {
+    double pitch = m_gyro.getPitch();
+    double roll = m_gyro.getRoll();
+
+    addRollValue(roll);
+    addPitchValue(pitch);
+
+    smoothedPitch = calculateSmoothedValue(pitchValues);
+    smoothedRoll = calculateSmoothedValue(rollValues);
+
+    return Math.abs(smoothedPitch) > Constants.TIPPING_ANGLE_THRESHOLD || Math.abs(smoothedRoll) > Constants.TIPPING_ANGLE_THRESHOLD;
+  }
+
+
   @Override
   public void periodic() {
+    System.out.println("isTipping: " + isTipping());
+    SmartDashboard.putBoolean("isTipping", isTipping());
+    SmartDashboard.putNumber("m_gyro.getPitch()", m_gyro.getPitch());
+    SmartDashboard.putNumber("m_gyro.getRoll()", m_gyro.getRoll());
+    SmartDashboard.putNumber("m_gyro.getRawGyroX()", m_gyro.getRawGyroX());
+    SmartDashboard.putNumber("m_gyro.getRawGyroY()", m_gyro.getRawGyroY());
+    SmartDashboard.putNumber("smoothedPitch", smoothedPitch);
+    SmartDashboard.putNumber("smoothRoll", smoothedRoll);
+
+    // SmartDashboard.putNumber("m_gyro.getRawGyroZ()", m_gyro.getRawGyroZ());
+
+
+    
     //Hat Power Overides for Trimming Position and Rotation
     // System.out.println("X: "+getPose().getX()+"\tY: "+getPose().getY()+"\tRot: "+getPose().getRotation().getDegrees());
     SmartDashboard.putNumber("stashAngle", m_angleCache);
