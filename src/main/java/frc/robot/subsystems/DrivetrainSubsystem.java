@@ -26,6 +26,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,8 +41,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private LinkedList<Double> pitchValues = new LinkedList<>();
     private LinkedList<Double> rollValues = new LinkedList<>();
+    BuiltInAccelerometer rioAccelerometer = new BuiltInAccelerometer();
+
     double smoothedPitch = 0;
     double smoothedRoll = 0;
+    double[] pitchData;
+    double []rollData;
+    double[] pitchDataGyro;
+    double []rollDataGyro;
+    double pitchOffset = 0;
+    boolean tipCorrection = false;
+    boolean PENDING_STATE = false;
+
+
+
 
     public static final double kMaxSpeed = 3.63; // 3.63 meters per second  Max Speed for Front, Back, Left, Right
     public final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second   Max Speed for Rotation
@@ -207,7 +220,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     );
 
     TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(Constants.kMaxModuleAngularSpeedRadiansPerSecond, Constants.kMaxModuleAngularAccelerationRadiansPerSecondSquared);
-
     // This x, y, and theta controllers are the controllers which are used for feedback inside 
     // the holonomic drive controller created by the SwerveControllerCommand.  These controllers 
     // close the loop around m_poseError and m_rotationError.  These caluclations are performed in 
@@ -300,6 +312,38 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rotCommanded = rot;
   }
 
+  public double[] getAngle(double z, double axisVal){
+    double accel = Math.sqrt(-Constants.GRAVITY_ACCEL_SQUARED + (axisVal * axisVal) + (z * z));
+    double thetaPlus = 2 * Math.toDegrees(Math.atan((axisVal + accel)/(Constants.GRAVITY_ACCEL + z)));
+    double thetaNeg = 2 * Math.toDegrees(Math.atan((axisVal - accel)/(Constants.GRAVITY_ACCEL + z)));
+    double[] arr = {accel, thetaPlus, thetaNeg};
+    return arr;
+  }
+
+  public double[] getPitchAngle(){
+    SmartDashboard.putNumber("rioAccelY", rioAccelerometer.getY());
+    SmartDashboard.putNumber("rioAccelZ", rioAccelerometer.getZ());
+
+
+    SmartDashboard.putNumber("RawAccelZ", m_gyro.getRawAccelZ());
+    SmartDashboard.putNumber("RawAccelY", m_gyro.getRawAccelY());
+
+    // return getAngle(1, m_gyro.getRawAccelY());
+    // return getAngle(m_gyro.getRawAccelZ(), m_gyro.getRawAccelY());
+
+    return getAngle(rioAccelerometer.getZ(), rioAccelerometer.getY());
+  }
+  
+  public double[] getRollAngle(){
+    SmartDashboard.putNumber("RawAccelX", m_gyro.getRawAccelX());
+    SmartDashboard.putNumber("rioAccelX", rioAccelerometer.getX());
+
+    // return getAngle(1, m_gyro.getRawAccelX());
+    // return getAngle(m_gyro.getRawAccelZ(), m_gyro.getRawAccelX());
+
+    return getAngle(rioAccelerometer.getZ(), rioAccelerometer.getX());
+  }
+
   private void addPitchValue(double newValue) {
     if (pitchValues.size() >= Constants.WINDOW_SIZE) {
         pitchValues.removeFirst();
@@ -328,8 +372,47 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return smoothedValue / totalWeight;
   }
 
-  
-  
+  public void setPitchOffset(){
+    pitchOffset = m_gyro.getPitch();
+  }
+
+  public void setTriggerAntiTip(boolean pending){
+    PENDING_STATE = pending;
+  }
+
+  public void setEnableAntiTip(){
+    tipCorrection = PENDING_STATE;
+  }
+
+  public ChassisSpeeds getAntiTipCorrections(){
+    if(tipCorrection){
+      double pitch = m_gyro.getPitch()-pitchOffset;
+      double roll = m_gyro.getRoll();
+      double pitchCorrection = 0;
+      double rollCorrection = 0;
+      //Multiplying by NOSE_DOWN_PITCH and RIGHT_ROLL to capture directionality gyro coordinates versus robot coordinates
+      if(pitch == Math.abs(pitch) * Constants.NOSE_DOWN_PITCH){
+        pitchCorrection = pitch * Constants.NOSE_DOWN_PITCH * Constants.PITCH_NOSE_DOWN_PROPORTION_CONSTANT * kMaxSpeed; 
+      }
+      else{
+        pitchCorrection = pitch * Constants.NOSE_DOWN_PITCH * Constants.PITCH_NOSE_UP_PROPORTION_CONSTANT * kMaxSpeed;
+      }
+
+      if(roll == Math.abs(roll) * Constants.RIGHT_ROLL){
+        rollCorrection = roll * Constants.RIGHT_ROLL * Constants.ROLL_RIGHT_PROPORTION_CONSTANT * kMaxSpeed; 
+      }
+      else{
+        rollCorrection = roll * Constants.RIGHT_ROLL * Constants.ROLL_LEFT_PROPORTION_CONSTANT * kMaxSpeed;
+      }
+      SmartDashboard.putNumber("pitchCorrection", pitchCorrection);
+      SmartDashboard.putNumber("rollCorrection", rollCorrection);
+      SmartDashboard.putNumber("pitchWithOffset", pitch);
+      return new ChassisSpeeds(rollCorrection, pitchCorrection, 0);
+    }
+    return new ChassisSpeeds(0, 0, 0);
+  }
+
+    
   public boolean isTipping() {
     double pitch = m_gyro.getPitch();
     double roll = m_gyro.getRoll();
@@ -342,11 +425,31 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     return Math.abs(smoothedPitch) > Constants.TIPPING_ANGLE_THRESHOLD || Math.abs(smoothedRoll) > Constants.TIPPING_ANGLE_THRESHOLD;
   }
+  
+
 
 
   @Override
   public void periodic() {
-    System.out.println("isTipping: " + isTipping());
+    pitchData = getPitchAngle();
+    // pitchDataGyro = getAngle(m_gyro.getRawAccelZ(), m_gyro.getRawAccelY());
+    SmartDashboard.putNumber("pitchAccel", pitchData[0]);
+    SmartDashboard.putNumber("pitchThetaPlus", pitchData[1]);
+    SmartDashboard.putNumber("pitchThetaMinus", pitchData[2]);
+
+    // SmartDashboard.putNumber("pitchAccelGyro", pitchDataGyro[0]);
+    // SmartDashboard.putNumber("pitchThetaPlusGyro", pitchData[1]);
+    // SmartDashboard.putNumber("pitchThetaMinusGyro", pitchData[2]);
+
+    rollData = getRollAngle();
+    // rollDataGyro = getAngle(m_gyro.getRawAccelZ(), m_gyro.getRawAccelY());
+
+    SmartDashboard.putNumber("rollAccel", rollData[0]);
+    SmartDashboard.putNumber("rollThetaPlus", rollData[1]);
+    SmartDashboard.putNumber("rollThetaMinus", rollData[2]);
+
+
+    // System.out.println("isTipping: " + isTipping());
     SmartDashboard.putBoolean("isTipping", isTipping());
     SmartDashboard.putNumber("m_gyro.getPitch()", m_gyro.getPitch());
     SmartDashboard.putNumber("m_gyro.getRoll()", m_gyro.getRoll());
@@ -492,11 +595,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, Translation2d centerOffset) {
     // TODO: Move kMaxSpeed and kMaxRotation into this method for ySpeed and xSpeed, and rot
     // TODO: Add another parameter for kMaxSpeed so you have an option to set it
-    swerveModuleStates =
+    ChassisSpeeds chassisSpeeds = fieldRelative
+    ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+    : new ChassisSpeeds(xSpeed, ySpeed, rot);
+    chassisSpeeds = chassisSpeeds.plus(getAntiTipCorrections());
+
+    swerveModuleStates = 
         m_kinematics.toSwerveModuleStates(
-            fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-                : new ChassisSpeeds(xSpeed, ySpeed, rot),
+            chassisSpeeds,
             centerOffset
         );
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
