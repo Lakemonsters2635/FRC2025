@@ -83,6 +83,10 @@ public class VisionPureAutoCommand extends Command {
     // this.zPrime = zPrime0;
     // this.finalYa = finalYa0;
     addRequirements(m_dts, m_ots);
+
+    m_visionSwerveController_x.setTolerance(0.02); // in meters
+    m_visionSwerveController_y.setTolerance(0.02);
+    m_visionSwerveController_rot.setTolerance(0.02);
     
   }
 
@@ -199,8 +203,8 @@ public class VisionPureAutoCommand extends Command {
     // CLAMP the values so they are not too fast
     // TODO look at it to see if we want field relative or robot centric.
     // .    our equeitons simplify if we do robot centric.
-    double driveX_Fraction = m_fb_x / Constants.maxModuleLinearSpeed;
-    double driveY_Fraction = m_fb_y / Constants.maxModuleLinearSpeed;
+    double driveX_Fraction   = m_fb_x   / Constants.maxModuleLinearSpeed;
+    double driveY_Fraction   = m_fb_y   / Constants.maxModuleLinearSpeed;
     double driveRot_Fraction = m_fb_rot / Constants.kMaxModuleAngularSpeedRadiansPerSecond;
     m_dts.drive(driveX_Fraction, driveY_Fraction, driveRot_Fraction, true);
     // xPrime = 23.5;

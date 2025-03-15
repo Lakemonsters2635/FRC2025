@@ -23,7 +23,6 @@ import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.MoveAlgaeToPose;
 import frc.robot.commands.MoveClimbPos;
 import frc.robot.commands.MoveCoralArmToPosition;
-import frc.robot.commands.MoveElevatorToPoseCommand;
 import frc.robot.commands.RunAutoCommand;
 import frc.robot.commands.VisionAutoCommand;
 import frc.robot.commands.VisionPureAutoCommand;

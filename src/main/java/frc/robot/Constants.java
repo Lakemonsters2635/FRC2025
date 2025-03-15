@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import java.util.ArrayList;
-
-import com.revrobotics.servohub.config.ServoChannelConfig.PulseRange;
-
 import edu.wpi.first.math.util.Units;
 
 /**

@@ -5,13 +5,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.BooleanEntry;
-import edu.wpi.first.networktables.BooleanTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringArrayEntry;
 import edu.wpi.first.networktables.StringEntry;
-import edu.wpi.first.networktables.StringTopic;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -21,9 +19,6 @@ public class StreamDeckSubsystem extends SubsystemBase {
 
   private NetworkTable table;
   int listenerHandle;
-
-  private BooleanEntry button0Entry;
-  private StringEntry selectedProgramEntry;
 
   private StringArrayEntry corralInfoEntry;
   private StringEntry algaeEntry;
