@@ -81,8 +81,8 @@ public final class Constants {
   public static final int INNER_ELEVATOR_ENCODER_A = 0;
   public static final int INNER_ELEVATOR_ENCODER_B = 1;
 
-  public static final int OUTER_ELEVATOR_ENCODER_A = 8;
-  public static final int OUTER_ELEVATOR_ENCODER_B = 9;
+  public static final int OUTER_ELEVATOR_ENCODER_A = 2;
+  public static final int OUTER_ELEVATOR_ENCODER_B = 3;
 
   public static class ElevatorState {
     public double ELEVATOR_POSITION;
@@ -144,11 +144,11 @@ public final class Constants {
   public static final double SMOOTHING_FACTOR = 0.9;
   public static final double GRAVITY_ACCEL = 1; 
   public static final double GRAVITY_ACCEL_SQUARED = GRAVITY_ACCEL * GRAVITY_ACCEL;
-  public static final double PITCH_NOSE_DOWN_PROPORTION_CONSTANT = 0.02; //TODO: tune this value these are percentages
-  public static final double PITCH_NOSE_UP_PROPORTION_CONSTANT = 0.02; //TODO: tune this value
+  public static final double PITCH_NOSE_DOWN_PROPORTION_CONSTANT = 0.03; //TODO: tune this value these are percentages
+  public static final double PITCH_NOSE_UP_PROPORTION_CONSTANT = 0.03; //TODO: tune this value
 
-  public static final double ROLL_LEFT_PROPORTION_CONSTANT = 0.01; //TODO: tune this value
-  public static final double ROLL_RIGHT_PROPORTION_CONSTANT = 0.01; //TODO: tune this value
+  public static final double ROLL_LEFT_PROPORTION_CONSTANT = 0.05; //TODO: tune this value
+  public static final double ROLL_RIGHT_PROPORTION_CONSTANT = 0.05; //TODO: tune this value
 
   public static final int NOSE_DOWN_PITCH = 1;
   public static final int RIGHT_ROLL = 1;

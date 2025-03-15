@@ -122,7 +122,7 @@ public class RobotContainer {
     tipCorrectionTriggerButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(true)));
     tipCorrectionTriggerButton.onFalse(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(false)));
     tipCorrectionEnableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setEnableAntiTip()));
-    setDriveSpeed.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setDriveSpeed(0.5)));
+    // setDriveSpeed.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setDriveSpeed(0.75)));
 
     coralUpButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralDown()));
     coralDownButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralUp()));

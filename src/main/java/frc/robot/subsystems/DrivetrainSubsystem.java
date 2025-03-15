@@ -49,7 +49,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     double smoothedPitch = 0;
     double smoothedRoll = 0;
     double pitchOffset = 0;
-    boolean tipCorrection = false;
+    double rollOffset = 0;
+    boolean tipCorrection = true;
     boolean PENDING_STATE = false;
 
 
@@ -329,7 +330,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     timer.start();
     setFollowJoystick(false);
     while(timer.get() < time){
-      drive(0, 0.80, 0, true);
+      drive(2.5, 0, 0, true);
     }
     setFollowJoystick(true);
     timer.stop();
@@ -350,8 +351,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return smoothedValue / totalWeight;
   }
 
-  public void setPitchOffset(){
+  public void setAntiTipOffsets(){
     pitchOffset = m_gyro.getPitch();
+    rollOffset = m_gyro.getRoll();
   }
 
   public void setTriggerAntiTip(boolean pending){
@@ -363,9 +365,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public ChassisSpeeds getAntiTipCorrections(){
-    if(tipCorrection){
+    if(tipCorrection && isTipping()){
       double pitch = m_gyro.getPitch()-pitchOffset;
-      double roll = m_gyro.getRoll();
+      double roll = m_gyro.getRoll()-rollOffset;
       double pitchCorrection = 0;
       double rollCorrection = 0;
       //Multiplying by NOSE_DOWN_PITCH and RIGHT_ROLL to capture directionality gyro coordinates versus robot coordinates
@@ -384,7 +386,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
       }
       SmartDashboard.putNumber("pitchCorrection", pitchCorrection);
       SmartDashboard.putNumber("rollCorrection", rollCorrection);
-      SmartDashboard.putNumber("pitchWithOffset", pitch);
       return new ChassisSpeeds(rollCorrection, pitchCorrection, 0);
     }
     return new ChassisSpeeds(0, 0, 0);
@@ -392,16 +393,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     
   public boolean isTipping() {
-    double pitch = m_gyro.getPitch();
-    double roll = m_gyro.getRoll();
+    double pitch = m_gyro.getPitch() - pitchOffset;
+    double roll = m_gyro.getRoll() - rollOffset;
+    
+    SmartDashboard.putNumber("pitchWithOffset", pitch);
+    SmartDashboard.putNumber("rollWithOffset", roll);
 
-    addRollValue(roll);
-    addPitchValue(pitch);
 
-    smoothedPitch = calculateSmoothedValue(pitchValues);
-    smoothedRoll = calculateSmoothedValue(rollValues);
+    // addRollValue(roll);
+    // addPitchValue(pitch);
 
-    return Math.abs(smoothedPitch) > Constants.TIPPING_ANGLE_THRESHOLD || Math.abs(smoothedRoll) > Constants.TIPPING_ANGLE_THRESHOLD;
+    // smoothedPitch = calculateSmoothedValue(pitchValues);
+    // smoothedRoll = calculateSmoothedValue(rollValues);
+
+    return Math.abs(pitch) > Constants.TIPPING_ANGLE_THRESHOLD || Math.abs(roll) > Constants.TIPPING_ANGLE_THRESHOLD;
   }
   
 
@@ -412,6 +417,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     
     //Hat Power Overides for Trimming Position and Rotation
     // System.out.println("X: "+getPose().getX()+"\tY: "+getPose().getY()+"\tRot: "+getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("gyro.pitch()", m_gyro.getPitch());
+    SmartDashboard.putNumber("gyro.roll()", m_gyro.getRoll());
+    SmartDashboard.putBoolean("isTipping", isTipping());
+
     SmartDashboard.putNumber("stashAngle", m_angleCache);
     SmartDashboard.putNumber("BackRight turn", m_backRight.getTurningEncoderRadians());
     SmartDashboard.putNumber("BackLeft turn", m_backLeft.getTurningEncoderRadians());
@@ -693,5 +702,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("getPose.getY", getPose().getY());
     SmartDashboard.putNumber("gyro.getAngle", m_gyro.getAngle());
     SmartDashboard.putNumber("getPose.getRotation", getPose().getRotation().getDegrees());
+
+    SmartDashboard.putBoolean("tipCorrection", tipCorrection);
   }
 }
