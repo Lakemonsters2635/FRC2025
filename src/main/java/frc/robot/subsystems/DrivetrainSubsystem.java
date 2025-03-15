@@ -45,10 +45,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     double smoothedPitch = 0;
     double smoothedRoll = 0;
-    double[] pitchData;
-    double []rollData;
-    double[] pitchDataGyro;
-    double []rollDataGyro;
     double pitchOffset = 0;
     boolean tipCorrection = false;
     boolean PENDING_STATE = false;
@@ -312,38 +308,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rotCommanded = rot;
   }
 
-  public double[] getAngle(double z, double axisVal){
-    double accel = Math.sqrt(-Constants.GRAVITY_ACCEL_SQUARED + (axisVal * axisVal) + (z * z));
-    double thetaPlus = 2 * Math.toDegrees(Math.atan((axisVal + accel)/(Constants.GRAVITY_ACCEL + z)));
-    double thetaNeg = 2 * Math.toDegrees(Math.atan((axisVal - accel)/(Constants.GRAVITY_ACCEL + z)));
-    double[] arr = {accel, thetaPlus, thetaNeg};
-    return arr;
-  }
-
-  public double[] getPitchAngle(){
-    SmartDashboard.putNumber("rioAccelY", rioAccelerometer.getY());
-    SmartDashboard.putNumber("rioAccelZ", rioAccelerometer.getZ());
-
-
-    SmartDashboard.putNumber("RawAccelZ", m_gyro.getRawAccelZ());
-    SmartDashboard.putNumber("RawAccelY", m_gyro.getRawAccelY());
-
-    // return getAngle(1, m_gyro.getRawAccelY());
-    // return getAngle(m_gyro.getRawAccelZ(), m_gyro.getRawAccelY());
-
-    return getAngle(rioAccelerometer.getZ(), rioAccelerometer.getY());
-  }
-  
-  public double[] getRollAngle(){
-    SmartDashboard.putNumber("RawAccelX", m_gyro.getRawAccelX());
-    SmartDashboard.putNumber("rioAccelX", rioAccelerometer.getX());
-
-    // return getAngle(1, m_gyro.getRawAccelX());
-    // return getAngle(m_gyro.getRawAccelZ(), m_gyro.getRawAccelX());
-
-    return getAngle(rioAccelerometer.getZ(), rioAccelerometer.getX());
-  }
-
   private void addPitchValue(double newValue) {
     if (pitchValues.size() >= Constants.WINDOW_SIZE) {
         pitchValues.removeFirst();
@@ -431,36 +395,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    pitchData = getPitchAngle();
-    // pitchDataGyro = getAngle(m_gyro.getRawAccelZ(), m_gyro.getRawAccelY());
-    SmartDashboard.putNumber("pitchAccel", pitchData[0]);
-    SmartDashboard.putNumber("pitchThetaPlus", pitchData[1]);
-    SmartDashboard.putNumber("pitchThetaMinus", pitchData[2]);
-
-    // SmartDashboard.putNumber("pitchAccelGyro", pitchDataGyro[0]);
-    // SmartDashboard.putNumber("pitchThetaPlusGyro", pitchData[1]);
-    // SmartDashboard.putNumber("pitchThetaMinusGyro", pitchData[2]);
-
-    rollData = getRollAngle();
-    // rollDataGyro = getAngle(m_gyro.getRawAccelZ(), m_gyro.getRawAccelY());
-
-    SmartDashboard.putNumber("rollAccel", rollData[0]);
-    SmartDashboard.putNumber("rollThetaPlus", rollData[1]);
-    SmartDashboard.putNumber("rollThetaMinus", rollData[2]);
-
-
-    // System.out.println("isTipping: " + isTipping());
-    SmartDashboard.putBoolean("isTipping", isTipping());
-    SmartDashboard.putNumber("m_gyro.getPitch()", m_gyro.getPitch());
-    SmartDashboard.putNumber("m_gyro.getRoll()", m_gyro.getRoll());
-    SmartDashboard.putNumber("m_gyro.getRawGyroX()", m_gyro.getRawGyroX());
-    SmartDashboard.putNumber("m_gyro.getRawGyroY()", m_gyro.getRawGyroY());
-    SmartDashboard.putNumber("smoothedPitch", smoothedPitch);
-    SmartDashboard.putNumber("smoothRoll", smoothedRoll);
-
-    // SmartDashboard.putNumber("m_gyro.getRawGyroZ()", m_gyro.getRawGyroZ());
-
-
     
     //Hat Power Overides for Trimming Position and Rotation
     // System.out.println("X: "+getPose().getX()+"\tY: "+getPose().getY()+"\tRot: "+getPose().getRotation().getDegrees());
