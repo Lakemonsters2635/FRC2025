@@ -94,6 +94,7 @@ public class RobotContainer {
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
     Trigger tipCorrectionTriggerButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_TRIGGER_BUTTON);
     Trigger tipCorrectionEnableButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_ENABLE_BUTTON);
+    Trigger setDriveSpeed = new JoystickButton(leftJoystick, 10);
 
 
 
@@ -121,6 +122,7 @@ public class RobotContainer {
     tipCorrectionTriggerButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(true)));
     tipCorrectionTriggerButton.onFalse(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(false)));
     tipCorrectionEnableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setEnableAntiTip()));
+    setDriveSpeed.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setDriveSpeed(0.5)));
 
     coralUpButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralDown()));
     coralDownButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralUp()));

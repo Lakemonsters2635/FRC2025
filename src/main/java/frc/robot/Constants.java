@@ -147,11 +147,11 @@ public final class Constants {
   public static final double PITCH_NOSE_DOWN_PROPORTION_CONSTANT = 0.02; //TODO: tune this value these are percentages
   public static final double PITCH_NOSE_UP_PROPORTION_CONSTANT = 0.02; //TODO: tune this value
 
-  public static final double ROLL_LEFT_PROPORTION_CONSTANT = 0.0; //TODO: tune this value
-  public static final double ROLL_RIGHT_PROPORTION_CONSTANT = 0.0; //TODO: tune this value
+  public static final double ROLL_LEFT_PROPORTION_CONSTANT = 0.01; //TODO: tune this value
+  public static final double ROLL_RIGHT_PROPORTION_CONSTANT = 0.01; //TODO: tune this value
 
   public static final int NOSE_DOWN_PITCH = 1;
-  public static final int RIGHT_ROLL = -1;
+  public static final int RIGHT_ROLL = 1;
 
   // CORAL
   public static final int CORAL_LEFT_INTAKE_MOTOR = 3;

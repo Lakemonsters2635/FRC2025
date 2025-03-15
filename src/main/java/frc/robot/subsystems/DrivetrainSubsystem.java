@@ -29,6 +29,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,6 +43,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private LinkedList<Double> pitchValues = new LinkedList<>();
     private LinkedList<Double> rollValues = new LinkedList<>();
     BuiltInAccelerometer rioAccelerometer = new BuiltInAccelerometer();
+    Timer timer = new Timer();
+
 
     double smoothedPitch = 0;
     double smoothedRoll = 0;
@@ -320,6 +323,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
       rollValues.removeFirst();
     }
     pitchValues.add(newValue);
+  }
+
+  public void setDriveSpeed(double time){
+    timer.start();
+    setFollowJoystick(false);
+    while(timer.get() < time){
+      drive(0, 0.80, 0, true);
+    }
+    setFollowJoystick(true);
+    timer.stop();
+    timer.reset();
   }
 
   private double calculateSmoothedValue(LinkedList<Double> values) {
