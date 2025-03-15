@@ -24,6 +24,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -123,11 +124,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void stashAngle(){
-    m_angleCache = getPose().getRotation().getDegrees();
+    // m_angleCache = getPose().getRotation().getDegrees();
+    m_angleCache = m_gyro.getAngle();
   }
 
   public void restoreAngle(){
-    resetAngle((m_angleCache + getPose().getRotation().getDegrees()) % 360);
+    // resetAngle(((m_angleCache + getPose().getRotation().getDegrees() + 180 ) % 360) - 180);
+    resetAngle((m_angleCache + m_gyro.getAngle()) % 360);
+    // resetOdometry(new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(((m_angleCache + getPose().getRotation().getDegrees() + 180 ) % 360) - 180))));
   }
 
   // We previously had this toRedHead() in here for converting heading for auto usage
@@ -252,7 +256,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveControllerCommand;
   }
 
-  public void  resetAngle(){
+  public void resetAngle(){
     // Setting the angle adjustment changes where forward is when you push the controls forward
     // However it doesn't rotate the definition of the odometry x and y
     resetAngle(0);
@@ -293,7 +297,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     //Hat Power Overides for Trimming Position and Rotation
     // System.out.println("X: "+getPose().getX()+"\tY: "+getPose().getY()+"\tRot: "+getPose().getRotation().getDegrees());
-
+    SmartDashboard.putNumber("stashAngle", m_angleCache);
     SmartDashboard.putNumber("BackRight turn", m_backRight.getTurningEncoderRadians());
     SmartDashboard.putNumber("BackLeft turn", m_backLeft.getTurningEncoderRadians());
     SmartDashboard.putNumber("FrontRight turn", m_frontRight.getTurningEncoderRadians());

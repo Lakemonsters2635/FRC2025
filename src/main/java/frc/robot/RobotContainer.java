@@ -24,6 +24,7 @@ import frc.robot.commands.MoveAlgaeToPose;
 import frc.robot.commands.MoveClimbPos;
 import frc.robot.commands.MoveCoralArmToPosition;
 import frc.robot.commands.MoveElevatorToPoseCommand;
+import frc.robot.commands.RunAutoCommand;
 import frc.robot.commands.VisionAutoCommand;
 import frc.robot.commands.VisionPureAutoCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
@@ -67,7 +68,7 @@ public class RobotContainer {
   public static final ElevatorUpCommand m_elevatorFirstStageUpCommand = new ElevatorUpCommand(m_elevatorSubsystem);
   public static final MoveCoralArmToPosition m_moveCoralArmToPosition = new MoveCoralArmToPosition(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
   public static final MoveAlgaeToPose m_moveAlgaeToPose = new MoveAlgaeToPose(m_coralArmSubsystem, m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
-  public Autos m_autos = new Autos(m_drivetrainSubsystem, m_objectTrackerSubsystem);
+  public static final Autos m_autos = new Autos(m_drivetrainSubsystem, m_objectTrackerSubsystem, m_elevatorSubsystem, m_coralArmSubsystem, m_algaeArmSubsystem);
   public static final VisionAutoCommand m_visionAutoCommand = new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem); // TODO: Change this later
   public static final ClimberUpCommand m_climberUpCommand = new ClimberUpCommand(m_climberSubsystem);
   public static final ClimberDownCommand m_climberDownCommand = new ClimberDownCommand(m_climberSubsystem);
@@ -90,7 +91,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //LEFT BUTTONS
-    Trigger coralIntakeInButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
+    Trigger coralIntakeOutButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
     //Trigger climberTestButton = new JoystickButton(leftJoystick, 5);
@@ -106,16 +107,20 @@ public class RobotContainer {
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
     Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
     Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON);
-    Trigger coralIntakeOutButton = new JoystickButton(rightJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
+    Trigger coralIntakeInButton = new JoystickButton(rightJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
     Trigger moveCoralArmPos = new JoystickButton(rightJoystick, 6);
     Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
     // Trigger moveElevatorToPos = new JoystickButton(rightJoystick, 10);  
-    Trigger algaeUpButton = new JoystickButton(rightJoystick, 10);
-    Trigger algaeDownButton = new JoystickButton(rightJoystick, 12);
+    Trigger algaeUpButton = new JoystickButton(rightJoystick, 12);
+    Trigger algaeDownButton = new JoystickButton(rightJoystick, 10);
+    Trigger runVisionAuto = new JoystickButton(rightJoystick, 2);
 
-    Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
+    //Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
+    Trigger coralUpButton = new JoystickButton(leftJoystick, 11);
+    Trigger coralDownButton = new JoystickButton(leftJoystick, 9);
 
-
+    coralUpButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralDown()));
+    coralDownButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralUp()));
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
     // algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     // algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
@@ -125,8 +130,10 @@ public class RobotContainer {
     //climberTestButton.whileFalse(new InstantCommand(()->m_climberSubsystem.motor.setVoltage(0)));
     // climberUpButton.whileTrue(m_climberUpCommand);
     // climberDownButton.whileTrue(m_climberDownCommand);
-    climberUpButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.configure()));
+    climberUpButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.up()));
     climberUpButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
+    climberDownButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.down()));
+    climberDownButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
     pureVisionAutoCommandButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 7));
 
     // Right Buttons, Run
@@ -135,15 +142,18 @@ public class RobotContainer {
       new InstantCommand(()-> m_drivetrainSubsystem.resetAngle())));
     zeroElevatorPowerButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.zeroElevatorPower()));
     moveCoralArmPos.onTrue(m_moveCoralArmToPosition);
-    elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000)));
-    elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000)));
+    // elevatorUpButton.whileTrue(m_elevatorFirstStageUpCommand);
+    // elevatorDownButton.whileTrue(m_elevatorFirstStageDownCommand);
+    elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000/3)));
+    elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000/3)));
     coralIntakeOutButton.whileTrue(m_coralIntakeOutCommand);
     // moveElevatorToPos.onTrue(new MoveElevatorToPoseCommand(m_elevatorSubsystem, 20000));
     moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
+    runVisionAuto.onTrue(new RunAutoCommand(m_streamDeckSubsystem));
 
-    visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));
+    // visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));
 
 
     climbPos.onTrue(m_moveClimbPos);
@@ -157,6 +167,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m_autos.goStraight();
-    return m_autos.sourceLineup();
+    return m_autos.goStraight();
   }
 }

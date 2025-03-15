@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // import frc.robot.subsystems.ObjectTrackerSubsystem.Detection;
 import frc.robot.subsystems.Detection;
@@ -47,6 +48,7 @@ public class VisionAutoCommand extends Command {
   public VisionAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots) {
     m_dts = dts;
     m_ots = ots;
+    m_tagID = -1;
 
     // this.xPrime = xPrime0;
     // this.zPrime = zPrime0;
@@ -108,16 +110,29 @@ public class VisionAutoCommand extends Command {
       SmartDashboard.putNumber("Robot rot", m_dts.getPose().getRotation().getDegrees());
 
       // no need to add a small value for xPrime since visionCreatePath takes care of it
-      if (m_tagID == -2) {
-        visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
-      }
-      else if(m_tagID >= -1){
+      // if (m_tagID == -2) {
+      //   visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
+      // }
+      // else 
+      int counts =0;
+      if(m_tagID >= -1){
         visionCreatePath(m_xPrime, m_zPrime, m_finalYa, m_tagID).schedule();
       }
       else{
-        visionCreatePath(m_xPrime, m_zPrime, m_finalYa, Integer.valueOf(m_ots.getNearestAprilTagDetection(m_tagIDs).objectLabel.substring(10)));
+        boolean notDone = true;
+        while (notDone) {
+          try{
+          visionCreatePath(m_xPrime, m_zPrime, m_finalYa, Integer.valueOf(m_ots.getAprilTagDetections(m_tagIDs).objectLabel.substring(10)));
+          notDone = false;
+          } catch(Exception e){
+            counts++;
+          }
+          if (counts>100) {
+            notDone = false;
+          }
+        }
       }
-      System.out.println("Scheduled " + m_tagID + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      System.out.println("Scheduled " + m_tagID + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + counts);
     }
     catch(Exception e) {
       System.out.println(e);
@@ -186,6 +201,8 @@ public class VisionAutoCommand extends Command {
       SmartDashboard.putBoolean("visionAutoData try_catch", false);
 
       System.out.println("VisionAutoCommand.visionAutoData(): failed to get vision");
+
+      return new Pose2d(0,0,new Rotation2d(Units.degreesToRadians(m_dts.getPose().getRotation().getDegrees())));
     }
 
     SmartDashboard.putNumber("visionAuto Z", visionZ);
@@ -207,8 +224,12 @@ public class VisionAutoCommand extends Command {
     double angleOffset = -Units.degreesToRadians(90); 
 
     // double heading = Math.atan(deltaRobotX/deltaRobotY)+botRadians+ angleOffset;
-    heading = Math.atan(deltaRobotX/Math.abs(deltaRobotY))+botRadians+ angleOffset;
-    double finalAngle = visionYa + finalYa + Units.radiansToDegrees(botRadians);
+    // heading = Math.atan(deltaRobotX/Math.abs(deltaRobotY))+botRadians+ angleOffset;
+    heading = Math.atan(deltaRobotX/Math.abs(deltaRobotY))+ angleOffset;
+
+    // double finalAngle = visionYa + finalYa + Units.radiansToDegrees(botRadians);
+    double finalAngle = visionYa + finalYa;
+
 
     // double deltaFieldX = ((deltaRobotX*Math.cos(transformationAngle))+ -(deltaRobotY*Math.sin(transformationAngle)));
     // double deltaFieldY = (deltaRobotX*Math.sin(transformationAngle))+ (deltaRobotY*Math.cos(transformationAngle));
@@ -222,6 +243,9 @@ public class VisionAutoCommand extends Command {
 
     deltaFieldX *= -1; // When the camera is on the front of the robot
     deltaFieldY *= -1;
+
+    deltaRobotX *=-1;
+    deltaRobotY *=-1;
 
     SmartDashboard.putNumber("x_vt", x_vt);
     SmartDashboard.putNumber("z_vt", z_vt);
@@ -238,10 +262,16 @@ public class VisionAutoCommand extends Command {
     SmartDashboard.putNumber("botRadians degrees", Units.radiansToDegrees(botRadians));
 
     return new Pose2d(
-      Units.inchesToMeters(deltaFieldX), 
-      Units.inchesToMeters(deltaFieldY), 
+      Units.inchesToMeters(deltaRobotX),
+      Units.inchesToMeters(deltaRobotY),
       new Rotation2d(Units.degreesToRadians(finalAngle))
     );
+
+    // return new Pose2d(
+    //   Units.inchesToMeters(deltaFieldX), 
+    //   Units.inchesToMeters(deltaFieldY), 
+    //   new Rotation2d(Units.degreesToRadians(finalAngle))
+    // );
   }
 
   /*
@@ -296,24 +326,27 @@ public class VisionAutoCommand extends Command {
       new InstantCommand(()->m_dts.setFollowJoystick(false)),
       new InstantCommand(()->m_dts.resetAngle()),
       new InstantCommand(()->m_dts.zeroOdometry()),
-      m_dts.createVisionPath(
-        new Pose2d(
-          0, //botPose.getX(), 
-          0, //botPose.getY(), 
-          new Rotation2d(heading)   // TODO need to explain this rotation offset and point to docs
-        ), 
-        new Translation2d(
-          (fieldDeltaPose.getX()/2), 
-          (fieldDeltaPose.getY()/2)
-        ), 
-        new Pose2d(
-          fieldDeltaPose.getX(),
-          fieldDeltaPose.getY(), 
-          new Rotation2d(heading)
+      new ParallelRaceGroup(
+        m_dts.createVisionPath(
+          new Pose2d(
+            0, //botPose.getX(), 
+            0, //botPose.getY(), 
+            new Rotation2d(heading)   // TODO need to explain this rotation offset and point to docs
+          ), 
+          new Translation2d(
+            (fieldDeltaPose.getX()/2), 
+            (fieldDeltaPose.getY()/2)
+          ), 
+          new Pose2d(
+            fieldDeltaPose.getX(),
+            fieldDeltaPose.getY(), 
+            new Rotation2d(heading)
+          ),
+          fieldDeltaPose.getRotation().getDegrees()
+          // finalAngle //heading+(Math.PI/2)
+          // ,true
         ),
-        fieldDeltaPose.getRotation().getDegrees()
-        // finalAngle //heading+(Math.PI/2)
-        // ,true
+        new StopCommand()
       ),
       new InstantCommand(()->m_dts.stopMotors()),
       new InstantCommand(()->m_dts.restoreAngle()),

@@ -19,11 +19,12 @@ import frc.robot.Constants;
 public class AlgaeArmSubsystem extends SubsystemBase {
   private final SparkMax m_algaeArmMotor;
   private final SparkMaxConfig m_algaeArmConfig;
-  double ff, fb, motorPower, theta, m_poseTarget;
+  double ff, fb, motorPower, theta, m_poseTarget = 10;
   double GAIN = - 0.412; // TODO: Measure this value
   double GAIN_ALGAE = - 0.78;
   PIDController m_algaeArmController;
   Joystick leftJoystick = new Joystick(0);
+  double offset = 10;
 
   public AlgaeArmSubsystem() {
     m_algaeArmMotor = new SparkMax(Constants.ALGAE_ARM_MOTOR, SparkMax.MotorType.kBrushless);
@@ -58,7 +59,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   public double getDegrees() {
     // 160 is the gear ratio
     double degrees = (getEncoderCounts() /160) * 360;
-    degrees += 10; // Calibration offset required with the setup
+    degrees += offset; // Calibration offset required with the setup
     degrees %= 360;
     return degrees;
   }
@@ -68,10 +69,12 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public void moveArmUp(){
-    setArmPosition(m_poseTarget-5);
+    offset -=5;
+    // setArmPosition(m_poseTarget-5);
   }
   public void moveArmDown(){
-    setArmPosition(m_poseTarget+5);
+    offset +=5;
+    // setArmPosition(m_poseTarget+5);
   }
 
   public double controlArmThrottle() {

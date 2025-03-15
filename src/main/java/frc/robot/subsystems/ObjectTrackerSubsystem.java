@@ -280,37 +280,38 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
         return 0;
     }
 
-    public Detection[] getAprilTagDetections(int[] tagIds){
+    public Detection getAprilTagDetections(int[] tagIds){
         Detection[] detections = new Detection[tagIds.length];
         for(int i = 0; i < tagIds.length; i++){
             try {
                 detections[i] = getSpecificAprilTag(tagIds[i]);
+                return detections[i];
             } catch (Exception e) {
                 detections[i] = null;
             }
         }
-        return detections;
+        return null;
     }
 
-    public Detection getNearestAprilTagDetection(int[] tagIds){
-        Detection[] detections = getAprilTagDetections(tagIds);
-        double minimum = Integer.MAX_VALUE;
-        int minIndex = -1;
+    // public Detection getNearestAprilTagDetection(int[] tagIds){
+    //     Detection[] detections = getAprilTagDetections(tagIds);
+    //     double minimum = Integer.MAX_VALUE;
+    //     int minIndex = -1;
 
-        for(int i =0; i<detections.length; i++){
-            if (detections[i] != null && detections[i].z < minimum){
-                minimum = detections[i].z;
-                minIndex = i;
-            }
-        }
+    //     for(int i =0; i<detections.length; i++){
+    //         if (detections[i] != null && detections[i].z < minimum){
+    //             minimum = detections[i].z;
+    //             minIndex = i;
+    //         }
+    //     }
 
-        if (minIndex == -1){
-            return null;
+    //     if (minIndex == -1){
+    //         return null;
             
-        }
+    //     }
 
-        return detections[minIndex];
-    }
+    //     return detections[minIndex];
+    // }
 
     // private void applyRotationTranslationMatrix() {
     //     // sets reference to be the CENTER of the robot 

@@ -62,7 +62,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.m_drivetrainSubsystem.setFollowJoystick(false);
-
+    RobotContainer.m_drivetrainSubsystem.resetAngle();
+    RobotContainer.m_drivetrainSubsystem.zeroOdometry();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     
     RobotContainer.m_objectTrackerSubsystem.data();
