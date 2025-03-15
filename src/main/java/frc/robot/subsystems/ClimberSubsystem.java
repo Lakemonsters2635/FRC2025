@@ -22,12 +22,12 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void up(){
-    motor.setVoltage(2.5);
+    motor.setVoltage(2.0);
   }
 
   public void down(){
     // motor.setVoltage((leftJoystick.getThrottle() - 1) *3);
-    motor.setVoltage(-3.0);
+    motor.setVoltage(-1.125 + (leftJoystick.getThrottle()-1));
   }
 
   public void stop(){
@@ -48,6 +48,7 @@ public class ClimberSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     // motor.setVoltage(leftJoystick.getThrottle()* 2.5);
     // SmartDashboard.putNumber("Throttle", leftJoystick.getThrottle()* 2.5);
+    SmartDashboard.putNumber("ClimberEncoder", motor.getPosition().getValueAsDouble());
   }
 }
 

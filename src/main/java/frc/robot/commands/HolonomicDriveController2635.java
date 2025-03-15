@@ -70,8 +70,8 @@ public class HolonomicDriveController2635 extends HolonomicDriveController{
     // }
 
     // Calculate feedforward velocities (field-relative).
-    double xFF = desiredLinearVelocityMetersPerSecond * trajectoryPose.getRotation().getCos();
-    double yFF = desiredLinearVelocityMetersPerSecond * trajectoryPose.getRotation().getSin();
+    double xFF = desiredLinearVelocityMetersPerSecond * trajectoryPose.getRotation().getCos() * 0.95; // Fudge factor of 3/4 to adjust the speed
+    double yFF = desiredLinearVelocityMetersPerSecond * trajectoryPose.getRotation().getSin() * 0.95;
     double thetaFF =
         thetaController.calculate(
             currentPose.getRotation().getRadians(), desiredHeading.getRadians());

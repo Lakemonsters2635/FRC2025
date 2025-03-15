@@ -24,13 +24,13 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.SwerveControllerCommand2635;
@@ -43,11 +43,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static Joystick rightJoystick = RobotContainer.rightJoystick;
     public static Joystick leftJoystick = RobotContainer.leftJoystick;
 
-    public static Trigger customCenterControlButton = new JoystickButton(leftJoystick, 4);
+    // public static Trigger customCenterControlButton = new JoystickButton(leftJoystick, 4);
     
 
     public final double m_drivetrainWheelbaseWidth =  Constants.DRIVETRAIN_WHEELBASE_WIDTH;  //Calibrated for 2024 BunnyBots
     public final double m_drivetrainWheelbaseLength = Constants.DRIVETRAIN_WHEELBASE_LENGTH; //Calibrated for 2024 BunnyBots
+
+    private double m_angleCache = 180; // This is used to stash the angle before reset, in degrees
 
     // x is forward       robot is long in the x-direction, i.e. wheelbase length
     // y is to the left   robot is short in the y-direction, i.e. wheelbase width
@@ -121,6 +123,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_frontRight.stop();
   }
 
+  public void stashAngle(){
+    // m_angleCache = getPose().getRotation().getDegrees();
+    m_angleCache = m_gyro.getAngle();
+  }
+
+  public void restoreAngle(){
+    // resetAngle(((m_angleCache + getPose().getRotation().getDegrees() + 180 ) % 360) - 180);
+    resetAngle((m_angleCache + m_gyro.getAngle()) % 360);
+    // resetOdometry(new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(((m_angleCache + getPose().getRotation().getDegrees() + 180 ) % 360) - 180))));
+  }
+
   // We previously had this toRedHead() in here for converting heading for auto usage
   // now that we have fixed the swerve modules, maybe this is not required... also... is our 
   // 180 deg offset for heading required as well?
@@ -174,7 +187,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
       Constants.maxModuleLinearSpeed,       // 3.5 m/s
       Constants.maxModuleLinearAccelaration // 4 m/s^2
-    ).setKinematics(m_kinematics);
+
+    ).setKinematics(m_kinematics).setReversed(true);
 
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
       startPose,
@@ -210,8 +224,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //   super.execute()
     //   // instrumentation for shuffleboard logging goes here.
     // }
-    PIDController xController = new PIDController(0.8, 0, 1);
-    PIDController yController = new PIDController(0.8, 0, 1);
+    PIDController xController = new PIDController(6, 6, 1);
+    PIDController yController = new PIDController(6, 6, 1);
     // kp = 0.4, ki = 3.3, kd = 1 integral overshot
     // Note: We reduced Kp to 2 so that rottion control loop doesn't saturate the module motor speed during autos
     // This however makes it so that robot cannot turn quickly, which is not good however it enables more acurate and consistent auto paths
@@ -226,6 +240,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // controllers and inside HolonomicDriveController constructor, enables the continuous input 
     // on the theta controller from 0 to 360.  Does this create problems if we try to input -45 deg
     // as a target heading?
+
     SwerveControllerCommand2635 swerveControllerCommand = new SwerveControllerCommand2635(
       trajectory,
       this::getPose,
@@ -241,14 +256,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveControllerCommand;
   }
 
-  public void  resetAngle(){
+  public void resetAngle(){
     // Setting the angle adjustment changes where forward is when you push the controls forward
     // However it doesn't rotate the definition of the odometry x and y
     resetAngle(0);
   }
   // do we use resetAngle(degree) when starting the auto from some angle which is not aligned with 
   // the front of the robot pointing downfield?
-  public void resetAngle(int degree){
+  public void resetAngle(double degree){
     //Use this method if you want to reset the angle to something not 0
     m_gyro.reset();
     m_gyro.setAngleAdjustment(degree);
@@ -282,7 +297,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     //Hat Power Overides for Trimming Position and Rotation
     // System.out.println("X: "+getPose().getX()+"\tY: "+getPose().getY()+"\tRot: "+getPose().getRotation().getDegrees());
-
+    SmartDashboard.putNumber("stashAngle", m_angleCache);
     SmartDashboard.putNumber("BackRight turn", m_backRight.getTurningEncoderRadians());
     SmartDashboard.putNumber("BackLeft turn", m_backLeft.getTurningEncoderRadians());
     SmartDashboard.putNumber("FrontRight turn", m_frontRight.getTurningEncoderRadians());
@@ -451,10 +466,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
 
-  public Pose2d getPoseMeters() {
-    Pose2d currentPose = getPose();
-    return new Pose2d(currentPose.getTranslation().div(39.37), currentPose.getRotation());
-  }
+  // public Pose2d getPoseMeters() {
+  //   Pose2d currentPose = getPose();
+  //   return new Pose2d(currentPose.getTranslation().div(39.37), currentPose.getRotation());
+  // }
 
   public SwerveDriveKinematics getSwerveDriveKinematics() {
     return m_kinematics; 

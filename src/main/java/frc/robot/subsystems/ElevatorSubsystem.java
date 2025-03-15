@@ -13,8 +13,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -28,16 +31,29 @@ public class ElevatorSubsystem extends SubsystemBase {
   double ff = -.5;
   PIDController m_elevatorController;
 
+  public boolean isPIDControl = true;
+
   Joystick leftJoystick = new Joystick(0);
-  Trigger stopElevator = new JoystickButton(leftJoystick, 8);
+  // Trigger stopElevator = new JoystickButton(leftJoystick, 8);
+
+  
 
   TalonFX m_elevatorMotor;
+
+  public Command unspoolElevator = new SequentialCommandGroup(
+    new WaitCommand(1),
+    new InstantCommand(()->m_elevatorMotor.setVoltage(0.5)),
+    new WaitCommand(1),
+    new InstantCommand(()->m_elevatorMotor.setVoltage(0))
+  );
 
   public ElevatorSubsystem() {
     m_elevatorMotor = new TalonFX(Constants.ElEVATOR_MOTOR_ID, new CANBus("CANivore"));
     m_elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
 
     m_elevatorController = new PIDController(0.001, 0, 0);
+
+    
     // m_elevatorController = new PIDController(0.001, 0, 0); 
 
     m_encoderInner.reset();
@@ -52,15 +68,18 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public double innerEncoderRotations(){
-    return m_encoderInner.get();
+    return -m_encoderInner.get();
   }
   
   public double outerEncoderRotations(){
     return -m_encoderOuter.get();
   }
 
+
   public double elevatorHeight() {
-    return innerEncoderRotations() + outerEncoderRotations();
+    // m_elevatorMotor
+    // return (36000 * m_elevatorMotor.getPosition().getValueAsDouble())/(-92); this is for the embedded encoder
+    return (innerEncoderRotations() + outerEncoderRotations()) * (24/16);
   }
 
   public void setRaisePower(){
@@ -68,7 +87,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setStageHoldPower(){
-    m_elevatorMotor.setVoltage(-.5);
+    m_elevatorMotor.setVoltage(-0.85);
   }
 
   public void setFirstStageLowerPower(){
@@ -91,12 +110,20 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_poseTarget = targetPos;
   }
 
+  public boolean isAtPosition(){
+    if (Math.abs(elevatorHeight()-m_poseTarget) < 2000) {
+      return true;
+    }
+
+    return false;
+  }
+
   @Override
   public void periodic() {
-    m_poseTarget = MathUtil.clamp(m_poseTarget, -12000, 36000);
+    m_poseTarget = MathUtil.clamp(m_poseTarget, -9000, 32500);
     // This method will be called once per schedu
-    SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
-    SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
+    // SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
+    // SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
     SmartDashboard.putNumber("elevatorHeight", elevatorHeight());
     SmartDashboard.putNumber("Motor Power (-1 to 1)", m_elevatorMotor.get());
     SmartDashboard.putNumber("Motor Power Voltage", m_elevatorMotor.get() * 11);
@@ -109,10 +136,18 @@ public class ElevatorSubsystem extends SubsystemBase {
     // stopElevator.toggleOnTrue(new InstantCommand(()->setStageHoldPower()));
 
     // setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5));
-    setElevatorMotorPower(MathUtil.clamp(ff+fb, -4.5, 2));
     // setElevatorMotorPower(MathUtil.clamp(ff+fb, -4.5, 1.5));
 
     SmartDashboard.putNumber("ElevatorVolts", m_elevatorMotor.getMotorVoltage().getValueAsDouble());
+
+    // if (stopElevator.getAsBoolean()) {
+    //   isPIDControl = false;
+      
+    // }
+
+    if (isPIDControl) {
+      setElevatorMotorPower(MathUtil.clamp(ff+fb, -5.5, 4));
+    }
 
     // if () {
     //   setElevatorMotorPower(MathUtil.clamp(ff+fb, -3, 1.5));
@@ -133,5 +168,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // if(elevatorHeight() < -12000){
     //   setElevatorMotorPower(-1);;
     // }
+
+    // setElevatorMotorPower(ff);
   }
 }

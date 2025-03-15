@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    RobotContainer.m_objectTrackerSubsystem.data();
 
     new Timer();
     SmartDashboard.putNumber("Match_time", Timer.getMatchTime());
@@ -60,7 +61,12 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    RobotContainer.m_drivetrainSubsystem.setFollowJoystick(false);
+    RobotContainer.m_drivetrainSubsystem.resetAngle();
+    RobotContainer.m_drivetrainSubsystem.zeroOdometry();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    
+    RobotContainer.m_objectTrackerSubsystem.data();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -81,6 +87,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    RobotContainer.m_drivetrainSubsystem.setFollowJoystick(true);
   }
 
   /** This function is called periodically during operator control. */
@@ -91,6 +98,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+
   }
 
   /** This function is called periodically during test mode. */
