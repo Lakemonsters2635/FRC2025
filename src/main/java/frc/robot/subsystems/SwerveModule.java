@@ -33,7 +33,7 @@ public class SwerveModule {
 
   private double turningMotorOffset;
 
-  private final PIDController m_drivePIDController = new PIDController(0.0, 0, 0.00);
+  private final PIDController m_drivePIDController = new PIDController(0.002, 0, 0.00);
   private final PIDController m_turningPIDController = new PIDController(Constants.kPModuleTurningController, 0, 0.0001);
 
   public NetworkTableEntry t_turningEncoder;
