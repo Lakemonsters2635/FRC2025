@@ -10,11 +10,13 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class AlgaeIntakeSubsystem extends SubsystemBase {
   /** Creates a new AlgaeIntakeSubsystem. */
+  Joystick leftJoystick = new Joystick(0);
   private final SparkMax m_leftAlgaeIntakeMotor;
   private final SparkMax m_rightAlgaeIntakeMotor;
 
@@ -61,7 +63,8 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
   }
 
   public void outAlgaeIntake() {
-    m_rightAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_OUT);
+    m_rightAlgaeIntakeMotor.setVoltage(Math.abs(leftJoystick.getThrottle() * 12));
+    // m_rightAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_OUT);
     // m_leftAlgaeIntakeMotor.setVoltage(-Constants.ALGAE_INTAKE_VOLTAGE_OUT);
   }
 

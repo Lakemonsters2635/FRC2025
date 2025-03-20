@@ -33,7 +33,7 @@ public class VisionPureAutoCommand extends Command {
   Pose2d fieldDeltaPose;
   double fieldX;
   double fieldY;
-  int m_tagID = -2; // When initialized at -2 so that if the user wants to input tagIDs, it is going to chose multiple instead of a sigular tagID
+  int m_tagID = 8; // When initialized at -2 so that if the user wants to input tagIDs, it is going to chose multiple instead of a sigular tagID
   int[] m_tagIDs;
 
   double m_xPrime;
@@ -123,6 +123,12 @@ public class VisionPureAutoCommand extends Command {
     m_rot_target = fieldDeltaPose.getRotation().getDegrees();
     m_c_target = Math.sqrt(Math.pow(m_x_target, 2) + Math.pow(m_y_target, 2));
 
+    SmartDashboard.putNumber("xPidTarget", m_x_target);
+    SmartDashboard.putNumber("yPidTarget", m_y_target);
+    SmartDashboard.putNumber("rotPidTarget", m_rot_target);
+    SmartDashboard.putNumber("cPidTarget", m_c_target);
+
+
     // get the starting pose so we can calculate fade-in for speed
     m_x_start = m_dts.getPose().getX();
     m_y_start = m_dts.getPose().getY();
@@ -206,6 +212,12 @@ public class VisionPureAutoCommand extends Command {
     double driveX_Fraction   = m_fb_x   / Constants.maxModuleLinearSpeed;
     double driveY_Fraction   = m_fb_y   / Constants.maxModuleLinearSpeed;
     double driveRot_Fraction = m_fb_rot / Constants.kMaxModuleAngularSpeedRadiansPerSecond;
+
+    SmartDashboard.putNumber("driveXSpeedPidAuto", driveX_Fraction);
+    SmartDashboard.putNumber("driveYSpeedPidAuto", driveY_Fraction);
+    SmartDashboard.putNumber("driveRotSpeedPidAuto", driveRot_Fraction);
+
+
     m_dts.drive(driveX_Fraction, driveY_Fraction, driveRot_Fraction, true);
     // xPrime = 23.5;
     // zPrime = -16.5;

@@ -120,8 +120,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     m_poseTarget = MathUtil.clamp(m_poseTarget, -9000, 32500);
     // This method will be called once per schedu
-    // SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
-    // SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
+    SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
+    SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
     SmartDashboard.putNumber("elevatorHeight", elevatorHeight());
     SmartDashboard.putNumber("Motor Power (-1 to 1)", m_elevatorMotor.get());
     SmartDashboard.putNumber("Motor Power Voltage", m_elevatorMotor.get() * 11);

@@ -36,7 +36,9 @@ public class CoralArmSubsystem extends SubsystemBase {
   public CoralArmSubsystem() {
     m_coralArmMotor = new SparkMax(Constants.CORAL_ARM_MOTOR, MotorType.kBrushless); 
     m_coralArmMotorConfig = new SparkMaxConfig();
-    m_coralArmMotorConfig.idleMode(IdleMode.kBrake);
+    // m_coralArmMotorConfig.idleMode(IdleMode.kBrake);
+    m_coralArmMotorConfig.idleMode(IdleMode.kCoast);
+
     m_coralArmController = new PIDController(.1, 0, 0);
     m_coralArmMotorConfig.smartCurrentLimit(10);
     m_coralArmMotor.getEncoder().setPosition(0); // reset encoder
@@ -112,7 +114,7 @@ public class CoralArmSubsystem extends SubsystemBase {
 
     // setArmPower(ff + controlArmThrottle());
     
-    setArmPower(ff+fb);
+    // setArmPower(ff+fb);
 
     
   }

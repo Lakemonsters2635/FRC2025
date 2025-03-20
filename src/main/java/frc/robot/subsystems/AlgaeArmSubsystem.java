@@ -110,7 +110,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     // setArmPosition(-Math.abs(leftJoystick.getThrottle()*90));
     SmartDashboard.putNumber("Throttle angle", -Math.abs(leftJoystick.getThrottle()*90));
 
-    setArmPowerVolts(ff + fb);
+    // setArmPowerVolts(ff + fb);
     // setArmPowerVolts(ff + controlArmThrottle());
     
   }
