@@ -100,7 +100,7 @@ public class RobotContainer {
     Trigger moveCorralUpButton = new JoystickButton(leftJoystick, 10);
     Trigger moveCorralDownButton = new JoystickButton(leftJoystick, 12);
     Trigger pureVisionAutoCommandButton = new JoystickButton(leftJoystick, 7);
-    
+    Trigger stopPureVisionAutoCommandButton = new JoystickButton(leftJoystick, 8);
     //RIGHT BUTTONS
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
@@ -117,7 +117,7 @@ public class RobotContainer {
     //Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
     Trigger coralUpButton = new JoystickButton(leftJoystick, 11);
     Trigger coralDownButton = new JoystickButton(leftJoystick, 9);
-
+    stopPureVisionAutoCommandButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setStopVisionAutoCommand(true)));
     coralUpButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralDown()));
     coralDownButton.onTrue(new InstantCommand(()->m_coralArmSubsystem.moveCorralUp()));
     coralIntakeInButton.whileTrue(m_coralIntakeInCommand);
@@ -133,7 +133,7 @@ public class RobotContainer {
     climberUpButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
     climberDownButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.down()));
     climberDownButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
-    pureVisionAutoCommandButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 7));
+    pureVisionAutoCommandButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8));
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(

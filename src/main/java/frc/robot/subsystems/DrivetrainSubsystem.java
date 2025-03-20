@@ -34,6 +34,8 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.SwerveControllerCommand2635;
 
 public class DrivetrainSubsystem extends SubsystemBase {
+    public boolean stopPureVisionAuto = false;
+
     public static final double kMaxSpeed = 3.63; // 3.63 meters per second  Max Speed for Front, Back, Left, Right
     public final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second   Max Speed for Rotation
     private SwerveModuleState[] swerveModuleStates;
@@ -269,6 +271,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void setFollowJoystick(boolean followJoystics){
     this.followJoystics = followJoystics;
+  }
+
+  public void setStopVisionAutoCommand(boolean pureVisionAutoState){
+    stopPureVisionAuto = pureVisionAutoState;
+  }
+  
+  public boolean getStopVisionAutoCommand(){
+    return stopPureVisionAuto;
   }
 
 

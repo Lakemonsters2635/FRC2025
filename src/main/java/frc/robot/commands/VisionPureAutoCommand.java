@@ -57,14 +57,14 @@ public class VisionPureAutoCommand extends Command {
 
   // These PID values for x and y convert an error in meters into a commanded speed.
   // if kp == 2, then a 1 meter error in position will command a 2 m/s speed to close the error
-  PIDController m_visionSwerveController_x = new PIDController(1, 0, 0.1);
-  PIDController m_visionSwerveController_y = new PIDController(1, 0, 0.1);
+  PIDController m_visionSwerveController_x = new PIDController(1, 0, 1);
+  PIDController m_visionSwerveController_y = new PIDController(5, 1, 1);
 
   // 
-  PIDController m_visionSwerveController_rot = new PIDController(0.01, 0, 0);
+  PIDController m_visionSwerveController_rot = new PIDController(20,20, 1);
 
-  double PURE_VISION_MAX_M_PER_SEC = 0.1;
-  double PURE_VISION_MAX_RAD_PER_SEC = Math.PI / 2; // normal limit is Math.PI radians per second
+  double PURE_VISION_MAX_M_PER_SEC = 1.5;
+  double PURE_VISION_MAX_RAD_PER_SEC = Math.PI; // normal limit is Math.PI radians per second
 
   double m_fb_x = 0.;
   double m_fb_y = 0.;
@@ -84,9 +84,9 @@ public class VisionPureAutoCommand extends Command {
     // this.finalYa = finalYa0;
     addRequirements(m_dts, m_ots);
 
-    m_visionSwerveController_x.setTolerance(0.02); // in meters
-    m_visionSwerveController_y.setTolerance(0.02);
-    m_visionSwerveController_rot.setTolerance(0.02);
+    m_visionSwerveController_x.setTolerance(0.1); // in meters
+    m_visionSwerveController_y.setTolerance(0.01);
+    m_visionSwerveController_rot.setTolerance(0.01);
     
   }
 
@@ -117,6 +117,9 @@ public class VisionPureAutoCommand extends Command {
   public void initialize() {
     // TODO: need to set the field x, y, rotation target.
     // TODO the x,y,rot will be based on the initial state + what was defined in the constructor based on desired relative positoin from the april tag.
+    m_dts.zeroOdometry();
+    m_dts.stashAngle();
+    m_dts.resetAngle();
     Pose2d fieldDeltaPose = visionAutoData(m_xPrime, m_zPrime, m_finalYa, m_tagID);
     m_x_target = fieldDeltaPose.getX();
     m_y_target = fieldDeltaPose.getY();
@@ -165,7 +168,7 @@ public class VisionPureAutoCommand extends Command {
     catch(Exception e) {
       System.out.println(e);
     }
-
+    m_dts.stopMotors();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -174,7 +177,7 @@ public class VisionPureAutoCommand extends Command {
     // Get the vision
 
     // TODO this pose will be current pose from odemetry.
-    double x_pose = m_dts.getPose().getX();
+    double x_pose = -m_dts.getPose().getX();
     double y_pose = m_dts.getPose().getY();
     double rot_pose = m_dts.getPose().getRotation().getDegrees();
 
@@ -187,24 +190,30 @@ public class VisionPureAutoCommand extends Command {
     // use m_{xy,yrot}_start for fade-in... need to figure out how far of a distance this needs to be faded in from.
     // this fade in distance likely needs to be an initialization parameter.
     double distanceFromStart = Math.sqrt(Math.pow((x_pose - m_x_start), 2) + Math.pow((y_pose - m_y_start), 2)); //use pythagoream 
-    double fadeInDistance = 1.5; //in meters
+    double fadeInDistance = 0.5; //in meters
     double distance_clamp = PURE_VISION_MAX_M_PER_SEC * (distanceFromStart/fadeInDistance);
     distance_clamp = MathUtil.clamp(distance_clamp,0.5, PURE_VISION_MAX_M_PER_SEC);
     double x_clamp = distance_clamp * (m_x_target/m_c_target); //distance_clamp * cos(theta)
     double y_clamp = distance_clamp * (m_y_target/m_c_target); //distance_clamp * sin(theta)
+    SmartDashboard.putNumber("x_clamp", x_clamp);
+    SmartDashboard.putNumber("xPidOutput", m_visionSwerveController_x.calculate(x_pose, m_x_target));
 
     m_fb_x = MathUtil.clamp(
-        m_visionSwerveController_x.calculate(x_pose, m_x_target), 
-        -1 * x_clamp, x_clamp
+        m_visionSwerveController_x.calculate(x_pose, m_x_target),
+         -1 * Math.abs(x_clamp), Math.abs(x_clamp)
     );
     m_fb_y = MathUtil.clamp(
         m_visionSwerveController_y.calculate(y_pose, m_y_target), 
-        -1 * y_clamp, y_clamp
+        -1 * Math.abs(y_clamp), Math.abs(y_clamp)
     );
     m_fb_rot = MathUtil.clamp(
         m_visionSwerveController_rot.calculate(Math.toRadians(rot_pose), Math.toRadians(m_rot_target)), 
         -1 * PURE_VISION_MAX_RAD_PER_SEC, PURE_VISION_MAX_RAD_PER_SEC
     );
+    
+    SmartDashboard.putNumber("m_fb_rot", m_fb_rot);
+    SmartDashboard.putNumber("m_fb_x", m_fb_x);
+    SmartDashboard.putNumber("m_fb_y", m_fb_y);
 
     // CLAMP the values so they are not too fast
     // TODO look at it to see if we want field relative or robot centric.
@@ -218,7 +227,7 @@ public class VisionPureAutoCommand extends Command {
     SmartDashboard.putNumber("driveRotSpeedPidAuto", driveRot_Fraction);
 
 
-    m_dts.drive(driveX_Fraction, driveY_Fraction, driveRot_Fraction, true);
+    m_dts.drive(driveX_Fraction, driveY_Fraction, driveRot_Fraction, false);
     // xPrime = 23.5;
     // zPrime = -16.5;
     // finalYa = 0;
@@ -228,14 +237,16 @@ public class VisionPureAutoCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_dts.restoreAngle();
     m_dts.stopMotors();
     m_dts.setFollowJoystick(true);
+    m_dts.setStopVisionAutoCommand(false);
 }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_visionSwerveController_x.atSetpoint() && m_visionSwerveController_y.atSetpoint() && m_visionSwerveController_rot.atSetpoint()){
+    if((m_visionSwerveController_x.atSetpoint() && m_visionSwerveController_y.atSetpoint() && m_visionSwerveController_rot.atSetpoint()) || m_dts.getStopVisionAutoCommand()){
       return true;
     }
     return false;
@@ -274,6 +285,9 @@ public class VisionPureAutoCommand extends Command {
     // corrects for the camera position TODO: does this need to be meters for the field
     deltaRobotX += -5;//-8.5;
     deltaRobotY += -14;//-12.875;
+
+    deltaRobotX *=-1;
+    deltaRobotY *=-1;
 
     double botRadians = Units.degreesToRadians(m_dts.getPose().getRotation().getDegrees());
     double angleOffset = -Units.degreesToRadians(90); 
