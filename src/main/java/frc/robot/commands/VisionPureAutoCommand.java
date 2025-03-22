@@ -134,7 +134,7 @@ public class VisionPureAutoCommand extends Command {
 
 
     // get the starting pose so we can calculate fade-in for speed
-    m_x_start = m_dts.getPose().getX();
+    m_x_start = -m_dts.getPose().getX();
     m_y_start = m_dts.getPose().getY();
     m_rot_start = m_dts.getPose().getRotation().getDegrees();
 
@@ -194,19 +194,23 @@ public class VisionPureAutoCommand extends Command {
     double distanceFromStart = Math.sqrt(Math.pow((x_pose - m_x_start), 2) + Math.pow((y_pose - m_y_start), 2)); //use pythagoream 
     double fadeInDistance = 0.5; //in meters
     double distance_clamp = PURE_VISION_MAX_M_PER_SEC * (distanceFromStart/fadeInDistance);
+    // distance_clamp is the max speed that we will go and defaults to 0.5 meters per second, and goes up to 
+    // PURE_VISION_MAX_M_PER_SEC once we have gone fadeInDistance meters away from the origin
     distance_clamp = MathUtil.clamp(distance_clamp,0.5, PURE_VISION_MAX_M_PER_SEC);
-    double x_clamp = distance_clamp * (m_x_target/m_c_target); //distance_clamp * cos(theta)
-    double y_clamp = distance_clamp * (m_y_target/m_c_target); //distance_clamp * sin(theta)
+    double x_clamp = distance_clamp * (Math.abs(m_x_target)/m_c_target); //distance_clamp * cos(theta)
+    double y_clamp = distance_clamp * (Math.abs(m_y_target)/m_c_target); //distance_clamp * sin(theta)
     SmartDashboard.putNumber("x_clamp", x_clamp);
-    SmartDashboard.putNumber("xPidOutput", m_visionSwerveController_x.calculate(x_pose, m_x_target));
+
+    double pid_x_calculate = m_visionSwerveController_x.calculate(x_pose, m_x_target);
+    SmartDashboard.putNumber("xPidOutput", pid_x_calculate);
 
     m_fb_x = MathUtil.clamp(
         m_visionSwerveController_x.calculate(x_pose, m_x_target),
-         -1 * Math.abs(x_clamp), Math.abs(x_clamp)
+         -1 * x_clamp, x_clamp
     );
     m_fb_y = MathUtil.clamp(
         m_visionSwerveController_y.calculate(y_pose, m_y_target), 
-        -1 * Math.abs(y_clamp), Math.abs(y_clamp)
+        -1 * y_clamp, y_clamp
     );
     m_fb_rot = MathUtil.clamp(
         m_visionSwerveController_rot.calculate(Math.toRadians(rot_pose), Math.toRadians(m_rot_target)), 

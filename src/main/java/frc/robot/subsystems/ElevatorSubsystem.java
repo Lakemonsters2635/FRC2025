@@ -144,7 +144,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // }
 
     if (isPIDControl) {
-      setElevatorMotorPower(MathUtil.clamp(ff+fb, -5.5, 4));
+      // setElevatorMotorPower(MathUtil.clamp(ff+fb, -5.5, 4));
     }
 
     // if () {

@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -30,7 +31,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
     m_leftAlgaeIntakeMotorConfig = new SparkMaxConfig();
     m_leftAlgaeIntakeMotorConfig.idleMode(IdleMode.kBrake);
-    m_leftAlgaeIntakeMotorConfig.inverted(false);
+    m_leftAlgaeIntakeMotorConfig.inverted(true);
     m_leftAlgaeIntakeMotorConfig.smartCurrentLimit(10);
 
     m_rightAlgaeIntakeMotorConfig = new SparkMaxConfig();
@@ -38,7 +39,7 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     m_rightAlgaeIntakeMotorConfig.inverted(false);
     m_rightAlgaeIntakeMotorConfig.smartCurrentLimit(10);
 
-    m_leftAlgaeIntakeMotorConfig.follow(m_rightAlgaeIntakeMotor, true);
+    // m_leftAlgaeIntakeMotorConfig.follow(m_rightAlgaeIntakeMotor, true);
 
     m_leftAlgaeIntakeMotor.configure(
       m_leftAlgaeIntakeMotorConfig, 
@@ -54,27 +55,33 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
 
   public void holdAlgaeIntake() {
     m_rightAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_HOLD);
+    m_leftAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_HOLD);
     // m_leftAlgaeIntakeMotor.setVoltage(-Constants.ALGAE_INTAKE_VOLTAGE_HOLD);
   }
   
   public void inAlgaeIntake() {
     m_rightAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_IN);
+    m_leftAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_IN);
     // m_leftAlgaeIntakeMotor.setVoltage(-Constants.ALGAE_INTAKE_VOLTAGE_IN);
   }
 
   public void outAlgaeIntake() {
     m_rightAlgaeIntakeMotor.setVoltage(Math.abs(leftJoystick.getThrottle() * 12));
+    m_leftAlgaeIntakeMotor.setVoltage(Math.abs(leftJoystick.getThrottle() * 12));
     // m_rightAlgaeIntakeMotor.setVoltage(Constants.ALGAE_INTAKE_VOLTAGE_OUT);
     // m_leftAlgaeIntakeMotor.setVoltage(-Constants.ALGAE_INTAKE_VOLTAGE_OUT);
   }
 
   public void stopAlgaeIntake() {
     m_rightAlgaeIntakeMotor.setVoltage(0);
+    m_leftAlgaeIntakeMotor.setVoltage(0);
     // m_leftAlgaeIntakeMotor.setVoltage(0);
   }  
-  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("leftAlgae speed", m_leftAlgaeIntakeMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("rightAlgae speed", m_rightAlgaeIntakeMotor.getEncoder().getVelocity());
   }
 }
