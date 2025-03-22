@@ -57,8 +57,8 @@ public class VisionPureAutoCommand extends Command {
 
   // These PID values for x and y convert an error in meters into a commanded speed.
   // if kp == 2, then a 1 meter error in position will command a 2 m/s speed to close the error
-  PIDController m_visionSwerveController_x = new PIDController(1, 0, 1);
-  PIDController m_visionSwerveController_y = new PIDController(5, 1, 1);
+  PIDController m_visionSwerveController_x = new PIDController(10, 0, 1);
+  PIDController m_visionSwerveController_y = new PIDController(10, 0, 1);
 
   // 
   PIDController m_visionSwerveController_rot = new PIDController(20,20, 1);
@@ -76,7 +76,7 @@ public class VisionPureAutoCommand extends Command {
     m_tagID = tagID;
 
     m_xPrime = 0;
-    m_zPrime = -40;
+    m_zPrime = -60;
     m_finalYa = 0;
 
     // this.xPrime = xPrime0;
@@ -84,9 +84,9 @@ public class VisionPureAutoCommand extends Command {
     // this.finalYa = finalYa0;
     addRequirements(m_dts, m_ots);
 
-    m_visionSwerveController_x.setTolerance(0.1); // in meters
-    m_visionSwerveController_y.setTolerance(0.01);
-    m_visionSwerveController_rot.setTolerance(0.01);
+    // m_visionSwerveController_x.setTolerance(0.1); // in meters
+    // m_visionSwerveController_y.setTolerance(0.01);
+    // m_visionSwerveController_rot.setTolerance(0.01);
     
   }
 
@@ -134,7 +134,7 @@ public class VisionPureAutoCommand extends Command {
 
 
     // get the starting pose so we can calculate fade-in for speed
-    m_x_start = -m_dts.getPose().getX();
+    m_x_start = m_dts.getPose().getX();
     m_y_start = m_dts.getPose().getY();
     m_rot_start = m_dts.getPose().getRotation().getDegrees();
 
@@ -179,41 +179,70 @@ public class VisionPureAutoCommand extends Command {
     // Get the vision
 
     // TODO this pose will be current pose from odemetry.
-    double x_pose = -m_dts.getPose().getX();
+    double x_pose = m_dts.getPose().getX();
     double y_pose = m_dts.getPose().getY();
     double rot_pose = m_dts.getPose().getRotation().getDegrees();
 
-    SmartDashboard.putNumber("Robot x", m_dts.getPose().getX());
-    SmartDashboard.putNumber("Robot y", m_dts.getPose().getY());
-    SmartDashboard.putNumber("Robot rot", m_dts.getPose().getRotation().getDegrees());
-    
     // TODO need something to fade-in the acceleration so we don't brown out the  robot.
     // we can do this by remembering how far we are from the start... maybe it is better to take a hack 
     // use m_{xy,yrot}_start for fade-in... need to figure out how far of a distance this needs to be faded in from.
     // this fade in distance likely needs to be an initialization parameter.
     double distanceFromStart = Math.sqrt(Math.pow((x_pose - m_x_start), 2) + Math.pow((y_pose - m_y_start), 2)); //use pythagoream 
     double fadeInDistance = 0.5; //in meters
-    double distance_clamp = PURE_VISION_MAX_M_PER_SEC * (distanceFromStart/fadeInDistance);
-    // distance_clamp is the max speed that we will go and defaults to 0.5 meters per second, and goes up to 
+    double speed_clamp = PURE_VISION_MAX_M_PER_SEC * (distanceFromStart/fadeInDistance);
+    // speed_clamp is the max speed that we will go and defaults to 0.5 meters per second, and goes up to 
     // PURE_VISION_MAX_M_PER_SEC once we have gone fadeInDistance meters away from the origin
-    distance_clamp = MathUtil.clamp(distance_clamp,0.5, PURE_VISION_MAX_M_PER_SEC);
-    double x_clamp = distance_clamp * (Math.abs(m_x_target)/m_c_target); //distance_clamp * cos(theta)
-    double y_clamp = distance_clamp * (Math.abs(m_y_target)/m_c_target); //distance_clamp * sin(theta)
-    SmartDashboard.putNumber("x_clamp", x_clamp);
+    speed_clamp = MathUtil.clamp(speed_clamp,0.5, PURE_VISION_MAX_M_PER_SEC); // low: 0.5, high:1.5
+    // double x_clamp = speed_clamp * (Math.abs(m_x_target)/m_c_target); //speed_clamp * cos(theta)
+    // double y_clamp = speed_clamp * (Math.abs(m_y_target)/m_c_target); //speed_clamp * sin(theta)
 
     double pid_x_calculate = m_visionSwerveController_x.calculate(x_pose, m_x_target);
-    SmartDashboard.putNumber("xPidOutput", pid_x_calculate);
+    double pid_y_calculate = m_visionSwerveController_y.calculate(y_pose, m_y_target);
+    double pid_rot_calculate = m_visionSwerveController_rot.calculate(Math.toRadians(rot_pose), Math.toRadians(m_rot_target));
+
+    double pid_c = Math.sqrt(pid_x_calculate * pid_x_calculate + pid_y_calculate * pid_y_calculate);
+
+    // double x_clamp = speed_clamp * (Math.abs(pid_x_calculate)/pid_c); //speed_clamp * cos(theta)
+    // double y_clamp = speed_clamp * (Math.abs(pid_y_calculate)/pid_c); //speed_clamp * sin(theta)
+
+    double x_clamp = (pid_c>speed_clamp) ? 
+                        (speed_clamp * (Math.abs(pid_x_calculate)/pid_c)):
+                        (speed_clamp); //speed_clamp * cos(theta)
+
+    double y_clamp = (pid_c>speed_clamp) ? 
+                        (speed_clamp * (Math.abs(pid_y_calculate)/pid_c)):
+                        (speed_clamp); //speed_clamp * cos(theta)
+
+    {
+      SmartDashboard.putNumber("pid pid_x_calculate", pid_x_calculate);
+      SmartDashboard.putNumber("pid pid_y_calculate", pid_y_calculate);
+      SmartDashboard.putNumber("pid distanceFromStart", distanceFromStart);
+      SmartDashboard.putNumber("pid speed_clamp", speed_clamp);
+
+      SmartDashboard.putNumber("pid x_clamp", x_clamp);
+      SmartDashboard.putNumber("pid y_clamp", y_clamp);
+      SmartDashboard.putNumber("pid pid_c", pid_c);
+
+      SmartDashboard.putNumber("pid x_pose", x_pose);
+      SmartDashboard.putNumber("pid y_pose", y_pose);
+      SmartDashboard.putNumber("pid rot_pose", rot_pose);
+
+      SmartDashboard.putNumber("pid x_target", m_x_target);
+      SmartDashboard.putNumber("pid y_target", m_y_target);
+      SmartDashboard.putNumber("pid rot_target", m_rot_target);
+    }
+    
 
     m_fb_x = MathUtil.clamp(
-        m_visionSwerveController_x.calculate(x_pose, m_x_target),
+        pid_x_calculate,
          -1 * x_clamp, x_clamp
     );
     m_fb_y = MathUtil.clamp(
-        m_visionSwerveController_y.calculate(y_pose, m_y_target), 
+      pid_y_calculate, 
         -1 * y_clamp, y_clamp
     );
     m_fb_rot = MathUtil.clamp(
-        m_visionSwerveController_rot.calculate(Math.toRadians(rot_pose), Math.toRadians(m_rot_target)), 
+      pid_rot_calculate, 
         -1 * PURE_VISION_MAX_RAD_PER_SEC, PURE_VISION_MAX_RAD_PER_SEC
     );
 
@@ -224,16 +253,16 @@ public class VisionPureAutoCommand extends Command {
     // CLAMP the values so they are not too fast
     // TODO look at it to see if we want field relative or robot centric.
     // .    our equeitons simplify if we do robot centric.
-    double driveX_Fraction   = m_fb_x   / Constants.maxModuleLinearSpeed;
-    double driveY_Fraction   = m_fb_y   / Constants.maxModuleLinearSpeed;
+    double driveX_Fraction   = m_fb_x   ; // / Constants.maxModuleLinearSpeed;
+    double driveY_Fraction   = m_fb_y   ; // / Constants.maxModuleLinearSpeed;
     double driveRot_Fraction = m_fb_rot / Constants.kMaxModuleAngularSpeedRadiansPerSecond;
 
     SmartDashboard.putNumber("driveXSpeedPidAuto", driveX_Fraction);
     SmartDashboard.putNumber("driveYSpeedPidAuto", driveY_Fraction);
     SmartDashboard.putNumber("driveRotSpeedPidAuto", driveRot_Fraction);
 
-
-    m_dts.drive(driveX_Fraction, driveY_Fraction, driveRot_Fraction, false);
+    // TODO: fix comments m_dts.drive, we are actually giving the speed not a fraction
+    m_dts.drive(driveX_Fraction, driveY_Fraction, driveRot_Fraction, true);
     // xPrime = 23.5;
     // zPrime = -16.5;
     // finalYa = 0;
@@ -252,11 +281,15 @@ public class VisionPureAutoCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double x_pose = -m_dts.getPose().getX();
+    double x_pose = m_dts.getPose().getX();
     double y_pose = m_dts.getPose().getY();
     double rot_pose = m_dts.getPose().getRotation().getDegrees();
 
-    if (Math.abs(m_x_target - x_pose) < 0.1 && Math.abs(m_y_target - y_pose) < 0.1 && Math.abs(m_rot_target - rot_pose) < 3) {
+    SmartDashboard.putNumber("pid isFinished X", Math.abs(m_x_target - x_pose));
+    SmartDashboard.putNumber("pid isFinished Y", Math.abs(m_y_target - y_pose));
+    SmartDashboard.putNumber("pid isFinished Rot", Math.abs(m_rot_target - rot_pose));
+
+    if (Math.abs(m_x_target - x_pose) < 0.01 && Math.abs(m_y_target - y_pose) < 0.01 && Math.abs(m_rot_target - rot_pose) < 2) {
       return true;
     }
 
