@@ -117,9 +117,10 @@ public class VisionPureAutoCommand extends Command {
   public void initialize() {
     // TODO: need to set the field x, y, rotation target.
     // TODO the x,y,rot will be based on the initial state + what was defined in the constructor based on desired relative positoin from the april tag.
-    m_dts.zeroOdometry();
     m_dts.stashAngle();
-    m_dts.resetAngle();
+    m_dts.resetAngle();    
+    m_dts.zeroOdometry();
+
     Pose2d fieldDeltaPose = visionAutoData(m_xPrime, m_zPrime, m_finalYa, m_tagID);
     m_x_target = fieldDeltaPose.getX();
     m_y_target = fieldDeltaPose.getY();
@@ -142,8 +143,9 @@ public class VisionPureAutoCommand extends Command {
 
     // Don't need to get m_ots.data() because it is already called in Robot.java periodic
 
+    m_dts.setFollowJoystick(false);
+
     try{
-        m_dts.setFollowJoystick(false);
       // visionX = m_ots.getVisionX(m_tagID);
       // visionY = m_ots.getVisionY(m_tagID);
       // visionZ = m_ots.getVisionZ(m_tagID);
@@ -210,7 +212,7 @@ public class VisionPureAutoCommand extends Command {
         m_visionSwerveController_rot.calculate(Math.toRadians(rot_pose), Math.toRadians(m_rot_target)), 
         -1 * PURE_VISION_MAX_RAD_PER_SEC, PURE_VISION_MAX_RAD_PER_SEC
     );
-    
+
     SmartDashboard.putNumber("m_fb_rot", m_fb_rot);
     SmartDashboard.putNumber("m_fb_x", m_fb_x);
     SmartDashboard.putNumber("m_fb_y", m_fb_y);
@@ -246,9 +248,18 @@ public class VisionPureAutoCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if((m_visionSwerveController_x.atSetpoint() && m_visionSwerveController_y.atSetpoint() && m_visionSwerveController_rot.atSetpoint()) || m_dts.getStopVisionAutoCommand()){
+    double x_pose = -m_dts.getPose().getX();
+    double y_pose = m_dts.getPose().getY();
+    double rot_pose = m_dts.getPose().getRotation().getDegrees();
+
+    if (Math.abs(m_x_target - x_pose) < 0.1 && Math.abs(m_y_target - y_pose) < 0.1 && Math.abs(m_rot_target - rot_pose) < 3) {
       return true;
     }
+
+    // if((m_visionSwerveController_x.atSetpoint() && m_visionSwerveController_y.atSetpoint() && m_visionSwerveController_rot.atSetpoint()) || m_dts.getStopVisionAutoCommand()){
+    //   return true;
+    // }
+
     return false;
   }
   

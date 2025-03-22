@@ -137,8 +137,9 @@ public class RobotContainer {
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(
-      new InstantCommand(()-> m_drivetrainSubsystem.zeroOdometry()),
-      new InstantCommand(()-> m_drivetrainSubsystem.resetAngle())));
+      new InstantCommand(()-> m_drivetrainSubsystem.resetAngle()),
+      new InstantCommand(()-> m_drivetrainSubsystem.zeroOdometry())
+      ));
     zeroElevatorPowerButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.zeroElevatorPower()));
     moveCoralArmPos.onTrue(m_moveCoralArmToPosition);
     // elevatorUpButton.whileTrue(m_elevatorFirstStageUpCommand);
