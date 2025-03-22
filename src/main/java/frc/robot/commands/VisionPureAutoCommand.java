@@ -63,7 +63,7 @@ public class VisionPureAutoCommand extends Command {
   // 
   PIDController m_visionSwerveController_rot = new PIDController(20,20, 1);
 
-  double PURE_VISION_MAX_M_PER_SEC = 1.5;
+  double PURE_VISION_MAX_M_PER_SEC = 1.5; //3.5;
   double PURE_VISION_MAX_RAD_PER_SEC = Math.PI; // normal limit is Math.PI radians per second
 
   double m_fb_x = 0.;
@@ -76,7 +76,7 @@ public class VisionPureAutoCommand extends Command {
     m_tagID = tagID;
 
     m_xPrime = 0;
-    m_zPrime = -60;
+    m_zPrime = -46;
     m_finalYa = 0;
 
     // this.xPrime = xPrime0;
