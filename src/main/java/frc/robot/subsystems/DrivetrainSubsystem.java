@@ -367,7 +367,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
               yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
               MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
               true,
-              new Translation2d(0, Constants.DRIVETRAIN_WHEELBASE_LENGTH/2));
+              new Translation2d(0, Constants.DRIVETRAIN_Y_ALTERNATE_CENTER_OFFSET));
       } else {
         this.drive(
               xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 

@@ -41,7 +41,8 @@ public final class Constants {
   // TODO: check the following values
   public static final double DRIVETRAIN_WHEELBASE_WIDTH =  26.5 / Constants.INCHES_PER_METER;
   public static final double DRIVETRAIN_WHEELBASE_LENGTH = 20.5 / Constants.INCHES_PER_METER; // 20.5 for batery_loc
-
+  public static final double DRIVETRAIN_Y_ALTERNATE_CENTER_OFFSET = 8 / Constants.INCHES_PER_METER; //Puts the rotation approximately below the tower
+  
   // SWERVE MODULE STATES
   public static final int FRONT_LEFT_MODULE_STATE_INDEX = 0;
   public static final int FRONT_RIGHT_MODULE_STATE_INDEX = 1;
