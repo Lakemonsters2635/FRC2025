@@ -93,6 +93,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_backRightLocation);
 
     private boolean followJoystics = true;  // When false does not use Joysticks for driving - When true uses Joysticks for driving
+    private boolean useCustomCenter = false; // When false uses the center of the robot for rotation - When true uses a CG for rotation
   
     // TODO: if we are going to use path planner, we will need to make the SwerveDriveOdometry() object with the
     //       initialPose parameter.  Not urgent now, but someone should put this into an issue.
@@ -273,6 +274,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     this.followJoystics = followJoystics;
   }
 
+  public void setCustomCenter(boolean useCustomCenter){
+    this.useCustomCenter = useCustomCenter;
+  }
+
   public void setStopVisionAutoCommand(boolean pureVisionAutoState){
     stopPureVisionAuto = pureVisionAutoState;
   }
@@ -356,20 +361,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
       // TODO: document how to use this button to reset various robot centers of rotation
       // Note: you can have multiple buttons for defining multiple centers of rotation.
-      // if (customCenterControlButton.getAsBoolean()) {
-      //   this.drive(-xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
-      //           yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
-      //           MathUtil.applyDeadband(-rotCommanded * this.kMaxAngularSpeed, 0.2), 
-      //           true,
-      //           new Translation2d(0, -Constants.DRIVETRAIN_WHEELBASE_LENGTH/2));
-      // } else {
-      this.drive(
+      if (useCustomCenter) {
+        this.drive(
+              xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
+              yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
+              MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
+              true,
+              new Translation2d(0, Constants.DRIVETRAIN_WHEELBASE_LENGTH/2));
+      } else {
+        this.drive(
               xPowerCommanded * DrivetrainSubsystem.kMaxSpeed, 
               yPowerCommanded * DrivetrainSubsystem.kMaxSpeed,
               MathUtil.applyDeadband(rotCommanded * this.kMaxAngularSpeed, 0.2), 
               true);
-      }
-    // }
+        }
+    }
 
     SmartDashboard.putNumber("FL_pos", m_frontLeft.getPosition().distanceMeters);
     SmartDashboard.putNumber("FR_pos", m_frontRight.getPosition().distanceMeters);
@@ -426,9 +432,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /**
    * Method to drive the robot using joystick info.
    *
-   * @param xSpeed Speed of the robot in the x direction (forward).   -1.0 ... +1.0
-   * @param ySpeed Speed of the robot in the y direction (sideways).  -1.0 ... +1.0
-   * @param rot Angular rate of the robot.                            -1.0 ... +1.0
+   * @param xSpeed Speed of the robot in the x direction (forward)  in   meters/second.
+   * @param ySpeed Speed of the robot in the y direction (sideways) in   meters/second.
+   * @param rot Angular rate of the robot.                          in radiance/second
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    * @param centerOffset is offset from center of robot to custom center of rotation in meters.
    * * left is positive x, front is positive y.
