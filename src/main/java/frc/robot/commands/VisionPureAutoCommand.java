@@ -57,13 +57,13 @@ public class VisionPureAutoCommand extends Command {
 
   // These PID values for x and y convert an error in meters into a commanded speed.
   // if kp == 2, then a 1 meter error in position will command a 2 m/s speed to close the error
-  PIDController m_visionSwerveController_x = new PIDController(10, 0, 1);
-  PIDController m_visionSwerveController_y = new PIDController(10, 0, 1);
+  PIDController m_visionSwerveController_x = new PIDController(10, 0, 0); //5 2 0
+  PIDController m_visionSwerveController_y = new PIDController(10, 0, 0);
 
   // 
-  PIDController m_visionSwerveController_rot = new PIDController(20,20, 1);
+  PIDController m_visionSwerveController_rot = new PIDController(10,0, 0);
 
-  double PURE_VISION_MAX_M_PER_SEC = 1.5; //3.5;
+  double PURE_VISION_MAX_M_PER_SEC = 2; //1.5;
   double PURE_VISION_MAX_RAD_PER_SEC = Math.PI; // normal limit is Math.PI radians per second
 
   double m_fb_x = 0.;
@@ -255,7 +255,7 @@ public class VisionPureAutoCommand extends Command {
     // .    our equeitons simplify if we do robot centric.
     double driveX_Fraction   = m_fb_x   ; // / Constants.maxModuleLinearSpeed;
     double driveY_Fraction   = m_fb_y   ; // / Constants.maxModuleLinearSpeed;
-    double driveRot_Fraction = m_fb_rot / Constants.kMaxModuleAngularSpeedRadiansPerSecond;
+    double driveRot_Fraction = m_fb_rot;
 
     SmartDashboard.putNumber("driveXSpeedPidAuto", driveX_Fraction);
     SmartDashboard.putNumber("driveYSpeedPidAuto", driveY_Fraction);
@@ -285,11 +285,14 @@ public class VisionPureAutoCommand extends Command {
     double y_pose = m_dts.getPose().getY();
     double rot_pose = m_dts.getPose().getRotation().getDegrees();
 
-    SmartDashboard.putNumber("pid isFinished X", Math.abs(m_x_target - x_pose));
-    SmartDashboard.putNumber("pid isFinished Y", Math.abs(m_y_target - y_pose));
-    SmartDashboard.putNumber("pid isFinished Rot", Math.abs(m_rot_target - rot_pose));
+    SmartDashboard.putNumber("pid isFinished X", (m_x_target - x_pose));
+    SmartDashboard.putNumber("pid isFinished Y", (m_y_target - y_pose));
+    SmartDashboard.putNumber("pid isFinished Rot", (m_rot_target - rot_pose));
+    // SmartDashboard.putNumber("pid isFinished X", Math.abs(m_x_target - x_pose));
+    // SmartDashboard.putNumber("pid isFinished Y", Math.abs(m_y_target - y_pose));
+    // SmartDashboard.putNumber("pid isFinished Rot", Math.abs(m_rot_target - rot_pose));
 
-    if (Math.abs(m_x_target - x_pose) < 0.01 && Math.abs(m_y_target - y_pose) < 0.01 && Math.abs(m_rot_target - rot_pose) < 2) {
+    if (Math.abs(m_x_target - x_pose) < 0.03 && Math.abs(m_y_target - y_pose) < 0.03 && Math.abs(m_rot_target - rot_pose) < 2) {
       return true;
     }
 
@@ -305,23 +308,31 @@ public class VisionPureAutoCommand extends Command {
    * Note: for the closest april tag use -1 as a parameter to tagId
    */
   public Pose2d visionAutoData(double xPrime, double zPrime, double finalYa, int tagId){
-    try{
-      Detection detectionObject;
-      if(tagId == -1){
-        detectionObject = m_ots.getNearestAprilTagDetection();
-      }
-      else{
-        detectionObject = m_ots.getSpecificAprilTag(tagId);
-      }
+    boolean notDone = true;
+    int i = 0;
+    while(notDone)
+      try{
+          Detection detectionObject;
+          if(tagId == -1){
+            detectionObject = m_ots.getNearestAprilTagDetection();
+          }
+          else{
+            detectionObject = m_ots.getSpecificAprilTag(tagId);
+          }
 
-      visionX = detectionObject.x;
-      visionZ = detectionObject.z;
-      visionY = detectionObject.y;
-      visionYa = detectionObject.ya;
-    }
-    catch(Exception e){
-      System.out.println("VisionAutoCommand.visionAutoData(): failed to get vision");
-    }
+          visionX = detectionObject.x;
+          visionZ = detectionObject.z;
+          visionY = detectionObject.y;
+          visionYa = detectionObject.ya;
+          notDone = false;
+        }
+        catch(Exception e){
+          i++;
+          if(i > 100){
+            notDone = false;
+          }
+          System.out.println("VisionAutoCommand.visionAutoData(): failed to get vision" + " i: " + i);
+        }
 
     visionYa*=-1;
     double x_vt = xPrime * Math.cos(Math.toRadians(visionYa)) + -zPrime * Math.sin(Math.toRadians(visionYa));

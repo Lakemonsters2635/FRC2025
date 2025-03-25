@@ -127,4 +127,31 @@ public class Autos {
             new VisionAutoCommand(m_dts, m_ots, -1, 0, -30, 0)
         );
     }
+    public Command multipleVisionAutos(){
+        return new SequentialCommandGroup(
+            new VisionPureAutoCommand(m_dts, m_ots, 3),
+            new WaitCommand(2),
+            new InstantCommand(()->m_dts.resetOdometry(new Pose2d(0,0, m_dts.getPose().getRotation()))),
+            // We need to reset odometry before we do a createPath but do not want to reset the angle
+            m_dts.createPath(
+                new Pose2d(0,0, new Rotation2d(-90)), 
+                new Translation2d(0,-0.75), 
+                new Pose2d(0,-1.5, new Rotation2d(-90))),
+            new WaitCommand(2),
+            new VisionPureAutoCommand(m_dts, m_ots, 8)
+        );
+    }
+    public Command chainPureMultiVision(){
+        return new SequentialCommandGroup(
+            new VisionPureAutoCommand(m_dts, m_ots, 8),
+            new WaitCommand(.1),
+            new VisionPureAutoCommand(m_dts, m_ots, 8, 0,-90, 70),
+            new WaitCommand(.1),
+            new VisionPureAutoCommand(m_dts, m_ots, 14),
+            new WaitCommand(.1),
+            new VisionPureAutoCommand(m_dts, m_ots, 14, -10, -90, -80),
+            new WaitCommand(.1),
+            new VisionPureAutoCommand(m_dts, m_ots, 8)
+        );
+    }
 }

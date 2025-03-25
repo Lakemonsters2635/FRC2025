@@ -133,7 +133,8 @@ public class RobotContainer {
     climberUpButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
     climberDownButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.down()));
     climberDownButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
-    pureVisionAutoCommandButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8));
+    pureVisionAutoCommandButton.onTrue(m_autos.chainPureMultiVision());
+    // pureVisionAutoCommandButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8));
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(
