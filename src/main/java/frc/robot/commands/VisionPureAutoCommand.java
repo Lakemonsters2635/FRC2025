@@ -61,7 +61,7 @@ public class VisionPureAutoCommand extends Command {
   PIDController m_visionSwerveController_y = new PIDController(10, 0, 0);
 
   // 
-  PIDController m_visionSwerveController_rot = new PIDController(10,0, 0);
+  PIDController m_visionSwerveController_rot = new PIDController(4,0, 0);
 
   double PURE_VISION_MAX_M_PER_SEC = 2; //1.5;
   double PURE_VISION_MAX_RAD_PER_SEC = Math.PI; // normal limit is Math.PI radians per second
@@ -292,7 +292,7 @@ public class VisionPureAutoCommand extends Command {
     // SmartDashboard.putNumber("pid isFinished Y", Math.abs(m_y_target - y_pose));
     // SmartDashboard.putNumber("pid isFinished Rot", Math.abs(m_rot_target - rot_pose));
 
-    if (Math.abs(m_x_target - x_pose) < 0.03 && Math.abs(m_y_target - y_pose) < 0.03 && Math.abs(m_rot_target - rot_pose) < 2) {
+    if (Math.abs(m_x_target - x_pose) < 0.01 && Math.abs(m_y_target - y_pose) < 0.01 && Math.abs(m_rot_target - rot_pose) < 1) {
       return true;
     }
 

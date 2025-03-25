@@ -144,13 +144,13 @@ public class Autos {
     public Command chainPureMultiVision(){
         return new SequentialCommandGroup(
             new VisionPureAutoCommand(m_dts, m_ots, 8),
-            new WaitCommand(.1),
+            new WaitCommand(.2),
             new VisionPureAutoCommand(m_dts, m_ots, 8, 0,-90, 70),
-            new WaitCommand(.1),
+            new WaitCommand(.2),
             new VisionPureAutoCommand(m_dts, m_ots, 14),
-            new WaitCommand(.1),
+            new WaitCommand(.2),
             new VisionPureAutoCommand(m_dts, m_ots, 14, -10, -90, -80),
-            new WaitCommand(.1),
+            new WaitCommand(.2),
             new VisionPureAutoCommand(m_dts, m_ots, 8)
         );
     }
