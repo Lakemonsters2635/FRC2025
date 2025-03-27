@@ -86,6 +86,12 @@ public class RobotContainer {
     Trigger coralIntakeOutButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
     Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
+    Trigger tipCorrectionTriggerButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_TRIGGER_BUTTON);
+    Trigger tipCorrectionEnableButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_ENABLE_BUTTON);
+    Trigger setDriveSpeed = new JoystickButton(leftJoystick, 10);
+
+
+
     //Trigger climberTestButton = new JoystickButton(leftJoystick, 5);
     Trigger climberUpButton = new JoystickButton(leftJoystick, 5);
     Trigger climberDownButton = new JoystickButton(leftJoystick, 3);
@@ -110,10 +116,19 @@ public class RobotContainer {
     //Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
     Trigger coralUpButton = new JoystickButton(leftJoystick, 11);
     Trigger coralDownButton = new JoystickButton(leftJoystick, 9);
-    stopPureVisionAutoCommandButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setStopVisionAutoCommand(true)));
-    // 
+
+    tipCorrectionTriggerButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(true)));
+    tipCorrectionTriggerButton.onFalse(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(false)));
+    tipCorrectionEnableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setEnableAntiTip()));
+    // setDriveSpeed.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setDriveSpeed(0.75)));
+
+    
+    // algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
+    // algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
     algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
     algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
+
+
     //climberTestButton.whileTrue(new InstantCommand(()->m_climberSubsystem.configure()));
     //climberTestButton.whileFalse(new InstantCommand(()->m_climberSubsystem.motor.setVoltage(0)));
     // climberUpButton.whileTrue(m_climberUpCommand);

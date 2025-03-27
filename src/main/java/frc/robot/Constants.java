@@ -134,7 +134,22 @@ public final class Constants {
   public static final int ALGAE_ARM_MOTOR = 2;
   public static final double CORAL_ARM_ENCODER_OFFSET = 0;//15.309518814086914;
 
-  //CORAL
+  //Tipping Constants
+  public static final double TIPPING_ANGLE_THRESHOLD = 5;
+  public static final int WINDOW_SIZE = 10;
+  public static final double SMOOTHING_FACTOR = 0.9;
+  public static final double GRAVITY_ACCEL = 1; 
+  public static final double GRAVITY_ACCEL_SQUARED = GRAVITY_ACCEL * GRAVITY_ACCEL;
+  public static final double PITCH_NOSE_DOWN_PROPORTION_CONSTANT = 0.03; //TODO: tune this value these are percentages
+  public static final double PITCH_NOSE_UP_PROPORTION_CONSTANT = 0.03; //TODO: tune this value
+
+  public static final double ROLL_LEFT_PROPORTION_CONSTANT = 0.05; //TODO: tune this value
+  public static final double ROLL_RIGHT_PROPORTION_CONSTANT = 0.05; //TODO: tune this value
+
+  public static final int NOSE_DOWN_PITCH = 1;
+  public static final int RIGHT_ROLL = 1;
+
+  // CORAL
   public static final int CORAL_LEFT_INTAKE_MOTOR = 3;
   public static final int CORAL_RIGHT_INTAKE_MOTOR = 2;
   //voltage values for coral intake
@@ -286,6 +301,8 @@ public final class Constants {
   public static final int CORAL_INTAKE_IN_BUTTON = 1;
   public static final int ALGAE_INTAKE_IN_BUTTON = 4; //TODO: 5
   public static final int ALGAE_INTAKE_OUT_BUTTON = 6;
+  public static final int TIP_CORRECTION_TRIGGER_BUTTON = 7;
+  public static final int TIP_CORRECTION_ENABLE_BUTTON = 8;
 
 
 }

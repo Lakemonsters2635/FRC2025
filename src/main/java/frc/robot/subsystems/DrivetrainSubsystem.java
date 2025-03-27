@@ -4,10 +4,11 @@
 
 package frc.robot.subsystems;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.studica.frc.AHRS;
+  import com.studica.frc.AHRS;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -24,8 +25,10 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,6 +37,23 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.SwerveControllerCommand2635;
 
 public class DrivetrainSubsystem extends SubsystemBase {
+
+    private LinkedList<Double> pitchValues = new LinkedList<>();
+    private LinkedList<Double> rollValues = new LinkedList<>();
+    BuiltInAccelerometer rioAccelerometer = new BuiltInAccelerometer();
+    Timer timer = new Timer();
+
+
+    double smoothedPitch = 0;
+    double smoothedRoll = 0;
+    double pitchOffset = 0;
+    double rollOffset = 0;
+    boolean tipCorrection = true;
+    boolean PENDING_STATE = false;
+
+
+
+
     public boolean stopPureVisionAuto = false;
 
     public static final double kMaxSpeed = 3.63; // 3.63 meters per second  Max Speed for Front, Back, Left, Right
@@ -200,7 +220,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     );
 
     TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(Constants.kMaxModuleAngularSpeedRadiansPerSecond, Constants.kMaxModuleAngularAccelerationRadiansPerSecondSquared);
-
     // This x, y, and theta controllers are the controllers which are used for feedback inside 
     // the holonomic drive controller created by the SwerveControllerCommand.  These controllers 
     // close the loop around m_poseError and m_rotationError.  These caluclations are performed in 
@@ -301,10 +320,115 @@ public class DrivetrainSubsystem extends SubsystemBase {
     rotCommanded = rot;
   }
 
+  private void addPitchValue(double newValue) {
+    if (pitchValues.size() >= Constants.WINDOW_SIZE) {
+        pitchValues.removeFirst();
+    }
+    pitchValues.add(newValue);
+  }
+
+  private void addRollValue(double newValue) {
+    if (rollValues.size() >= Constants.WINDOW_SIZE) {
+      rollValues.removeFirst();
+    }
+    pitchValues.add(newValue);
+  }
+
+  public void setDriveSpeed(double time){
+    timer.start();
+    setFollowJoystick(false);
+    while(timer.get() < time){
+      drive(2.5, 0, 0, true);
+    }
+    setFollowJoystick(true);
+    timer.stop();
+    timer.reset();
+  }
+
+  private double calculateSmoothedValue(LinkedList<Double> values) {
+    double smoothedValue = 0.0;
+    double weight = 1.0;
+    double totalWeight = 0.0;
+
+    for (double value : values) {
+        smoothedValue += value * weight;
+        totalWeight += weight;
+        weight *= Constants.SMOOTHING_FACTOR;
+    }
+
+    return smoothedValue / totalWeight;
+  }
+
+  public void setAntiTipOffsets(){
+    pitchOffset = m_gyro.getPitch();
+    rollOffset = m_gyro.getRoll();
+  }
+
+  public void setTriggerAntiTip(boolean pending){
+    PENDING_STATE = pending;
+  }
+
+  public void setEnableAntiTip(){
+    tipCorrection = PENDING_STATE;
+  }
+
+  public ChassisSpeeds getAntiTipCorrections(){
+    if(tipCorrection && isTipping()){
+      double pitch = m_gyro.getPitch()-pitchOffset;
+      double roll = m_gyro.getRoll()-rollOffset;
+      double pitchCorrection = 0;
+      double rollCorrection = 0;
+      //Multiplying by NOSE_DOWN_PITCH and RIGHT_ROLL to capture directionality gyro coordinates versus robot coordinates
+      if(pitch == Math.abs(pitch) * Constants.NOSE_DOWN_PITCH){
+        pitchCorrection = pitch * Constants.NOSE_DOWN_PITCH * Constants.PITCH_NOSE_DOWN_PROPORTION_CONSTANT * kMaxSpeed; 
+      }
+      else{
+        pitchCorrection = pitch * Constants.NOSE_DOWN_PITCH * Constants.PITCH_NOSE_UP_PROPORTION_CONSTANT * kMaxSpeed;
+      }
+
+      if(roll == Math.abs(roll) * Constants.RIGHT_ROLL){
+        rollCorrection = roll * Constants.RIGHT_ROLL * Constants.ROLL_RIGHT_PROPORTION_CONSTANT * kMaxSpeed; 
+      }
+      else{
+        rollCorrection = roll * Constants.RIGHT_ROLL * Constants.ROLL_LEFT_PROPORTION_CONSTANT * kMaxSpeed;
+      }
+      SmartDashboard.putNumber("pitchCorrection", pitchCorrection);
+      SmartDashboard.putNumber("rollCorrection", rollCorrection);
+      return new ChassisSpeeds(rollCorrection, pitchCorrection, 0);
+    }
+    return new ChassisSpeeds(0, 0, 0);
+  }
+
+    
+  public boolean isTipping() {
+    double pitch = m_gyro.getPitch() - pitchOffset;
+    double roll = m_gyro.getRoll() - rollOffset;
+    
+    SmartDashboard.putNumber("pitchWithOffset", pitch);
+    SmartDashboard.putNumber("rollWithOffset", roll);
+
+
+    // addRollValue(roll);
+    // addPitchValue(pitch);
+
+    // smoothedPitch = calculateSmoothedValue(pitchValues);
+    // smoothedRoll = calculateSmoothedValue(rollValues);
+
+    return Math.abs(pitch) > Constants.TIPPING_ANGLE_THRESHOLD || Math.abs(roll) > Constants.TIPPING_ANGLE_THRESHOLD;
+  }
+  
+
+
+
   @Override
   public void periodic() {
+    
     //Hat Power Overides for Trimming Position and Rotation
     // System.out.println("X: "+getPose().getX()+"\tY: "+getPose().getY()+"\tRot: "+getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("gyro.pitch()", m_gyro.getPitch());
+    SmartDashboard.putNumber("gyro.roll()", m_gyro.getRoll());
+    SmartDashboard.putBoolean("isTipping", isTipping());
+
     SmartDashboard.putNumber("stashAngle", m_angleCache);
     SmartDashboard.putNumber("BackRight turn", m_backRight.getTurningEncoderRadians());
     SmartDashboard.putNumber("BackLeft turn", m_backLeft.getTurningEncoderRadians());
@@ -436,11 +560,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, Translation2d centerOffset) {
     // TODO: Move kMaxSpeed and kMaxRotation into this method for ySpeed and xSpeed, and rot
     // TODO: Add another parameter for kMaxSpeed so you have an option to set it
-    swerveModuleStates =
+    ChassisSpeeds chassisSpeeds = fieldRelative
+    ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+    : new ChassisSpeeds(xSpeed, ySpeed, rot);
+    chassisSpeeds = chassisSpeeds.plus(getAntiTipCorrections());
+
+    swerveModuleStates = 
         m_kinematics.toSwerveModuleStates(
-            fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
-                : new ChassisSpeeds(xSpeed, ySpeed, rot),
+            chassisSpeeds,
             centerOffset
         );
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
@@ -583,5 +710,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("getPose.getY", getPose().getY());
     SmartDashboard.putNumber("gyro.getAngle", m_gyro.getAngle());
     SmartDashboard.putNumber("getPose.getRotation", getPose().getRotation().getDegrees());
+
+    SmartDashboard.putBoolean("tipCorrection", tipCorrection);
   }
 }

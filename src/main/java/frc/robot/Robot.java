@@ -88,6 +88,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     RobotContainer.m_drivetrainSubsystem.setFollowJoystick(true);
+    RobotContainer.m_drivetrainSubsystem.setAntiTipOffsets();
   }
 
   /** This function is called periodically during operator control. */
