@@ -122,8 +122,8 @@ public final class Constants {
    */
   // INTAKE CONSTANTS
   // Algae
-  public static final int ALGAE_LEFT_INTAKE_MOTOR = 6;
-  public static final int ALGAE_RIGHT_INTAKE_MOTOR = 5;
+  public static final int ALGAE_LEFT_INTAKE_MOTOR = 3;
+  public static final int ALGAE_RIGHT_INTAKE_MOTOR = 1;
   public static final double ALGAE_INTAKE_ROTATION_SPEED = 0.3;
   // voltage values for algae intake
   // positive is out, negative is in
@@ -131,13 +131,13 @@ public final class Constants {
   public static final double ALGAE_INTAKE_VOLTAGE_IN = -6;
   public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.5;
 
-  public static final int ALGAE_ARM_MOTOR = 4;
+  public static final int ALGAE_ARM_MOTOR = 2;
   public static final double CORAL_ARM_ENCODER_OFFSET = 0;//15.309518814086914;
 
-  // CORAL
+  //CORAL
   public static final int CORAL_LEFT_INTAKE_MOTOR = 3;
   public static final int CORAL_RIGHT_INTAKE_MOTOR = 2;
-  // voltage values for coral intake
+  //voltage values for coral intake
   public static final double CORAL_INTAKE_VOLTAGE_OUT = -3;
   public static final double CORAL_INTAKE_VOLTAGE_IN = 3;
 
