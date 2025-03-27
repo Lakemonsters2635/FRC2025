@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.AlgaeArmSubsystem;
-import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ObjectTrackerSubsystem;
@@ -25,13 +24,11 @@ public class Autos {
     DrivetrainSubsystem m_dts;
     ObjectTrackerSubsystem m_ots;
     ElevatorSubsystem m_es;
-    CoralArmSubsystem m_cas;
     AlgaeArmSubsystem m_aas;
-    public Autos(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, ElevatorSubsystem es, CoralArmSubsystem cas, AlgaeArmSubsystem aas) {
+    public Autos(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, ElevatorSubsystem es, AlgaeArmSubsystem aas) {
         m_dts = dts;
         m_ots = ots;
         m_es = es;
-        m_cas = cas;
         m_aas = aas;
     }
 
@@ -40,7 +37,6 @@ public class Autos {
             new InstantCommand(()-> m_dts.stopMotors()),
             new InstantCommand(()->m_dts.setFollowJoystick(false)),
             new InstantCommand(()->m_es.setElevatorTarget(Constants.E_STATE_AUTO_FINAL.ELEVATOR_POSITION)),
-            new InstantCommand(()->m_cas.setPoseTarget(Constants.E_STATE_AUTO_FINAL.CORAL_ARM_ANGLE)),
             new InstantCommand(()->m_aas.setArmPosition(Constants.E_STATE_AUTO_FINAL.ALGAE_ARM_ANGLE)),
             m_dts.createPath(
                 new Pose2d(0,0, new Rotation2d(Units.degreesToRadians(-90))), 

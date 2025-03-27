@@ -118,7 +118,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_poseTarget = MathUtil.clamp(m_poseTarget, -9000, 32500);
+    // m_poseTarget = MathUtil.clamp(m_poseTarget, -9000, 32500);
+    m_poseTarget = MathUtil.clamp(m_poseTarget, 0, 32500+9000); //New elevator starts at bottom pos
+
     // This method will be called once per schedu
     SmartDashboard.putNumber("innerEncoder Rot", innerEncoderRotations());
     SmartDashboard.putNumber("outerEncoder Rot", outerEncoderRotations());
@@ -144,7 +146,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // }
 
     if (isPIDControl) {
-      // setElevatorMotorPower(MathUtil.clamp(ff+fb, -5.5, 4));
+      setElevatorMotorPower(MathUtil.clamp(ff+fb, -5.5, 4));
     }
 
     // if () {
@@ -167,6 +169,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     //   setElevatorMotorPower(-1);;
     // }
 
-    // setElevatorMotorPower(ff);
+    // setElevatorMotorPower(ff + fb);
   }
 }

@@ -19,12 +19,12 @@ import frc.robot.Constants;
 public class AlgaeArmSubsystem extends SubsystemBase {
   private final SparkMax m_algaeArmMotor;
   private final SparkMaxConfig m_algaeArmConfig;
-  double ff, fb, motorPower, theta, m_poseTarget = 10;
+  double ff, fb, motorPower, theta, m_poseTarget = 25;
   double GAIN = - 0.412; // TODO: Measure this value
   double GAIN_ALGAE = - 0.78;
   PIDController m_algaeArmController;
   Joystick leftJoystick = new Joystick(0);
-  double offset = 10;
+  double offset = 0;
 
   public AlgaeArmSubsystem() {
     m_algaeArmMotor = new SparkMax(Constants.ALGAE_ARM_MOTOR, SparkMax.MotorType.kBrushless);
@@ -34,14 +34,15 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_algaeArmConfig.inverted(false);
     // m_algaeArmConfig.idleMode(IdleMode.kBrake);
     m_algaeArmConfig.idleMode(IdleMode.kCoast);
-    m_algaeArmConfig.smartCurrentLimit(20);
+    m_algaeArmConfig
+    .smartCurrentLimit(70);
     m_algaeArmMotor.configure(
       m_algaeArmConfig, 
       SparkBase.ResetMode.kNoResetSafeParameters, 
       SparkBase.PersistMode.kPersistParameters
     );
 
-    m_algaeArmController = new PIDController(0.08,0,0); // TODO: Tune these values
+    m_algaeArmController = new PIDController(0.12,0,0); // TODO: Tune these values
     // m_algaeArmController = new PIDController(0.02,0,0); // TODO: Tune these values
 
     resetEncoder(); // Reset encoder, since we start from the 0 position
@@ -58,7 +59,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
   public double getDegrees() {
     // 160 is the gear ratio
-    double degrees = (getEncoderCounts() /160) * 360;
+    double degrees = (getEncoderCounts() /54) * 360;  //160 old gear ratio
     degrees += offset; // Calibration offset required with the setup
     degrees %= 360;
     return degrees;
@@ -69,11 +70,13 @@ public class AlgaeArmSubsystem extends SubsystemBase {
   }
 
   public void moveArmUp(){
-    offset -=5;
+    m_poseTarget -=5;
+    // offset -=5;
     // setArmPosition(m_poseTarget-5);
   }
   public void moveArmDown(){
-    offset +=5;
+    m_poseTarget += 5;
+    // offset +=5;
     // setArmPosition(m_poseTarget+5);
   }
 
@@ -92,11 +95,12 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     theta = getDegrees();
 
     // setArmPowerVolts(controlArmThrottle());
-
+    m_poseTarget = MathUtil.clamp(m_poseTarget, 10, 150);
     ff = GAIN_ALGAE * Math.abs(Math.sin(Math.toRadians(theta)));
     fb = MathUtil.clamp(m_algaeArmController.calculate(theta, m_poseTarget), -6, 6);
     // fb = MathUtil.clamp(m_algaeArmController.calculate(theta, m_poseTarget), -6, 6);
 
+    SmartDashboard.putNumber("algae m_poseTarget", m_poseTarget);
     SmartDashboard.putNumber("Encoder Counts", getEncoderCounts());
     SmartDashboard.putNumber("Algae Degrees", getDegrees());
     SmartDashboard.putNumber("Motor Power", m_algaeArmMotor.get());
@@ -109,8 +113,8 @@ public class AlgaeArmSubsystem extends SubsystemBase {
 
     // setArmPosition(-Math.abs(leftJoystick.getThrottle()*90));
     SmartDashboard.putNumber("Throttle angle", -Math.abs(leftJoystick.getThrottle()*90));
-
-    // setArmPowerVolts(ff + fb);
+    SmartDashboard.putNumber("ff + fb", fb + ff);
+    setArmPowerVolts(ff + fb);
     // setArmPowerVolts(ff + controlArmThrottle());
     
   }

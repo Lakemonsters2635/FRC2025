@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.AlgaeArmSubsystem;
-import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.StreamDeckSubsystem;
 
@@ -17,12 +16,10 @@ public class MoveAlgaeToPose extends Command {
   /** Creates a new MoveAlgaeToPose. */
   StreamDeckSubsystem m_sds;
   AlgaeArmSubsystem m_aas;
-  CoralArmSubsystem m_cas;
   ElevatorSubsystem m_es;
 
   Constants.ElevatorState constant;
-  public MoveAlgaeToPose(CoralArmSubsystem cas, StreamDeckSubsystem sds, AlgaeArmSubsystem aas, ElevatorSubsystem es) {
-    m_cas = cas;
+  public MoveAlgaeToPose(StreamDeckSubsystem sds, AlgaeArmSubsystem aas, ElevatorSubsystem es) {
     m_sds = sds;
     m_aas = aas;
     m_es = es;
@@ -65,7 +62,6 @@ public class MoveAlgaeToPose extends Command {
       System.out.println("Exception !!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 
-    m_cas.setPoseTarget(constant.CORAL_ARM_ANGLE);
     m_aas.setArmPosition(constant.ALGAE_ARM_ANGLE);
     m_es.setElevatorTarget(constant.ELEVATOR_POSITION);
   }

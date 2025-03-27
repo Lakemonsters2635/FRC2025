@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.AlgaeArmSubsystem;
-import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.StreamDeckSubsystem;
 
@@ -15,15 +14,13 @@ import frc.robot.subsystems.StreamDeckSubsystem;
 public class MoveClimbPos extends Command {
   /** Creates a new MoveClimbPos. */
   
-  CoralArmSubsystem m_cas;
   StreamDeckSubsystem m_sds;
   AlgaeArmSubsystem m_aas;
   ElevatorSubsystem m_es;
   Constants.ElevatorState constant;
 
-  public MoveClimbPos(CoralArmSubsystem cas, StreamDeckSubsystem sds, AlgaeArmSubsystem aas, ElevatorSubsystem es) {
+  public MoveClimbPos(StreamDeckSubsystem sds, AlgaeArmSubsystem aas, ElevatorSubsystem es) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_cas = cas;
     m_sds = sds;
     m_aas = aas;
     m_es = es;
@@ -33,7 +30,6 @@ public class MoveClimbPos extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_cas.setPoseTarget(constant.CORAL_ARM_ANGLE);
     m_aas.setArmPosition(constant.ALGAE_ARM_ANGLE);
     m_es.setElevatorTarget(constant.ELEVATOR_POSITION);
   }
