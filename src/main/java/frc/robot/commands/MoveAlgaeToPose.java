@@ -52,6 +52,10 @@ public class MoveAlgaeToPose extends Command {
         case Constants.SD_ALGAE_PROCESS:
           constant = Constants.E_STATE_ALGAE_PROCESSOR;
           break;
+          
+        case Constants.SD_ALGAE_BARGE:
+          constant = Constants.E_STATE_ALGAE_BARGE;
+          break;
       
         default:
           System.out.println("DEFAULT VALUE !!!!!!!!!!!!!!!");

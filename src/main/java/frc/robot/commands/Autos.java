@@ -123,6 +123,14 @@ public class Autos {
             new VisionAutoCommand(m_dts, m_ots, -1, 0, -30, 0)
         );
     }
+
+    public Command bargeAlgae(){
+        return new SequentialCommandGroup(
+            new VisionPureAutoCommand(m_dts, m_ots, 3),
+            new WaitCommand(0.2)
+            // TODO: work on this
+        );
+    }
     public Command multipleVisionAutos(){
         return new SequentialCommandGroup(
             new VisionPureAutoCommand(m_dts, m_ots, 3),
@@ -148,6 +156,19 @@ public class Autos {
             new VisionPureAutoCommand(m_dts, m_ots, 14, -10, -90, -80),
             new WaitCommand(.2),
             new VisionPureAutoCommand(m_dts, m_ots, 8)
+        );
+    }
+
+    public Command autoReefAndBarge(){
+        return new SequentialCommandGroup(
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW),
+            new VisionPureAutoCommand(m_dts, m_ots, 7, 0, -1 *(20 + 3), 0)            
+            // new WaitCommand(.2),
+            // new VisionPureAutoCommand(m_dts, m_ots, 14),
+            // new WaitCommand(.2),
+            // new VisionPureAutoCommand(m_dts, m_ots, 14, -10, -90, -80),
+            // new WaitCommand(.2),
+            // new VisionPureAutoCommand(m_dts, m_ots, 8)
         );
     }
 }

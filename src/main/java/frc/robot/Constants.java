@@ -97,6 +97,7 @@ public final class Constants {
   public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11), 0, 100);
   public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000+9000-((2000/3) * 11), 0, 100);
   public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(0, 0, 90);
+  public static final ElevatorState E_STATE_ALGAE_BARGE = new Constants.ElevatorState(0, 0, 0);
 
   public static final ElevatorState E_STATE_CLIMB = new Constants.ElevatorState(250, 0, 10);
 
@@ -275,6 +276,7 @@ public final class Constants {
   public static final String SD_ALGAE_CORRAL = "AC";
   public static final String SD_ALGAE_GROUND = "AG";
   public static final String SD_ALGAE_PROCESS = "AP";
+  public static final String SD_ALGAE_BARGE = "AB";
 
   // AUTO CONSTANTS
   
