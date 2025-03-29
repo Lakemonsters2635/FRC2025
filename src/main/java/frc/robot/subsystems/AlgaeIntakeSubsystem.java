@@ -32,12 +32,12 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     m_leftAlgaeIntakeMotorConfig = new SparkMaxConfig();
     m_leftAlgaeIntakeMotorConfig.idleMode(IdleMode.kBrake);
     m_leftAlgaeIntakeMotorConfig.inverted(true);
-    m_leftAlgaeIntakeMotorConfig.smartCurrentLimit(10);
+    // m_leftAlgaeIntakeMotorConfig.smartCurrentLimit(10);
 
     m_rightAlgaeIntakeMotorConfig = new SparkMaxConfig();
     m_rightAlgaeIntakeMotorConfig.idleMode(IdleMode.kBrake);
     m_rightAlgaeIntakeMotorConfig.inverted(false);
-    m_rightAlgaeIntakeMotorConfig.smartCurrentLimit(10);
+    // m_rightAlgaeIntakeMotorConfig.smartCurrentLimit(10);
 
     // m_leftAlgaeIntakeMotorConfig.follow(m_rightAlgaeIntakeMotor, true);
 
