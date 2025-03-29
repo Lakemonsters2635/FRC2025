@@ -107,7 +107,7 @@ public final class Constants {
   public static final ElevatorState E_STATE_CORAL_REEF_3 = new Constants.ElevatorState(11200-1000-700, -87, -40);
   public static final ElevatorState E_STATE_CORAL_REEF_4 = new Constants.ElevatorState(35000-1000, -78, 0); // TODO: find maximum angle for the coralArmAngle
   public static final ElevatorState E_STATE_CORAL_TRANSIT = new Constants.ElevatorState(0, -25, 0); // TODO: find maximum angle for the coralArmAngle
-  public static final ElevatorState E_STATE_AUTO_FINAL = new Constants.ElevatorState(8000, 0, -40);
+  public static final ElevatorState E_STATE_AUTO_FINAL = new Constants.ElevatorState(8000, 0, 0);
 
   /*
    * E_STATE_ALGAE_LOW
