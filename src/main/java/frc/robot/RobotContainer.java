@@ -59,7 +59,7 @@ public class RobotContainer {
   public static final AlgaeIntakeOutCommand m_algaeIntakeOutCommand = new AlgaeIntakeOutCommand(m_algaeIntakeSubsystem);
   public static final ElevatorDownCommand m_elevatorFirstStageDownCommand = new ElevatorDownCommand(m_elevatorSubsystem);
   public static final ElevatorUpCommand m_elevatorFirstStageUpCommand = new ElevatorUpCommand(m_elevatorSubsystem);
-  public static final Autos m_autos = new Autos(m_drivetrainSubsystem, m_objectTrackerSubsystem, m_elevatorSubsystem, m_algaeArmSubsystem);
+  public static final Autos m_autos = new Autos(m_drivetrainSubsystem, m_objectTrackerSubsystem, m_elevatorSubsystem, m_algaeArmSubsystem, m_algaeIntakeSubsystem);
   public static final VisionAutoCommand m_visionAutoCommand = new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem); // TODO: Change this later
   public static final ClimberUpCommand m_climberUpCommand = new ClimberUpCommand(m_climberSubsystem);
   public static final ClimberDownCommand m_climberDownCommand = new ClimberDownCommand(m_climberSubsystem);
@@ -137,7 +137,7 @@ public class RobotContainer {
     climberUpButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
     climberDownButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.down()));
     climberDownButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
-    pureVisionAutoCommandButton.onTrue(m_autos.chainPureMultiVision());
+    pureVisionAutoCommandButton.onTrue(m_autos.autoReefAndBarge());
     // pureVisionAutoCommandButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8));
 
     // Right Buttons, Run

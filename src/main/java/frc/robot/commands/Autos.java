@@ -11,10 +11,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.AlgaeArmSubsystem;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ObjectTrackerSubsystem;
@@ -25,11 +28,13 @@ public class Autos {
     ObjectTrackerSubsystem m_ots;
     ElevatorSubsystem m_es;
     AlgaeArmSubsystem m_aas;
-    public Autos(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, ElevatorSubsystem es, AlgaeArmSubsystem aas) {
+    AlgaeIntakeSubsystem m_ais;
+    public Autos(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, ElevatorSubsystem es, AlgaeArmSubsystem aas, AlgaeIntakeSubsystem ais) {
         m_dts = dts;
         m_ots = ots;
         m_es = es;
         m_aas = aas;
+        m_ais = ais;
     }
 
     public Command goStraight(){
@@ -161,8 +166,24 @@ public class Autos {
 
     public Command autoReefAndBarge(){
         return new SequentialCommandGroup(
-            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW),
-            new VisionPureAutoCommand(m_dts, m_ots, 7, 0, -1 *(20 + 3), 0)            
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW).withTimeout(1),
+            new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.2),
+            // new ParallelCommandGroup(
+                new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0),
+            //     new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(10)
+            // ),
+            new WaitCommand(0.3),
+            new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(1),
+            new WaitCommand(2),
+            new InstantCommand(()-> m_dts.resetAngle()).withTimeout(0.1),
+            new InstantCommand(()-> m_dts.zeroOdometry()).withTimeout(0.1),
+            m_dts.createPath(
+                new Pose2d(0,0,new Rotation2d(Math.toRadians(-90))), 
+                new Translation2d(0, -0.5), 
+                new Pose2d(0,-1, new Rotation2d(Math.toRadians(-90))),
+                180
+            ),
+            new InstantCommand(()->m_dts.stopMotors()).withTimeout(0.1)
             // new WaitCommand(.2),
             // new VisionPureAutoCommand(m_dts, m_ots, 14),
             // new WaitCommand(.2),

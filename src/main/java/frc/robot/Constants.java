@@ -130,7 +130,7 @@ public final class Constants {
   // positive is out, negative is in
   public static final double ALGAE_INTAKE_VOLTAGE_OUT = 10;
   public static final double ALGAE_INTAKE_VOLTAGE_IN = -3;
-  public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.5;
+  public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.3; // -0.5
 
   public static final int ALGAE_ARM_MOTOR = 2;
   public static final double CORAL_ARM_ENCODER_OFFSET = 0;//15.309518814086914;

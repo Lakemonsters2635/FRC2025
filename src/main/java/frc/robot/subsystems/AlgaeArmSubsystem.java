@@ -33,7 +33,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_algaeArmConfig = new SparkMaxConfig();
     m_algaeArmConfig.inverted(false);
     // m_algaeArmConfig.idleMode(IdleMode.kBrake);
-    m_algaeArmConfig.idleMode(IdleMode.kCoast);
+    m_algaeArmConfig.idleMode(IdleMode.kBrake);
     m_algaeArmConfig
     .smartCurrentLimit(70);
     m_algaeArmMotor.configure(
