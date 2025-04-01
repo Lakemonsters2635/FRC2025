@@ -345,6 +345,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     timer.reset();
   }
 
+  public double getYawGyroValue(){
+    return m_gyro.getRawGyroZ();
+  }
+
   private double calculateSmoothedValue(LinkedList<Double> values) {
     double smoothedValue = 0.0;
     double weight = 1.0;
@@ -494,7 +498,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
               true);
       }
     // }
-
+    SmartDashboard.putNumber("m_gyro.getRawGyroZ", getYawGyroValue());
     SmartDashboard.putNumber("FL_pos", m_frontLeft.getPosition().distanceMeters);
     SmartDashboard.putNumber("FR_pos", m_frontRight.getPosition().distanceMeters);
     SmartDashboard.putNumber("BL_pos", m_backLeft.getPosition().distanceMeters);

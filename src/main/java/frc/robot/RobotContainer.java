@@ -100,6 +100,7 @@ public class RobotContainer {
     Trigger moveCorralDownButton = new JoystickButton(leftJoystick, 12);
     Trigger pureVisionAutoCommandButton = new JoystickButton(leftJoystick, 7);
     Trigger stopPureVisionAutoCommandButton = new JoystickButton(leftJoystick, 8);
+    Trigger distancePidPathButton = new JoystickButton(leftJoystick, 1);
     //RIGHT BUTTONS
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
@@ -122,7 +123,7 @@ public class RobotContainer {
     tipCorrectionEnableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setEnableAntiTip()));
     // setDriveSpeed.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setDriveSpeed(0.75)));
 
-    
+    distancePidPathButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 0, 1, 0));
     // algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     // algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
     algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
@@ -171,6 +172,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m_autos.goStraight();
-    return m_autos.goStraight();
+    return m_autos.autoReefAndBarge();
   }
 }

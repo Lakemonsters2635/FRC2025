@@ -95,7 +95,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     theta = getDegrees();
 
     // setArmPowerVolts(controlArmThrottle());
-    m_poseTarget = MathUtil.clamp(m_poseTarget, 10, 150);
+    m_poseTarget = MathUtil.clamp(m_poseTarget, 10, 120);
     ff = GAIN_ALGAE * Math.abs(Math.sin(Math.toRadians(theta)));
     fb = MathUtil.clamp(m_algaeArmController.calculate(theta, m_poseTarget), -6, 6);
     // fb = MathUtil.clamp(m_algaeArmController.calculate(theta, m_poseTarget), -6, 6);
