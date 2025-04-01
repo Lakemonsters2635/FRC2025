@@ -85,14 +85,14 @@ public final class Constants {
     public double CORAL_ARM_ANGLE;
     public double ALGAE_ARM_ANGLE;
 
-    ElevatorState(double elevatorPosition, double coralArmAngle, double algaeArmAngle) {
+    public ElevatorState(double elevatorPosition, double coralArmAngle, double algaeArmAngle) {
       ELEVATOR_POSITION = elevatorPosition;
       CORAL_ARM_ANGLE = coralArmAngle;
       ALGAE_ARM_ANGLE = algaeArmAngle;
     }
   }
 
-  public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(41500, 0, 10);
+  public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(41500, 0, 20); //this is currently barge
   public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(0, 0, 112.856954); // origionally 110
   public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11), 0, 100);
   public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000+9000-((2000/3) * 11), 0, 100);
@@ -128,7 +128,7 @@ public final class Constants {
   public static final double ALGAE_INTAKE_ROTATION_SPEED = 0.3;
   // voltage values for algae intake
   // positive is out, negative is in
-  public static final double ALGAE_INTAKE_VOLTAGE_OUT = 10;
+  public static final double ALGAE_INTAKE_VOLTAGE_OUT = 5;
   public static final double ALGAE_INTAKE_VOLTAGE_IN = -3;
   public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.3; // -0.5
 
