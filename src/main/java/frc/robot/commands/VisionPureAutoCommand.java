@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import java.util.ArrayList;
+import java.util.function.ObjDoubleConsumer;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -69,6 +70,7 @@ public class VisionPureAutoCommand extends Command {
   double m_fb_x = 0.;
   double m_fb_y = 0.;
   double m_fb_rot = 0.;
+  boolean isVisionAuto = false;
 
   public VisionPureAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, int tagID) {
     m_dts = dts;
@@ -78,6 +80,7 @@ public class VisionPureAutoCommand extends Command {
     m_xPrime = 0;
     m_zPrime = -46;
     m_finalYa = 0;
+    isVisionAuto = true;
 
     // this.xPrime = xPrime0;
     // this.zPrime = zPrime0;
@@ -97,9 +100,23 @@ public class VisionPureAutoCommand extends Command {
     m_xPrime = xPrime;
     m_zPrime = zPrime;
     m_finalYa = finalYa;
+    isVisionAuto = true;
 
     addRequirements(m_dts, m_ots);
   }
+  //This constructor manually defines target distances without the use of vision
+  public VisionPureAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, double xTarget, double yTarget, double rotTarget){
+    m_dts = dts;
+    m_ots = ots;
+    m_x_target = xTarget;
+    m_y_target = yTarget;
+    m_rot_target = rotTarget;
+    isVisionAuto = false;   
+    
+    addRequirements(m_dts, m_ots);
+  }
+
+
 
 //   public VisionPureAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, int[] tagIDs, double xPrime, double zPrime, double finalYa) {
 //     m_dts = dts;
@@ -120,12 +137,14 @@ public class VisionPureAutoCommand extends Command {
     m_dts.stashAngle();
     m_dts.resetAngle();    
     m_dts.zeroOdometry();
-
-    Pose2d fieldDeltaPose = visionAutoData(m_xPrime, m_zPrime, m_finalYa, m_tagID);
-    m_x_target = fieldDeltaPose.getX();
-    m_y_target = fieldDeltaPose.getY();
-    m_rot_target = fieldDeltaPose.getRotation().getDegrees();
+    if(isVisionAuto){
+      Pose2d fieldDeltaPose = visionAutoData(m_xPrime, m_zPrime, m_finalYa, m_tagID);
+      m_x_target = fieldDeltaPose.getX();
+      m_y_target = fieldDeltaPose.getY();
+      m_rot_target = fieldDeltaPose.getRotation().getDegrees();
+    }
     m_c_target = Math.sqrt(Math.pow(m_x_target, 2) + Math.pow(m_y_target, 2));
+
 
     SmartDashboard.putNumber("xPidTarget", m_x_target);
     SmartDashboard.putNumber("yPidTarget", m_y_target);
@@ -292,7 +311,7 @@ public class VisionPureAutoCommand extends Command {
     // SmartDashboard.putNumber("pid isFinished Y", Math.abs(m_y_target - y_pose));
     // SmartDashboard.putNumber("pid isFinished Rot", Math.abs(m_rot_target - rot_pose));
 
-    if (Math.abs(m_x_target - x_pose) < 0.01 && Math.abs(m_y_target - y_pose) < 0.01 && Math.abs(m_rot_target - rot_pose) < 1) {
+    if (Math.abs(m_x_target - x_pose) < 0.01 && Math.abs(m_y_target - y_pose) < 0.01 && (Math.abs(m_rot_target - rot_pose) % 360) < 1  && Math.abs(m_dts.getYawGyroValue()) < 10) {
       return true;
     }
 
