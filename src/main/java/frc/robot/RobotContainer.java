@@ -19,9 +19,7 @@ import frc.robot.commands.ClimberDownCommand;
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.ElevatorUpCommand;
-import frc.robot.commands.MoveAlgaeToPose;
 import frc.robot.commands.MoveClimbPos;
-import frc.robot.commands.RunAutoCommand;
 import frc.robot.commands.VisionAutoCommand;
 import frc.robot.commands.VisionPureAutoCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
@@ -31,7 +29,6 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ObjectTrackerSubsystem;
 import frc.robot.subsystems.StreamDeckSubsystem;
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -64,7 +61,7 @@ public class RobotContainer {
   public static final ClimberUpCommand m_climberUpCommand = new ClimberUpCommand(m_climberSubsystem);
   public static final ClimberDownCommand m_climberDownCommand = new ClimberDownCommand(m_climberSubsystem);
   public static final MoveClimbPos m_moveClimbPos = new MoveClimbPos(m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
-  public static final MoveAlgaeToPose m_moveAlgaeToPose = new MoveAlgaeToPose(m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
+  // public static final MoveAlgaeToPose m_moveAlgaeToPose = new MoveAlgaeToPose(m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -155,7 +152,7 @@ public class RobotContainer {
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
     runVisionAuto.onTrue(m_autos.autoReefAndBarge());
-    moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
+    // moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
 
 
     // visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));

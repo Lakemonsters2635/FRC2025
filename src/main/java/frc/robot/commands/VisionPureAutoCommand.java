@@ -312,7 +312,11 @@ public class VisionPureAutoCommand extends Command {
     // SmartDashboard.putNumber("pid isFinished Y", Math.abs(m_y_target - y_pose));
     // SmartDashboard.putNumber("pid isFinished Rot", Math.abs(m_rot_target - rot_pose));
 
-    if (Math.abs(m_x_target - x_pose) < 0.01 && Math.abs(m_y_target - y_pose) < 0.01 && (Math.abs(m_rot_target - rot_pose) % 360) < 3  && Math.abs(m_dts.getYawGyroValue()) < 10) {
+    if (
+      Math.abs(m_x_target - x_pose) < 0.01 && 
+      Math.abs(m_y_target - y_pose) < 0.01 && 
+      (Math.abs(m_rot_target - rot_pose) % 360) < 3  && 
+      Math.abs(m_dts.getYawGyroValue()) < 10) {
       return true;
     }
 
