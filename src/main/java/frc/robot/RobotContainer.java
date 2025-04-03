@@ -138,7 +138,7 @@ public class RobotContainer {
     climberUpButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
     climberDownButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.down()));
     climberDownButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
-    pureVisionAutoCommandButton.onTrue(m_autos.autoReefAndBarge());
+    // pureVisionAutoCommandButton.onTrue(m_autos.autoReefAndBarge());
     // pureVisionAutoCommandButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8));
 
     // Right Buttons, Run
@@ -154,7 +154,7 @@ public class RobotContainer {
     // moveElevatorToPos.onTrue(new MoveElevatorToPoseCommand(m_elevatorSubsystem, 20000));
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    runVisionAuto.onTrue(new RunAutoCommand(m_streamDeckSubsystem));
+    runVisionAuto.onTrue(m_autos.autoReefAndBarge());
     moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
 
 

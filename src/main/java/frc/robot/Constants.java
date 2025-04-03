@@ -92,12 +92,13 @@ public final class Constants {
     }
   }
 
-  public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(41500, 0, 20); //this is currently barge
-  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(0, 0, 112.856954); // origionally 110
-  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11), 0, 100);
-  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000+9000-((2000/3) * 11), 0, 100);
+  public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(0, 0, 20); //this is currently barge
+  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(0, 0, 107); // origionally 110
+  
+  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11) + 1500, 0, 100);
+  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000+9000-((2000/3) * 11) + 3000, 0, 100);
   public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(0, 0, 90);
-  public static final ElevatorState E_STATE_ALGAE_BARGE = new Constants.ElevatorState(0, 0, 0);
+  public static final ElevatorState E_STATE_ALGAE_BARGE = new Constants.ElevatorState(41500, 0, 20);
 
   public static final ElevatorState E_STATE_CLIMB = new Constants.ElevatorState(250, 0, 10);
 
@@ -128,7 +129,7 @@ public final class Constants {
   public static final double ALGAE_INTAKE_ROTATION_SPEED = 0.3;
   // voltage values for algae intake
   // positive is out, negative is in
-  public static final double ALGAE_INTAKE_VOLTAGE_OUT = 5;
+  public static final double ALGAE_INTAKE_VOLTAGE_OUT = 5; // 5 is good for Barge
   public static final double ALGAE_INTAKE_VOLTAGE_IN = -3;
   public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.3; // -0.5
 

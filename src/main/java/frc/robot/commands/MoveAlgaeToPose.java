@@ -42,7 +42,7 @@ public class MoveAlgaeToPose extends Command {
           break;
     
         case Constants.SD_ALGAE_CORRAL:
-          constant = Constants.E_STATE_ALGAE_PICKUP;
+          constant = Constants.E_STATE_ALGAE_BARGE; // This is a temporary way to test barge, this is suppose to be above corral
           break;
       
         case Constants.SD_ALGAE_GROUND:

@@ -178,8 +178,46 @@ public class Autos {
             new WaitCommand(2),
             new VisionPureAutoCommand(m_dts, m_ots, 0, -26 / Constants.INCHES_PER_METER, 0),
             new MoveElevatorAndALgae(m_aas, m_es, new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11), 0, 20)).withTimeout(0.1),
-            new VisionPureAutoCommand(m_dts, m_ots, 40 / Constants.INCHES_PER_METER, -24 / Constants.INCHES_PER_METER, -170),
-            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_PICKUP)
+            new VisionPureAutoCommand(m_dts, m_ots, 40 / Constants.INCHES_PER_METER, (-24-8) / Constants.INCHES_PER_METER, -160),
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_BARGE).withTimeout(2),
+            new WaitCommand(0.2),
+            new InstantCommand(()->m_ais.outAlgaeIntake()).withTimeout(1),
+            new WaitCommand(1),
+            new InstantCommand(()->m_ais.stopAlgaeIntake()).withTimeout(0.1),
+            new WaitCommand(0.5), // remove this before production
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH).withTimeout(2)
+
+            //,
+            // new InstantCommand(()-> m_dts.resetAngle()).withTimeout(0.1),
+            // new InstantCommand(()-> m_dts.zeroOdometry()).withTimeout(0.1),
+            // m_dts.createPath(
+            //     new Pose2d(0,0,new Rotation2d(Math.toRadians(-90))), 
+            //     new Translation2d(0, -0.5), 
+            //     new Pose2d(0,-1, new Rotation2d(Math.toRadians(-90))),
+            //     180
+            // ),
+            // new InstantCommand(()->m_dts.stopMotors()).withTimeout(0.1)
+            // new WaitCommand(.2),
+            // new VisionPureAutoCommand(m_dts, m_ots, 14),
+            // new WaitCommand(.2),
+            // new VisionPureAutoCommand(m_dts, m_ots, 14, -10, -90, -80),
+            // new WaitCommand(.2),
+            // new VisionPureAutoCommand(m_dts, m_ots, 8)
+        );
+    }
+
+    public Command autoGrabAlgaeReef(){
+        return new SequentialCommandGroup(
+            //new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW).withTimeout(1),
+            new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.2),
+            // new ParallelCommandGroup(
+            new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0),
+            //     new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(10)
+            // ),
+            new WaitCommand(0.3),
+            new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(1)
+
+            
             //,
             // new InstantCommand(()-> m_dts.resetAngle()).withTimeout(0.1),
             // new InstantCommand(()-> m_dts.zeroOdometry()).withTimeout(0.1),

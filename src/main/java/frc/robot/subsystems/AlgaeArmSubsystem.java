@@ -90,6 +90,13 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     m_poseTarget = position;
   }
 
+  public boolean isAtPosition() {
+    if (Math.abs(m_poseTarget - getDegrees()) < 2) {
+      return true;
+    }
+    return false;
+  }
+
   @Override
   public void periodic() {
     theta = getDegrees();

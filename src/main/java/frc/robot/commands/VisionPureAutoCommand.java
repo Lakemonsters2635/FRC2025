@@ -215,6 +215,7 @@ public class VisionPureAutoCommand extends Command {
     // double x_clamp = speed_clamp * (Math.abs(m_x_target)/m_c_target); //speed_clamp * cos(theta)
     // double y_clamp = speed_clamp * (Math.abs(m_y_target)/m_c_target); //speed_clamp * sin(theta)
 
+    m_visionSwerveController_rot.enableContinuousInput(-180, 180);
     double pid_x_calculate = m_visionSwerveController_x.calculate(x_pose, m_x_target);
     double pid_y_calculate = m_visionSwerveController_y.calculate(y_pose, m_y_target);
     double pid_rot_calculate = m_visionSwerveController_rot.calculate(Math.toRadians(rot_pose), Math.toRadians(m_rot_target));
@@ -311,7 +312,7 @@ public class VisionPureAutoCommand extends Command {
     // SmartDashboard.putNumber("pid isFinished Y", Math.abs(m_y_target - y_pose));
     // SmartDashboard.putNumber("pid isFinished Rot", Math.abs(m_rot_target - rot_pose));
 
-    if (Math.abs(m_x_target - x_pose) < 0.01 && Math.abs(m_y_target - y_pose) < 0.01 && (Math.abs(m_rot_target - rot_pose) % 360) < 1  && Math.abs(m_dts.getYawGyroValue()) < 10) {
+    if (Math.abs(m_x_target - x_pose) < 0.01 && Math.abs(m_y_target - y_pose) < 0.01 && (Math.abs(m_rot_target - rot_pose) % 360) < 3  && Math.abs(m_dts.getYawGyroValue()) < 10) {
       return true;
     }
 
