@@ -151,7 +151,7 @@ public class RobotContainer {
     // moveElevatorToPos.onTrue(new MoveElevatorToPoseCommand(m_elevatorSubsystem, 20000));
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    runVisionAuto.onTrue(m_autos.autoGrabAlgaeGround());
+    runVisionAuto.onTrue(m_autos.autoReefAndBargeRight());
     // runVisionAuto.onTrue(m_autos.autoReefAndBarge());
     // moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
 
@@ -169,7 +169,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // return m_autos.goStraight();
-    return m_autos.autoReefAndBarge();
+    // return m_autos.autoReefAndBarge();
+    return m_autos.autoReefAndBargeRight();
   }
 }

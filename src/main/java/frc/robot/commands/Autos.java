@@ -178,14 +178,15 @@ public class Autos {
             new MoveElevatorAndALgae(m_aas, m_es, new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11), 0, 20)).withTimeout(0.021),
             new VisionPureAutoCommand(m_dts, m_ots, 40 / Constants.INCHES_PER_METER, (-24-8) / Constants.INCHES_PER_METER, -160),
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_BARGE),
-            new WaitCommand(0.2),
+            new WaitCommand(0.05),
             new InstantCommand(()->m_ais.outAlgaeIntake()).withTimeout(0.021),
-            new WaitCommand(1),
+            new WaitCommand(0.5),
             new InstantCommand(()->m_ais.stopAlgaeIntake()).withTimeout(0.021),
             // Second Algae pickup
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW).withTimeout(0.021),
             new VisionPureAutoCommand(m_dts, m_ots, -52 / Constants.INCHES_PER_METER, -65 / Constants.INCHES_PER_METER, -135),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.02),
+            new WaitCommand(0.3+0.2),
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH).withTimeout(0.021),
             new VisionPureAutoCommand(m_dts, m_ots, 5, 0, (-1 *(20 + 3)) - 8, 0),
             new WaitCommand(0.1),
@@ -194,11 +195,50 @@ public class Autos {
             new VisionPureAutoCommand(m_dts, m_ots, 0, -15 / Constants.INCHES_PER_METER, 0), // move back 15 inches
             new VisionPureAutoCommand(m_dts, m_ots, 0, 0, 120), // rotate towards barge
             new MoveElevatorAndALgae(m_aas, m_es, new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11), 0, 20)).withTimeout(0.021),
-            new VisionPureAutoCommand(m_dts, m_ots, 0, (50+29) / Constants.INCHES_PER_METER, 0), // move towards barge
+            new VisionPureAutoCommand(m_dts, m_ots, 0, (50+29-5-15) / Constants.INCHES_PER_METER, 0), // move towards barge
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_BARGE),
-            new InstantCommand(()->m_ais.outAlgaeIntake()).withTimeout(0.021),
+            new InstantCommand(()->m_ais.outAlgaeIntake(7.5)).withTimeout(0.021),
             new WaitCommand(1),
-            new InstantCommand(()->m_ais.stopAlgaeIntake()).withTimeout(0.021)
+            new InstantCommand(()->m_ais.stopAlgaeIntake()).withTimeout(0.021),
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_DRIVE)
+        );
+    }
+
+    public Command autoReefAndBargeRight(){
+        return new SequentialCommandGroup(
+            // First algae intake
+            new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.02),
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH).withTimeout(1),
+            new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0),
+            new WaitCommand(0.1),
+            new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.021),
+            // First barge score
+            new VisionPureAutoCommand(m_dts, m_ots, 0, -15 / Constants.INCHES_PER_METER, 0), // move back 15 inches
+            new VisionPureAutoCommand(m_dts, m_ots, 0, 0, 120), // rotate towards barge
+            new MoveElevatorAndALgae(m_aas, m_es, new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11), 0, 20)).withTimeout(0.021),
+            new VisionPureAutoCommand(m_dts, m_ots, 0, (50+29-5-15) / Constants.INCHES_PER_METER, 0), // move towards barge
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_BARGE),
+            new InstantCommand(()->m_ais.outAlgaeIntake(7.5)).withTimeout(0.021),
+            new WaitCommand(0.5),
+            new InstantCommand(()->m_ais.stopAlgaeIntake()).withTimeout(0.021),
+            // Second algae intake
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW).withTimeout(0.4),
+            new VisionPureAutoCommand(m_dts, m_ots, -37 / Constants.INCHES_PER_METER, -130/ Constants.INCHES_PER_METER, -75.0),
+            new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.1),
+            new WaitCommand(0.4),
+            new VisionPureAutoCommand(m_dts, m_ots, 5, -5, (-1 *(20 + 3)) - 8, 0),
+            new WaitCommand(0.3),
+            new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.1),
+            // Second barge Score
+            new VisionPureAutoCommand(m_dts, m_ots, 0, -20/ Constants.INCHES_PER_METER, 0),
+            new VisionPureAutoCommand(m_dts, m_ots, 0, 0, 60),
+            new WaitCommand(0.2),
+            new VisionPureAutoCommand(m_dts, m_ots, 0, 110 / Constants.INCHES_PER_METER,0),
+            new WaitCommand(0.2),
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_BARGE).withTimeout(1),
+            new InstantCommand(()->m_ais.outAlgaeIntake(10)),
+            new WaitCommand(0.5),
+            new InstantCommand(()->m_ais.stopAlgaeIntake())
         );
     }
 
@@ -211,7 +251,6 @@ public class Autos {
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.1)
         );
     }
-
     public Command autoGrabAlgaeReefHigh(){
         return new SequentialCommandGroup(
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH),
