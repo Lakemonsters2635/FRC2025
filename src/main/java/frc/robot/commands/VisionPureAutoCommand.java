@@ -35,6 +35,7 @@ public class VisionPureAutoCommand extends Command {
   double fieldX;
   double fieldY;
   int m_tagID = 8; // When initialized at -2 so that if the user wants to input tagIDs, it is going to chose multiple instead of a sigular tagID
+  String YOLO_object = "";
   int[] m_tagIDs;
 
   double m_xPrime;
@@ -104,6 +105,19 @@ public class VisionPureAutoCommand extends Command {
 
     addRequirements(m_dts, m_ots);
   }
+
+  public VisionPureAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, String YOLO_object, double xPrime, double zPrime, double finalYa) {
+    m_dts = dts;
+    m_ots = ots;
+    m_xPrime = xPrime;
+    m_zPrime = zPrime;
+    m_finalYa = finalYa;
+    isVisionAuto = true;
+    this.YOLO_object = YOLO_object;
+
+    addRequirements(m_dts, m_ots);
+  }
+
   //This constructor manually defines target distances without the use of vision
   public VisionPureAutoCommand(DrivetrainSubsystem dts, ObjectTrackerSubsystem ots, double xTarget, double yTarget, double rotTarget){
     m_dts = dts;
@@ -337,11 +351,16 @@ public class VisionPureAutoCommand extends Command {
     while(notDone)
       try{
           Detection detectionObject;
-          if(tagId == -1){
-            detectionObject = m_ots.getNearestAprilTagDetection();
+          if (YOLO_object.equals("")) {
+            if(tagId == -1){
+              detectionObject = m_ots.getNearestAprilTagDetection();
+            }
+            else{
+              detectionObject = m_ots.getSpecificAprilTag(tagId);
+            }
           }
           else{
-            detectionObject = m_ots.getSpecificAprilTag(tagId);
+            detectionObject = m_ots.getNearestYoloDetection();
           }
 
           visionX = detectionObject.x;

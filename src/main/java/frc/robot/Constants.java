@@ -93,7 +93,7 @@ public final class Constants {
   }
 
   public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(0, 0, 20); //this is currently barge
-  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(0, 0, 107); // origionally 110
+  public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(247, 0, 115); // origionally 110
   
   public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11) + 1500, 0, 100);
   public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000+9000-((2000/3) * 11) + 3000, 0, 100);
@@ -130,7 +130,7 @@ public final class Constants {
   // voltage values for algae intake
   // positive is out, negative is in
   public static final double ALGAE_INTAKE_VOLTAGE_OUT = 5; // 5 is good for Barge
-  public static final double ALGAE_INTAKE_VOLTAGE_IN = -3;
+  public static final double ALGAE_INTAKE_VOLTAGE_IN = -8; // -3
   public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.3; // -0.5
 
   public static final int ALGAE_ARM_MOTOR = 2;
@@ -306,7 +306,5 @@ public final class Constants {
   public static final int ALGAE_INTAKE_OUT_BUTTON = 6;
   public static final int TIP_CORRECTION_TRIGGER_BUTTON = 7;
   public static final int TIP_CORRECTION_ENABLE_BUTTON = 8;
-
-
 }
 

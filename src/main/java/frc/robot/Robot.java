@@ -49,6 +49,12 @@ public class Robot extends TimedRobot {
 
     new Timer();
     SmartDashboard.putNumber("Match_time", Timer.getMatchTime());
+
+    try {
+      SmartDashboard.putNumber("YOLO_z", RobotContainer.m_objectTrackerSubsystem.getNearestYoloDetection().z);
+    } catch (Exception e) {
+      SmartDashboard.putNumber("YOLO_z", -9999);
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
