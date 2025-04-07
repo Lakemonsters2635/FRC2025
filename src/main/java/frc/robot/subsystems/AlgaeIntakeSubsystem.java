@@ -65,6 +65,10 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     // m_leftAlgaeIntakeMotor.setVoltage(-Constants.ALGAE_INTAKE_VOLTAGE_IN);
   }
 
+  public void outAlgaeProcessor() {
+    m_rightAlgaeIntakeMotor.setVoltage(Constants.ALGAE_PROCESSOR_VOLTAGE_OUT);
+    m_leftAlgaeIntakeMotor.setVoltage(Constants.ALGAE_PROCESSOR_VOLTAGE_OUT);
+  }
   public void outAlgaeIntake() {
     // m_rightAlgaeIntakeMotor.setVoltage(Math.abs(leftJoystick.getThrottle() * 12));
     // m_leftAlgaeIntakeMotor.setVoltage(Math.abs(leftJoystick.getThrottle() * 12));

@@ -25,7 +25,7 @@ public class StreamDeckSubsystem extends SubsystemBase {
 
   public StreamDeckSubsystem() {
     ntinst = NetworkTableInstance.getDefault();
-    ntinst.setServer("localhost");
+    ntinst.setServer("localhost"); // We are running network tables on the same computer as the robot code to avoid bandwidth issues during comp
     // ntinst.setServer("127.0.0.1");
     table = ntinst.getTable("StreamDeck");
     ntinst.removeListener(0);

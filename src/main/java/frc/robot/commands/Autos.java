@@ -208,7 +208,7 @@ public class Autos {
         return new SequentialCommandGroup(
             // First algae intake
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.02),
-            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH).withTimeout(1),
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH).withTimeout(1), // can decrease the timeout (risky)
             new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0),
             new WaitCommand(0.1),
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.021),
@@ -219,13 +219,13 @@ public class Autos {
             new VisionPureAutoCommand(m_dts, m_ots, 0, (50+29-5-15) / Constants.INCHES_PER_METER, 0), // move towards barge
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_BARGE),
             new InstantCommand(()->m_ais.outAlgaeIntake(7.5)).withTimeout(0.021),
-            new WaitCommand(0.5),
+            new WaitCommand(0.5), // Could be less, but if it breaks the whole auto would be broken
             new InstantCommand(()->m_ais.stopAlgaeIntake()).withTimeout(0.021),
             // Second algae intake
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW).withTimeout(0.4),
             new VisionPureAutoCommand(m_dts, m_ots, -37 / Constants.INCHES_PER_METER, -130/ Constants.INCHES_PER_METER, -75.0),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.1),
-            new WaitCommand(0.4),
+            new WaitCommand(0.4), // Doesn't need this timeout
             new VisionPureAutoCommand(m_dts, m_ots, 5, -5, (-1 *(20 + 3)) - 8, 0),
             new WaitCommand(0.3),
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.1),
@@ -235,9 +235,9 @@ public class Autos {
             new WaitCommand(0.2),
             new VisionPureAutoCommand(m_dts, m_ots, 0, 110 / Constants.INCHES_PER_METER,0),
             new WaitCommand(0.2),
-            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_BARGE).withTimeout(1),
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_BARGE).withTimeout(1), // Doesn't need this timeout
             new InstantCommand(()->m_ais.outAlgaeIntake(10)),
-            new WaitCommand(0.5),
+            new WaitCommand(0.5), // Could be less but doesn't matter for the time
             new InstantCommand(()->m_ais.stopAlgaeIntake())
         );
     }

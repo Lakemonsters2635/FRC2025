@@ -132,6 +132,7 @@ public final class Constants {
   // voltage values for algae intake
   // positive is out, negative is in
   public static final double ALGAE_INTAKE_VOLTAGE_OUT = 5; // 5 is good for Barge
+  public static final double ALGAE_PROCESSOR_VOLTAGE_OUT = 2; // 5 is good for Barge
   public static final double ALGAE_INTAKE_VOLTAGE_IN = -8; // -3
   public static final double ALGAE_INTAKE_VOLTAGE_HOLD = -0.3; // -0.5
 
