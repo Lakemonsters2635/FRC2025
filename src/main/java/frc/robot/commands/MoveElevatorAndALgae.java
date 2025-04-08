@@ -41,7 +41,6 @@ public class MoveElevatorAndALgae extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // TODO: We want to add a if statement that is going to terminate the command when the elevator and the arm reaches the target pos
     if (m_aas.isAtPosition() && m_es.isAtPosition()) {
       return true;
     }

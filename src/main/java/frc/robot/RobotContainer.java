@@ -14,11 +14,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlgaeIntakeInCommand;
 import frc.robot.commands.AlgaeIntakeOutCommand;
+import frc.robot.commands.AlgaeProcessorCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.ElevatorUpCommand;
+import frc.robot.commands.MoveAlgaeToPose;
 import frc.robot.commands.MoveClimbPos;
 import frc.robot.commands.VisionAutoCommand;
 import frc.robot.commands.VisionPureAutoCommand;
@@ -61,7 +63,8 @@ public class RobotContainer {
   public static final ClimberUpCommand m_climberUpCommand = new ClimberUpCommand(m_climberSubsystem);
   public static final ClimberDownCommand m_climberDownCommand = new ClimberDownCommand(m_climberSubsystem);
   public static final MoveClimbPos m_moveClimbPos = new MoveClimbPos(m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
-  // public static final MoveAlgaeToPose m_moveAlgaeToPose = new MoveAlgaeToPose(m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
+  public static final MoveAlgaeToPose m_moveAlgaeToPose = new MoveAlgaeToPose(m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
+  public static final AlgaeProcessorCommand m_algaeProcessorCommand = new AlgaeProcessorCommand(m_algaeIntakeSubsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -97,7 +100,7 @@ public class RobotContainer {
     Trigger moveCorralDownButton = new JoystickButton(leftJoystick, 12);
     Trigger pureVisionAutoCommandButton = new JoystickButton(leftJoystick, 7);
     Trigger stopPureVisionAutoCommandButton = new JoystickButton(leftJoystick, 8);
-    Trigger distancePidPathButton = new JoystickButton(leftJoystick, 1);
+    // Trigger distancePidPathButton = new JoystickButton(leftJoystick, 1);
     //RIGHT BUTTONS
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
@@ -120,7 +123,7 @@ public class RobotContainer {
     tipCorrectionEnableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setEnableAntiTip()));
     // setDriveSpeed.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setDriveSpeed(0.75)));
 
-    distancePidPathButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 0, 1, 0));
+    // distancePidPathButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 0, 1, 0));
     // algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     // algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
     algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
@@ -151,9 +154,11 @@ public class RobotContainer {
     // moveElevatorToPos.onTrue(new MoveElevatorToPoseCommand(m_elevatorSubsystem, 20000));
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    runVisionAuto.onTrue(m_autos.autoReefAndBargeRight());
+    runVisionAuto.onTrue(m_autos.centerReef());
     // runVisionAuto.onTrue(m_autos.autoReefAndBarge());
-    // moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
+    moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
+
+    coralIntakeInButton.whileTrue(m_algaeProcessorCommand);
 
 
     // visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));
@@ -170,6 +175,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m_autos.autoReefAndBarge();
-    return m_autos.autoReefAndBargeRight();
+    return m_autos.autoReefAndBarge();
   }
 }
