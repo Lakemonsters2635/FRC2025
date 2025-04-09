@@ -6,13 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlgaeIntakeOutCommand extends Command {
   /** Creates a new AlgaeIntakeOutCommand. */
   private AlgaeIntakeSubsystem m_algaeIntakeSubsystem;
-  private Joystick rJoystick = new Joystick(1);
+  // private Joystick rJoystick = new Joystick(1);
   public AlgaeIntakeOutCommand(AlgaeIntakeSubsystem algaeIntakeSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_algaeIntakeSubsystem = algaeIntakeSubsystem;
@@ -22,7 +23,7 @@ public class AlgaeIntakeOutCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_algaeIntakeSubsystem.outAlgaeIntake(rJoystick.getThrottle()*11);
+    m_algaeIntakeSubsystem.outAlgaeIntake(Constants.ALGAE_INTAKE_VOLTAGE_OUT);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

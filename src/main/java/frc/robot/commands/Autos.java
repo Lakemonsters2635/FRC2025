@@ -308,7 +308,7 @@ public class Autos {
 
     public Command autoGrabAlgaeReefLow(){
         return new SequentialCommandGroup(
-            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW),
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW_TELE),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.2),
             new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0), // Figure out tag id
             new WaitCommand(0.3),
@@ -317,7 +317,7 @@ public class Autos {
     }
     public Command autoGrabAlgaeReefHigh(){
         return new SequentialCommandGroup(
-            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH),
+            new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH_TELE),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.2),
             new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0), // Figure out tag id
             new WaitCommand(0.3),

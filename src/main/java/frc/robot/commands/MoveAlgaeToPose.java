@@ -34,11 +34,11 @@ public class MoveAlgaeToPose extends Command {
       SmartDashboard.putString("algaeLevel", level);
       switch (level) {
         case Constants.SD_ALGAE_HIGH:
-          constant = Constants.E_STATE_ALGAE_HIGH;
+          constant = Constants.E_STATE_ALGAE_HIGH_TELE;
           break;
         
         case Constants.SD_ALGAE_LOW:
-          constant = Constants.E_STATE_ALGAE_LOW;
+          constant = Constants.E_STATE_ALGAE_LOW_TELE;
           break;
     
         case Constants.SD_ALGAE_CORRAL:
