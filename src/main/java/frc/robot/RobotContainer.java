@@ -106,7 +106,7 @@ public class RobotContainer {
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
     Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
     Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON);
-    Trigger coralIntakeInButton = new JoystickButton(rightJoystick, Constants.CORAL_INTAKE_IN_BUTTON);
+    Trigger processorButton = new JoystickButton(rightJoystick, Constants.PROCESSOR_OUT_BUTTON);
     Trigger moveCoralArmPos = new JoystickButton(rightJoystick, 6);
     Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
     // Trigger moveElevatorToPos = new JoystickButton(rightJoystick, 10);  
@@ -159,7 +159,7 @@ public class RobotContainer {
     // runVisionAuto.onTrue(m_autos.autoReefAndBarge());
     moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
 
-    coralIntakeInButton.whileTrue(m_algaeProcessorCommand);
+    processorButton.whileTrue(m_algaeProcessorCommand); // ALGAE PROCESSOR OUT 
 
 
     // visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));
@@ -175,7 +175,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // return m_autos.autoReefAndBarge();
-    return m_autos.autoReefAndBarge();
+    return m_autos.centerReef();         // auto for one algae in the center and stop
+    // return m_autos.autoReefAndBarge();   // auto for one algae on the front and one algae on the side
+    //return m_autos.autoReefAndBargeRight();  // auto for the two algae on the side of the reef, starts back left corner of bot on line, 6 ft from the wall, facing the reef
   }
 }

@@ -183,7 +183,7 @@ public class Autos {
             new WaitCommand(0.5),
             new InstantCommand(()->m_ais.stopAlgaeIntake()).withTimeout(0.021),
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_DRIVE).withTimeout(0.021),
-            new VisionPureAutoCommand(m_dts, m_ots, 10 / Constants.INCHES_PER_METER, (-25) / Constants.INCHES_PER_METER, 0)
+            new VisionPureAutoCommand(m_dts, m_ots, 10 / Constants.INCHES_PER_METER, (-25) / Constants.INCHES_PER_METER, 0).withTimeout(2)
         );
     }
 
@@ -331,8 +331,9 @@ public class Autos {
             new VisionPureAutoCommand(m_dts, m_ots, "algae", 0, (-1 *(20+13)), 0), // Figure out tag id
             new WaitCommand(0.3),
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.1),
-            new InstantCommand(()->m_dts.stopMotors()).withTimeout(0.1),
-            new MoveElevatorAndALgae(m_aas, m_es, new Constants.ElevatorState(Constants.E_STATE_ALGAE_PICKUP_GROUND.ELEVATOR_POSITION, 0.0, 20.0)).withTimeout(0.1)
+            new InstantCommand(()->m_dts.stopMotors()).withTimeout(0.1)
+            // commented out so the arms do not raise up if the algae was missed
+            // , new MoveElevatorAndALgae(m_aas, m_es, new Constants.ElevatorState(Constants.E_STATE_ALGAE_PICKUP_GROUND.ELEVATOR_POSITION, 0.0, 20.0)).withTimeout(0.1)
         );
     }
 }
