@@ -302,11 +302,11 @@ public final class Constants {
   public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;
   public static final int ELEVATOR_FIRST_STAGE_DOWN_BUTTON = 3;
   public static final int ELEVATOR_ZERO_POWER_BUTTON = 2;
+  public static final int PROCESSOR_OUT_BUTTON = 1;
 
 
   // left buttons
   //TODO: change these to better buttons
-  public static final int CORAL_INTAKE_IN_BUTTON = 1;
   public static final int ALGAE_INTAKE_IN_BUTTON = 4; //TODO: 5
   public static final int ALGAE_INTAKE_OUT_BUTTON = 6;
   public static final int TIP_CORRECTION_TRIGGER_BUTTON = 7;
