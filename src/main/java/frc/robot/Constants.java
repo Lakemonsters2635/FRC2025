@@ -260,31 +260,19 @@ public final class Constants {
   public static int[] PROCESSOR_TAG_IDS = {3, 16}; //RED: 3 BLUE: 16
 
   // STREAMDECK CONSTANTS
-  public static final String SD_SOURCE = "0";
-  public static final String SD_REEF_LEVEL_1 = "1";
-  public static final String SD_REEF_LEVEL_2 = "2";
-  public static final String SD_REEF_LEVEL_3 = "3";
-  public static final String SD_REEF_LEVEL_4 = "4";
+  // auto entries
+  public static final String SD_AUTO_CENTER = "C";
+  public static final String SD_AUTO_CENTER_SIDE = "CS";
+  public static final String SD_AUTO_SIDE_SIDE = "SS";
 
-  public static final String SD_REEF_POS_1 = "1";
-  public static final String SD_REEF_POS_2 = "2";
-  public static final String SD_REEF_POS_3 = "3";
-  public static final String SD_REEF_POS_4 = "4";
-  public static final String SD_REEF_POS_5 = "5";
-  public static final String SD_REEF_POS_6 = "6";
-
-  public static final String SD_REEF_LEFT = "L";
-  public static final String SD_REEF_RIGHT = "R";
-
-
-  public static final String SD_ALGAE_LOW = "AL";
+  // elevStates
+  public static final String SD_ALGAE_BARGE = "AB";
   public static final String SD_ALGAE_HIGH = "AH";
-  public static final String SD_ALGAE_CORRAL = "AC";
+  public static final String SD_ALGAE_LOW = "AL";
   public static final String SD_ALGAE_GROUND = "AG";
   public static final String SD_ALGAE_PROCESS = "AP";
-  public static final String SD_ALGAE_BARGE = "AB";
-
-  // AUTO CONSTANTS
+  public static final String SD_ALGAE_CARRY = "AC";
+  public static final String SD_CLIMB = "CL";
   
   // AUTOMOVESWERVE CONSTANTS
   public static final double CHANGE_IN_X_PER_SECOND= 0.714;

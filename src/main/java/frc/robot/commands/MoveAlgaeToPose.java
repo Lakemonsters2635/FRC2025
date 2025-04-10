@@ -30,9 +30,13 @@ public class MoveAlgaeToPose extends Command {
   @Override
   public void initialize() {
     try{
-      String level = m_sds.getAlgaeInfo();
-      SmartDashboard.putString("algaeLevel", level);
-      switch (level) {
+      String elevState = m_sds.getElevStateEntry();
+      SmartDashboard.putString("elevState", elevState);
+      switch (elevState) {
+        case Constants.SD_ALGAE_BARGE:
+          constant = Constants.E_STATE_ALGAE_BARGE; // This is a temporary way to test barge, this is suppose to be above corral
+          break;
+
         case Constants.SD_ALGAE_HIGH:
           constant = Constants.E_STATE_ALGAE_HIGH_TELE;
           break;
@@ -41,10 +45,6 @@ public class MoveAlgaeToPose extends Command {
           constant = Constants.E_STATE_ALGAE_LOW_TELE;
           break;
     
-        case Constants.SD_ALGAE_CORRAL:
-          constant = Constants.E_STATE_ALGAE_BARGE; // This is a temporary way to test barge, this is suppose to be above corral
-          break;
-      
         case Constants.SD_ALGAE_GROUND:
           constant = Constants.E_STATE_ALGAE_PICKUP_GROUND;
           break;
@@ -53,10 +53,14 @@ public class MoveAlgaeToPose extends Command {
           constant = Constants.E_STATE_ALGAE_PROCESSOR;
           break;
           
-        case Constants.SD_ALGAE_BARGE:
-          constant = Constants.E_STATE_ALGAE_BARGE;
+        case Constants.SD_ALGAE_CARRY:
+          constant = Constants.E_STATE_ALGAE_PROCESSOR; // TODO: change this constant
           break;
-      
+          
+        case Constants.SD_CLIMB:
+          constant = Constants.E_STATE_CLIMB;
+          break;
+
         default:
           System.out.println("DEFAULT VALUE !!!!!!!!!!!!!!!");
           break;

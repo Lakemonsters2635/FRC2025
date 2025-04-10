@@ -20,23 +20,20 @@ public class RunAutoCommand extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     m_autos = RobotContainer.m_autos;
     Command autoCommand = m_autos.sourceLineup();
-    String val = m_sds.getCorralInfo()[0];
-    switch (val) {
-      case "L":
-        autoCommand = m_autos.reefCorralLeft();
+    String elevState = m_sds.getElevStateEntry();
+    switch (elevState) {
+      case "AH":
+        autoCommand = m_autos.autoGrabAlgaeReefHigh();
         break;
-      case "R":
-        autoCommand = m_autos.reefCorralRight();
+      case "AL":
+        autoCommand = m_autos.autoGrabAlgaeReefLow();
         break;
-      case "1":
-       autoCommand = m_autos.sourceLineup();
+      case "AG":
+       autoCommand = m_autos.autoGrabAlgaeGround();
        break;
-      case "2":
-        autoCommand = m_autos.reefAlgae();
       default:
         break;
     }
-    //autoCommand = m_autos.closestAprilTag();
     addCommands(autoCommand);
   }
 }

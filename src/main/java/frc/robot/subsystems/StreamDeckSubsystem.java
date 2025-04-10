@@ -4,11 +4,9 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StringArrayEntry;
 import edu.wpi.first.networktables.StringEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,8 +18,10 @@ public class StreamDeckSubsystem extends SubsystemBase {
   private NetworkTable table;
   int listenerHandle;
 
-  private StringArrayEntry corralInfoEntry;
-  private StringEntry algaeEntry;
+
+  private StringEntry autoEntry;
+  private StringEntry elevStateEntry;
+
 
   public StreamDeckSubsystem() {
     ntinst = NetworkTableInstance.getDefault();
@@ -39,47 +39,32 @@ public class StreamDeckSubsystem extends SubsystemBase {
   }
 
   private void getEntries(){
-    corralInfoEntry = table.getStringArrayTopic("coralInfo").getEntry(new String[]{"", "", ""});
-    algaeEntry = table.getStringTopic("algae").getEntry("");
+    autoEntry = table.getStringTopic("auto").getEntry("");
+    elevStateEntry = table.getStringTopic("elevState").getEntry("");
   }
 
-  public String[] getCorralInfo(){
-    String[] getValue = corralInfoEntry.get();
+  public String getElevStateEntry(){
+    String elevStateVal = elevStateEntry.get();
     try{
-      SmartDashboard.putString("StreamdeckCoralInfo[0]", getValue[0]);
-      SmartDashboard.putString("StreamdeckCoralInfo[1]", getValue[1]);
-      SmartDashboard.putString("StreamdeckCoralInfo[2]", getValue[2]);
+      SmartDashboard.putString("Streamdeck_elevState", elevStateVal);
     }
     catch(Exception e){
       
     }
-    return getValue;
+    return elevStateVal;
   }
 
-  public String getAlgaeInfo(){
-    String getValue = algaeEntry.get();
+  public String getAutoEntry(){
+    String autoVal = autoEntry.get();
+
     try{
-      SmartDashboard.putString("Algae", getValue);
+      SmartDashboard.putString("StreamDeck_autoEntry", autoVal);
     }
     catch(Exception e){
       
     }
-    return getValue;
+    return autoVal;
   }
-
-  
-
-  // public boolean isPressed(int index){
-  //   boolean val = button0Entry.getAsBoolean();
-  //   // table.getBooleanTopic(index+"").getEntry(false).close();
-  //   // clear();
-  //   return val;
-  // }
-
-  // public String getSelectedProgram() {
-  //   String selectedProgram = selectedProgramEntry.get();
-  //   return selectedProgram;
-  // }
 
   public void clear(){
     for(String index: table.getKeys()){
@@ -91,15 +76,6 @@ public class StreamDeckSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // if(isPressed(0)){
-    //   System.out.println("INDEX 0 IS PRESSED");
-    // }
-    // else{
-    //   System.out.println("INDEX 0 IS NOT PRESSED");
-    // }
-    // This method will be called once per scheduler run
-
-    SmartDashboard.putStringArray("StreamDeck", getCorralInfo());
 
   }
 }
