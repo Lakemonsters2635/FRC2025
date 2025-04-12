@@ -22,6 +22,7 @@ import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.MoveAlgaeToPose;
 import frc.robot.commands.MoveClimbPos;
+import frc.robot.commands.RunAutoCommand;
 import frc.robot.commands.VisionAutoCommand;
 import frc.robot.commands.VisionPureAutoCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
@@ -65,6 +66,7 @@ public class RobotContainer {
   public static final MoveClimbPos m_moveClimbPos = new MoveClimbPos(m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
   public static final MoveAlgaeToPose m_moveAlgaeToPose = new MoveAlgaeToPose(m_streamDeckSubsystem, m_algaeArmSubsystem, m_elevatorSubsystem);
   public static final AlgaeProcessorCommand m_algaeProcessorCommand = new AlgaeProcessorCommand(m_algaeIntakeSubsystem);
+  public static final RunAutoCommand m_runAutoCommand = new RunAutoCommand(m_streamDeckSubsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -82,41 +84,37 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //LEFT BUTTONS
-    Trigger coralIntakeOutButton = new JoystickButton(leftJoystick, Constants.CORAL_INTAKE_OUT_BUTTON);
-    Trigger algaeIntakeInButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
+    // RIGHT BUTTONS
+    Trigger algaeIntakeInButton = new JoystickButton(rightJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
+    Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
+    Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
+    Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
+    Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
+    
+
+    // LEFT BUTTONS
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
+    Trigger runVisionAuto = new JoystickButton(rightJoystick, 2);
     Trigger tipCorrectionTriggerButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_TRIGGER_BUTTON);
     Trigger tipCorrectionEnableButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_ENABLE_BUTTON);
-    Trigger setDriveSpeed = new JoystickButton(leftJoystick, 10);
-
-
+    Trigger climberUpButton = new JoystickButton(leftJoystick, Constants.CLIMB_UP_BUTTON);
+    Trigger climberDownButton = new JoystickButton(leftJoystick, Constants.CLIMB_DOWN_BUTTON);
+    Trigger algaeUpButton = new JoystickButton(leftJoystick,Constants.ALGAE_RAISE_ARM_BUTTON);
+    Trigger algaeDownButton = new JoystickButton(leftJoystick, Constants.ALGAE_LOWER_ARM_BUTTON);
 
     //Trigger climberTestButton = new JoystickButton(leftJoystick, 5);
-    Trigger climberUpButton = new JoystickButton(leftJoystick, 5);
-    Trigger climberDownButton = new JoystickButton(leftJoystick, 3);
+    
     Trigger climbPos = new JoystickButton(leftJoystick, 2);
-    Trigger moveCorralUpButton = new JoystickButton(leftJoystick, 10);
-    Trigger moveCorralDownButton = new JoystickButton(leftJoystick, 12);
-    Trigger pureVisionAutoCommandButton = new JoystickButton(leftJoystick, 7);
+    // Trigger pureVisionAutoCommandButton = new JoystickButton(leftJoystick, 7);
     Trigger stopPureVisionAutoCommandButton = new JoystickButton(leftJoystick, 8);
     // Trigger distancePidPathButton = new JoystickButton(leftJoystick, 1);
     //RIGHT BUTTONS
-    Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
-    Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
-    Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
-    Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON);
-    Trigger processorButton = new JoystickButton(rightJoystick, Constants.PROCESSOR_OUT_BUTTON);
-    Trigger moveCoralArmPos = new JoystickButton(rightJoystick, 6);
-    Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
+    
+    // Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON); // If wanted to use choose a different, empty, button
+    // Trigger processorButton = new JoystickButton(rightJoystick, Constants.PROCESSOR_OUT_BUTTON);
     // Trigger moveElevatorToPos = new JoystickButton(rightJoystick, 10);  
-    Trigger algaeUpButton = new JoystickButton(rightJoystick,10);
-    Trigger algaeDownButton = new JoystickButton(rightJoystick, 12);
-    Trigger runVisionAuto = new JoystickButton(rightJoystick, 2);
 
     //Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
-    Trigger coralUpButton = new JoystickButton(leftJoystick, 11);
-    Trigger coralDownButton = new JoystickButton(leftJoystick, 9);
 
     tipCorrectionTriggerButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(true)));
     tipCorrectionTriggerButton.onFalse(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(false)));
@@ -138,28 +136,24 @@ public class RobotContainer {
     climberUpButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
     climberDownButton.whileTrue(new InstantCommand(()-> m_climberSubsystem.down()));
     climberDownButton.whileFalse(new InstantCommand(()->m_climberSubsystem.stop()));
-    // pureVisionAutoCommandButton.onTrue(m_autos.autoReefAndBarge());
-    // pureVisionAutoCommandButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8));
 
     // Right Buttons, Run
     resetButton.onTrue(new SequentialCommandGroup(
       new InstantCommand(()-> m_drivetrainSubsystem.resetAngle()),
       new InstantCommand(()-> m_drivetrainSubsystem.zeroOdometry())
       ));
-    zeroElevatorPowerButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.zeroElevatorPower()));
-    // elevatorUpButton.whileTrue(m_elevatorFirstStageUpCommand);
-    // elevatorDownButton.whileTrue(m_elevatorFirstStageDownCommand);
+    // zeroElevatorPowerButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.zeroElevatorPower()));
+
     elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000/3)));
     elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000/3)));
-    // moveElevatorToPos.onTrue(new MoveElevatorToPoseCommand(m_elevatorSubsystem, 20000));
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
     algaeDownButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
-    runVisionAuto.onTrue(m_autos.autoGrabAlgaeGround());
+    runVisionAuto.onTrue(m_runAutoCommand);
     // runVisionAuto.onTrue(m_autos.centerReef());
     // runVisionAuto.onTrue(m_autos.autoReefAndBarge());
     moveAlgaeToPose.onTrue(m_moveAlgaeToPose);
 
-    processorButton.whileTrue(m_algaeProcessorCommand); // ALGAE PROCESSOR OUT 
+    // processorButton.whileTrue(m_algaeProcessorCommand); // ALGAE PROCESSOR OUT 
 
 
     // visionAutoData.onTrue(new InstantCommand(()->new VisionAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8).visionAutoData(0.00001, -20, 0, 8)));

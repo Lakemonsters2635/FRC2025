@@ -97,6 +97,7 @@ public final class Constants {
   public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(0, 0, 20);
   public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(247, 0, 115); // origionally 110
   
+  public static final ElevatorState E_STATE_ALGAE_CARRY = new Constants.ElevatorState(2000, 0, 30);
   public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11) + 1500, 0, 100);
   public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000+9000-((2000/3) * 11) + 3000, 0, 100);
   public static final ElevatorState E_STATE_ALGAE_LOW_TELE = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11) + 1500, 0, 100+7);
@@ -283,21 +284,35 @@ public final class Constants {
 
   //BUTTON BINDINGS
 
+  // OLD
   // right buttons
-  public static final int CORAL_INTAKE_OUT_BUTTON = 1;
-  public static final int SWERVE_RESET_BUTTON = 9;
-  public static final int ZERO_ODOMETRY_BUTTON = 11;
-  public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;
-  public static final int ELEVATOR_FIRST_STAGE_DOWN_BUTTON = 3;
+  
   public static final int ELEVATOR_ZERO_POWER_BUTTON = 2;
   public static final int PROCESSOR_OUT_BUTTON = 1;
 
 
   // left buttons
   //TODO: change these to better buttons
-  public static final int ALGAE_INTAKE_IN_BUTTON = 4; //TODO: 5
-  public static final int ALGAE_INTAKE_OUT_BUTTON = 6;
+  
+
+  // NEW
+  // clean right buttons
+  public static final int ALGAE_INTAKE_IN_BUTTON = 1; 
+  public static final int ELEVATOR_FIRST_STAGE_DOWN_BUTTON = 3;
+  public static final int MOVE_ELEV_POS_BUTTON = 4;
+  public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;
+  public static final int SWERVE_RESET_BUTTON = 9;
+  public static final int ZERO_ODOMETRY_BUTTON = 11;
+
+
+  // clean left buttons
+  public static final int ALGAE_INTAKE_OUT_BUTTON = 1;
+  public static final int CLIMB_DOWN_BUTTON = 3;
+  public static final int ALGAE_LOWER_ARM_BUTTON = 4;
+  public static final int CLIMB_UP_BUTTON = 5;
+  public static final int ALGAE_RAISE_ARM_BUTTON = 6;
   public static final int TIP_CORRECTION_TRIGGER_BUTTON = 7;
   public static final int TIP_CORRECTION_ENABLE_BUTTON = 8;
+
 }
 

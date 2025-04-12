@@ -34,7 +34,7 @@ public class MoveAlgaeToPose extends Command {
       SmartDashboard.putString("elevState", elevState);
       switch (elevState) {
         case Constants.SD_ALGAE_BARGE:
-          constant = Constants.E_STATE_ALGAE_BARGE; // This is a temporary way to test barge, this is suppose to be above corral
+          constant = Constants.E_STATE_ALGAE_BARGE;
           break;
 
         case Constants.SD_ALGAE_HIGH:
@@ -54,7 +54,7 @@ public class MoveAlgaeToPose extends Command {
           break;
           
         case Constants.SD_ALGAE_CARRY:
-          constant = Constants.E_STATE_ALGAE_PROCESSOR; // TODO: change this constant
+          constant = Constants.E_STATE_ALGAE_CARRY; // TODO: change this constant
           break;
           
         case Constants.SD_CLIMB:
