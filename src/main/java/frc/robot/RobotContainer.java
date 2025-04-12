@@ -168,9 +168,16 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return m_autos.centerReef();         // auto for one algae in the center and stop
-    // return m_autos.autoReefAndBarge();   // auto for one algae on the front and one algae on the side
-    //return m_autos.autoReefAndBargeRight();  // auto for the two algae on the side of the reef, starts back left corner of bot on line, 6 ft from the wall, facing the reef
+    String autoEntry = m_streamDeckSubsystem.getAutoEntry();
+    switch (autoEntry) {
+      case "C": //auto for picking up the algae in the middle and score barge
+        return m_autos.centerReef();
+      case "CS": // auto for one algae on the front and one algae on the side
+        return m_autos.autoReefAndBarge(); 
+      case "SS": // auto for the two algae on the side of the reef, starts back left corner of bot on line, 6 ft from the wall, facing the reef
+        return m_autos.autoReefAndBargeRight();
+      default:
+        return m_autos.autoReefAndBarge();
+    } 
   }
 }
