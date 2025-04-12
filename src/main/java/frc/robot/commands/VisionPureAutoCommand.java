@@ -9,8 +9,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotContainer;
 // import frc.robot.subsystems.ObjectTrackerSubsystem.Detection;
 import frc.robot.subsystems.Detection;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -54,6 +58,8 @@ public class VisionPureAutoCommand extends Command {
   // if kp == 2, then a 1 meter error in position will command a 2 m/s speed to close the error
   PIDController m_visionSwerveController_x = new PIDController(10, 0, 0); //5 2 0
   PIDController m_visionSwerveController_y = new PIDController(10, 0, 0);
+
+  Trigger cancelTeleAuto = new JoystickButton(new Joystick(1), 6);
 
   // 
   PIDController m_visionSwerveController_rot = new PIDController(4,0, 0);
@@ -139,6 +145,7 @@ public class VisionPureAutoCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
     // TODO: need to set the field x, y, rotation target.
     // TODO the x,y,rot will be based on the initial state + what was defined in the constructor based on desired relative positoin from the april tag.
     m_dts.stashAngle();
@@ -318,6 +325,10 @@ public class VisionPureAutoCommand extends Command {
     // SmartDashboard.putNumber("pid isFinished X", Math.abs(m_x_target - x_pose));
     // SmartDashboard.putNumber("pid isFinished Y", Math.abs(m_y_target - y_pose));
     // SmartDashboard.putNumber("pid isFinished Rot", Math.abs(m_rot_target - rot_pose));
+
+    if (cancelTeleAuto.getAsBoolean()) {
+      return true;
+    }
 
     if (
       Math.abs(m_x_target - x_pose) < 0.01 && 

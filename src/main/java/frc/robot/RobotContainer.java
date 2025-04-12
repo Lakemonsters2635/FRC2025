@@ -89,6 +89,7 @@ public class RobotContainer {
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
     Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
+    // cancelTeleAuto button on VisionPureAutoCommand: rightJoystick, buttonNumber: 6
     Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
     
 
