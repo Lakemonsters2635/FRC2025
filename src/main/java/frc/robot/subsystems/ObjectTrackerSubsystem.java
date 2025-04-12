@@ -84,6 +84,8 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
 	// Put methods for controlling this subsystem
     // here. Call these from Commands.
 	public ObjectTrackerSubsystem(String source){
+        SmartDashboard.putBoolean("AlgaeVisible", false); // Default value for reporting to Elastic
+
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         this.source = source; 
         monsterVision = inst.getTable("MonsterVision");
@@ -651,6 +653,14 @@ public class ObjectTrackerSubsystem extends SubsystemBase {
                 // System.out.println("yolo object");
             }
         }
+        try {
+            if (yoloObjects.size()>0) {
+                SmartDashboard.putBoolean("AlgaeVisible", true);
+            }
+            else{
+                SmartDashboard.putBoolean("AlgaeVisible", false);
+            }
+        } catch (Exception e) {}
     }
 
     // TODO: not working yet
