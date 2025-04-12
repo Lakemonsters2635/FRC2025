@@ -376,6 +376,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     tipCorrection = PENDING_STATE;
   }
 
+  public void setAntiTip(boolean bool){
+    tipCorrection = bool;
+  }
+
   public ChassisSpeeds getAntiTipCorrections(){
     if(tipCorrection && isTipping()){
       double pitch = m_gyro.getPitch()-pitchOffset;

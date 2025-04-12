@@ -298,9 +298,9 @@ public final class Constants {
   // NEW
   // clean right buttons
   public static final int ALGAE_INTAKE_IN_BUTTON = 1; 
-  public static final int ELEVATOR_FIRST_STAGE_DOWN_BUTTON = 3;
+  public static final int ELEVATOR_FIRST_STAGE_DOWN_BUTTON = 3; // Elevator down
   public static final int MOVE_ELEV_POS_BUTTON = 4;
-  public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;
+  public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;   // Elevator up
   public static final int SWERVE_RESET_BUTTON = 9;
   public static final int ZERO_ODOMETRY_BUTTON = 11;
 
@@ -311,7 +311,7 @@ public final class Constants {
   public static final int ALGAE_LOWER_ARM_BUTTON = 4;
   public static final int CLIMB_UP_BUTTON = 5;
   public static final int ALGAE_RAISE_ARM_BUTTON = 6;
-  public static final int TIP_CORRECTION_TRIGGER_BUTTON = 7;
+  public static final int TIP_CORRECTION_DISABLE_BUTTON = 7;
   public static final int TIP_CORRECTION_ENABLE_BUTTON = 8;
 
 }

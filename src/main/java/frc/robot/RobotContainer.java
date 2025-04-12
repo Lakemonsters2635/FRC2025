@@ -95,7 +95,7 @@ public class RobotContainer {
     // LEFT BUTTONS
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
     Trigger runVisionAuto = new JoystickButton(rightJoystick, 2);
-    Trigger tipCorrectionTriggerButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_TRIGGER_BUTTON);
+    Trigger tipCorrectionDisableButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_DISABLE_BUTTON);
     Trigger tipCorrectionEnableButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_ENABLE_BUTTON);
     Trigger climberUpButton = new JoystickButton(leftJoystick, Constants.CLIMB_UP_BUTTON);
     Trigger climberDownButton = new JoystickButton(leftJoystick, Constants.CLIMB_DOWN_BUTTON);
@@ -116,10 +116,12 @@ public class RobotContainer {
 
     //Trigger visionAutoData = new JoystickButton(leftJoystick, 11);
 
-    tipCorrectionTriggerButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(true)));
-    tipCorrectionTriggerButton.onFalse(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(false)));
-    tipCorrectionEnableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setEnableAntiTip()));
-    // setDriveSpeed.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setDriveSpeed(0.75)));
+    // tipCorrectionDisableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(true)));
+    // tipCorrectionDisableButton.onFalse(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(false)));
+    // tipCorrectionEnableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setEnableAntiTip()));
+
+    tipCorrectionDisableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setAntiTip(false)));
+    tipCorrectionEnableButton.onTrue(new InstantCommand(()-> m_drivetrainSubsystem.setAntiTip(true)));
 
     // distancePidPathButton.onTrue(new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 0, 1, 0));
     // algaeIntakeInButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
