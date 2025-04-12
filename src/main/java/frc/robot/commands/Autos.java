@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,6 +36,23 @@ public class Autos {
         m_es = es;
         m_aas = aas;
         m_ais = ais;
+    }
+
+    public int redBlueApriltags(int id){
+        // https://firstfrc.blob.core.windows.net/frc2025/FieldAssets/Apriltag_Images_and_User_Guide.pdf
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
+          return id;
+        }
+        else{
+            switch (id) {
+                case 21: return 10;
+                case 20: return 11;
+                case 19: return 6;
+                case 14: return 5; // Barge
+                case 4 : return 15; // Barge - other side
+                default: return -1;
+            }
+        }
     }
 
     public Command goStraight(){
@@ -169,7 +187,7 @@ public class Autos {
             // First algae pickup
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW).withTimeout(0.021),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.021),
-            new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0),
+            new VisionPureAutoCommand(m_dts, m_ots, redBlueApriltags(21), 0, (-1 *(20 + 3)) - 8, 0),
             new WaitCommand(0.1), // might not need it
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.021),
             // First barge score
@@ -232,7 +250,7 @@ public class Autos {
             // First algae pickup
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW).withTimeout(0.021),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.021),
-            new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0),
+            new VisionPureAutoCommand(m_dts, m_ots, redBlueApriltags(21), 0, (-1 *(20 + 3)) - 8, 0),
             new WaitCommand(0.1), // might not need it
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.021),
             // First barge score
@@ -251,7 +269,7 @@ public class Autos {
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.02),
             new WaitCommand(0.3+0.2),
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH).withTimeout(0.021),
-            new VisionPureAutoCommand(m_dts, m_ots, 5, 0, (-1 *(20 + 3)) - 8, 0),
+            new VisionPureAutoCommand(m_dts, m_ots, redBlueApriltags(20), 0, (-1 *(20 + 3)) - 8, 0),
             new WaitCommand(0.1),
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.021),
             // Second barge score
@@ -272,7 +290,7 @@ public class Autos {
             // First algae intake
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.02),
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH).withTimeout(0.8), // can decrease the timeout (risky)
-            new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0),
+            new VisionPureAutoCommand(m_dts, m_ots, redBlueApriltags(20), 0, (-1 *(20 + 3)) - 8, 0),
             new WaitCommand(0.1),
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.021),
             // First barge score
@@ -289,7 +307,7 @@ public class Autos {
             new VisionPureAutoCommand(m_dts, m_ots, -5 / Constants.INCHES_PER_METER, -130/ Constants.INCHES_PER_METER, -75.0),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.02),
             new WaitCommand(0.5), // Doesn't need this timeout
-            new VisionPureAutoCommand(m_dts, m_ots, 5, -5, (-1 *(20 + 3)) - 8 + 2, 0), // little bit further than the first algae
+            new VisionPureAutoCommand(m_dts, m_ots, redBlueApriltags(19), -5, (-1 *(20 + 3)) - 8 + 2, 0), // little bit further than the first algae
             new WaitCommand(0.2),
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.1),
             // Second barge Score
@@ -310,7 +328,7 @@ public class Autos {
         return new SequentialCommandGroup(
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_LOW_TELE),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.2),
-            new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0), // Figure out tag id
+            new VisionPureAutoCommand(m_dts, m_ots, -1, 0, (-1 *(20 + 3)) - 8, 0),
             new WaitCommand(0.3),
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.1)
         );
@@ -319,7 +337,7 @@ public class Autos {
         return new SequentialCommandGroup(
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_HIGH_TELE),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.2),
-            new VisionPureAutoCommand(m_dts, m_ots, 8, 0, (-1 *(20 + 3)) - 8, 0), // Figure out tag id
+            new VisionPureAutoCommand(m_dts, m_ots, -1, 0, (-1 *(20 + 3)) - 8, 0),
             new WaitCommand(0.3),
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.1)
         );
@@ -328,7 +346,7 @@ public class Autos {
         return new SequentialCommandGroup(
             new MoveElevatorAndALgae(m_aas, m_es, Constants.E_STATE_ALGAE_PICKUP_GROUND).withTimeout(0.1),
             new InstantCommand(()->m_ais.inAlgaeIntake()).withTimeout(0.2),
-            new VisionPureAutoCommand(m_dts, m_ots, "algae", 0, (-1 *(20+13)), 0), // Figure out tag id
+            new VisionPureAutoCommand(m_dts, m_ots, "algae", 0, (-1 *(20+13)), 0), // the YOLO_OBJECT could be anything other than ""
             new WaitCommand(0.3),
             new InstantCommand(()->m_ais.holdAlgaeIntake()).withTimeout(0.1),
             new InstantCommand(()->m_dts.stopMotors()).withTimeout(0.1)
