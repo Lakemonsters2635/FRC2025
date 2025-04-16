@@ -92,11 +92,16 @@ public final class Constants {
     }
   }
 
+  //EDIT THESE TO TUNE POSITIONS DURING COMPETITION
+  //EDIT THESE TO TUNE POSITIONS DURING COMPETITION
+  //EDIT THESE TO TUNE POSITIONS DURING COMPETITION
+  //Algae Arm increase angle to make it go down
   public static final ElevatorState E_STATE_DRIVE = new Constants.ElevatorState(0, 0, 20);
 
   public static final ElevatorState E_STATE_ALGAE_PICKUP = new Constants.ElevatorState(0, 0, 20);
   public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(247, 0, 115); // origionally 110
   
+  //TODO: CARRY POSITION HAS NOT BEEN TESTED
   public static final ElevatorState E_STATE_ALGAE_CARRY = new Constants.ElevatorState(2000, 0, 30);
   public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11) + 1500, 0, 100);
   public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000+9000-((2000/3) * 11) + 3000, 0, 100);

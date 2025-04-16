@@ -106,10 +106,7 @@ public class RobotContainer {
     //Trigger climberTestButton = new JoystickButton(leftJoystick, 5);
     
     Trigger climbPos = new JoystickButton(leftJoystick, 2);
-    // Trigger pureVisionAutoCommandButton = new JoystickButton(leftJoystick, 7);
-    Trigger stopPureVisionAutoCommandButton = new JoystickButton(leftJoystick, 8);
-    // Trigger distancePidPathButton = new JoystickButton(leftJoystick, 1);
-    //RIGHT BUTTONS
+    
     
     // Trigger zeroElevatorPowerButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_ZERO_POWER_BUTTON); // If wanted to use choose a different, empty, button
     // Trigger processorButton = new JoystickButton(rightJoystick, Constants.PROCESSOR_OUT_BUTTON);
