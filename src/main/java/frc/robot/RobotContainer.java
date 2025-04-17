@@ -173,7 +173,8 @@ public class RobotContainer {
       case "C": //auto for picking up the algae in the middle and score barge
         return m_autos.centerReef();
       case "CS": // auto for one algae on the front and one algae on the side
-        return m_autos.autoReefAndBarge(); 
+        return m_autos.autoReefAndBarge(); //Default = hopefully Blue
+      //  return m_autos.autoReefAndBargeRed(); //Comfirmed default doesn't work on Red
       case "SS": // auto for the two algae on the side of the reef, starts back left corner of bot on line, 6 ft from the wall, facing the reef
         return m_autos.autoReefAndBargeRight();
       default:
