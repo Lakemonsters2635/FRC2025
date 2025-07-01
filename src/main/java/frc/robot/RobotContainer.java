@@ -4,9 +4,15 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import java.util.Set;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,7 +30,6 @@ import frc.robot.commands.MoveAlgaeToPose;
 import frc.robot.commands.MoveClimbPos;
 import frc.robot.commands.RunAutoCommand;
 import frc.robot.commands.VisionAutoCommand;
-import frc.robot.commands.VisionPureAutoCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -42,6 +47,7 @@ public class RobotContainer {
   // Joysticks
   public static Joystick rightJoystick = new Joystick(Constants.RIGHT_JOYSTICK_CHANNEL);
   public static Joystick leftJoystick = new Joystick(Constants.LEFT_JOYSTICK_CHANNEL);
+  public final SendableChooser<Command> pathChooser = new SendableChooser<>();
 
   // Subsystems
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
@@ -71,9 +77,17 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    createPathChooser();
     configureBindings();
   }
 
+  public void createPathChooser(){
+    pathChooser.setDefaultOption("Do Nothing", new PathPlannerAuto("Do Nothing"));
+    pathChooser.addOption("FR Diag 1M", new PathPlannerAuto("FR Diag 1M"));
+    pathChooser.addOption("Right 1M", new PathPlannerAuto("Right 1M"));
+    pathChooser.addOption("Straight 1M", new PathPlannerAuto("Straight 1M"));
+    SmartDashboard.putData("PathPlanner Chooser",pathChooser);
+  }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -91,11 +105,11 @@ public class RobotContainer {
     Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
     // cancelTeleAuto button on VisionPureAutoCommand: rightJoystick, buttonNumber: 6
     Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
-    
+    Trigger runVisionAuto = new JoystickButton(rightJoystick, 8);
+    Trigger runPathPlannerButton = new JoystickButton(rightJoystick, Constants.RUN_PATH_PLANNER_BUTTON);
 
     // LEFT BUTTONS
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
-    Trigger runVisionAuto = new JoystickButton(rightJoystick, 2);
     Trigger tipCorrectionDisableButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_DISABLE_BUTTON);
     Trigger tipCorrectionEnableButton = new JoystickButton(leftJoystick, Constants.TIP_CORRECTION_ENABLE_BUTTON);
     Trigger climberUpButton = new JoystickButton(leftJoystick, Constants.CLIMB_UP_BUTTON);
@@ -146,7 +160,16 @@ public class RobotContainer {
       new InstantCommand(()-> m_drivetrainSubsystem.zeroOdometry())
       ));
     // zeroElevatorPowerButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.zeroElevatorPower()));
+    
+    //runPathPlannerButton.onTrue(pathChooser.getSelected()); //in theory this gets built on robot startup so doesnt allow for live change
 
+    //Using a DeferredCommand allows you to create command on runtime so dont have to use schedule and it wont mess up sequential or parellel command groups
+    runPathPlannerButton.onTrue(
+      new DeferredCommand(() -> {
+        Command selected = pathChooser.getSelected();
+        return selected != null ? selected : new InstantCommand();
+      }, Set.of()) //this is kind of like addRequirements not sure if this is needed
+);
     elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000/3)));
     elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000/3)));
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
