@@ -169,7 +169,7 @@ public class RobotContainer {
         Command selected = pathChooser.getSelected();
         return selected != null ? selected : new InstantCommand();
       }, Set.of()) //this is kind of like addRequirements not sure if this is needed
-);
+    );
     elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000/3)));
     elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000/3)));
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
