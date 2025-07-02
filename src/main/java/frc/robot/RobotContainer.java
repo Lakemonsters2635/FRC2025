@@ -6,6 +6,8 @@
 package frc.robot;
 import java.util.Set;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -28,6 +30,7 @@ import frc.robot.commands.ElevatorDownCommand;
 import frc.robot.commands.ElevatorUpCommand;
 import frc.robot.commands.MoveAlgaeToPose;
 import frc.robot.commands.MoveClimbPos;
+import frc.robot.commands.MoveElevatorAndALgae;
 import frc.robot.commands.RunAutoCommand;
 import frc.robot.commands.VisionAutoCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
@@ -81,11 +84,18 @@ public class RobotContainer {
     configureBindings();
   }
 
+  public void registerCommands(){
+    NamedCommands.registerCommand("Bot to Processor", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_ALGAE_PROCESSOR));
+    NamedCommands.registerCommand("Bot to Drive", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_DRIVE));
+    NamedCommands.registerCommand("outake", m_algaeIntakeOutCommand);
+    NamedCommands.registerCommand("intake", m_algaeIntakeInCommand);
+  }
   public void createPathChooser(){
     pathChooser.setDefaultOption("Do Nothing", new PathPlannerAuto("Do Nothing"));
     pathChooser.addOption("FR Diag 1M", new PathPlannerAuto("FR Diag 1M"));
     pathChooser.addOption("Right 1M", new PathPlannerAuto("Right 1M"));
     pathChooser.addOption("Straight 1M", new PathPlannerAuto("Straight 1M"));
+
     SmartDashboard.putData("PathPlanner Chooser",pathChooser);
   }
   /**
