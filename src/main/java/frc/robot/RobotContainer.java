@@ -80,6 +80,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    registerCommands();
     createPathChooser();
     configureBindings();
   }
@@ -88,13 +89,20 @@ public class RobotContainer {
     NamedCommands.registerCommand("Bot to Processor", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_ALGAE_PROCESSOR));
     NamedCommands.registerCommand("Bot to Drive", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_DRIVE));
     NamedCommands.registerCommand("outake", m_algaeIntakeOutCommand);
-    NamedCommands.registerCommand("intake", m_algaeIntakeInCommand);
+    NamedCommands.registerCommand("stopOutake", new InstantCommand(()->m_algaeIntakeSubsystem.stopAlgaeIntake()));
   }
   public void createPathChooser(){
     pathChooser.setDefaultOption("Do Nothing", new PathPlannerAuto("Do Nothing"));
     pathChooser.addOption("FR Diag 1M", new PathPlannerAuto("FR Diag 1M"));
     pathChooser.addOption("Right 1M", new PathPlannerAuto("Right 1M"));
     pathChooser.addOption("Straight 1M", new PathPlannerAuto("Straight 1M"));
+    pathChooser.addOption("Back 1M", new PathPlannerAuto("Back 1M"));
+    pathChooser.addOption("Straight 180 1.5M", new PathPlannerAuto("Straight 180 1.5M"));
+    pathChooser.addOption("FR Diag 45 1M", new PathPlannerAuto("FR Diag 45 1M"));
+    pathChooser.addOption("Processor 1M", new PathPlannerAuto("Processor 1M"));
+
+
+
 
     SmartDashboard.putData("PathPlanner Chooser",pathChooser);
   }
