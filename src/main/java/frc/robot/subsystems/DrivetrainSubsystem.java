@@ -8,7 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-  import com.studica.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.studica.frc.AHRS;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -134,7 +138,38 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // resetAngle() should be called before zeroOdometry() because reseting odometry uses gyro values to do the reset
     resetAngle();
     zeroOdometry();
-  }
+    
+    RobotConfig config = null;
+    try{
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
+    AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> setDesiredStates(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config, // Default path replanning config. See the API for the options here
+            () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                return false;
+                // var alliance = DriverStation.getAlliance();
+                // if (alliance.isPresent()) {
+                //   return alliance.get() == DriverStation.Alliance.Red;
+                // }
+                // return false;
+            },
+            this // Reference to this subsystem to set requirements
+  );
+}
 
   public void stopMotors(){   //Zero motorPower
     m_backLeft.stop();
@@ -148,6 +183,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_angleCache = m_gyro.getAngle();
   }
 
+  public void resetAngleAndOdometry(){
+    resetAngle();
+    zeroOdometry();
+  }
   public void restoreAngle(){
     // resetAngle(((m_angleCache + getPose().getRotation().getDegrees() + 180 ) % 360) - 180);
     resetAngle((m_angleCache + m_gyro.getAngle()) % 360);

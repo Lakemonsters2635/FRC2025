@@ -4,11 +4,12 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import java.time.InstantSource;
 import java.util.Set;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -85,6 +86,7 @@ public class RobotContainer {
     configureBindings();
   }
 
+ 
   public void registerCommands(){
     NamedCommands.registerCommand("Bot to Processor", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_ALGAE_PROCESSOR));
     NamedCommands.registerCommand("Bot to Drive", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_DRIVE));
@@ -93,12 +95,12 @@ public class RobotContainer {
   }
   public void createPathChooser(){
     pathChooser.setDefaultOption("Do Nothing", new PathPlannerAuto("Do Nothing"));
-    pathChooser.addOption("FR Diag 1M", new PathPlannerAuto("FR Diag 1M"));
+    pathChooser.addOption("FR Diag 1M", new PathPlannerAuto("Diag"));
     pathChooser.addOption("Right 1M", new PathPlannerAuto("Right 1M"));
-    pathChooser.addOption("Straight 1M", new PathPlannerAuto("Straight 1M"));
+    pathChooser.addOption("Straight 1M", new PathPlannerAuto("Str1M"));
     pathChooser.addOption("Back 1M", new PathPlannerAuto("Back 1M"));
     pathChooser.addOption("Straight 180 1.5M", new PathPlannerAuto("Straight 180 1.5M"));
-    pathChooser.addOption("FR Diag 45 1M", new PathPlannerAuto("FR Diag 45 1M"));
+    pathChooser.addOption("FR Diag 45 1M", new PathPlannerAuto("FR Diag Curve 1M 45"));
     pathChooser.addOption("Processor 1M", new PathPlannerAuto("Processor 1M"));
 
 
@@ -182,12 +184,16 @@ public class RobotContainer {
     //runPathPlannerButton.onTrue(pathChooser.getSelected()); //in theory this gets built on robot startup so doesnt allow for live change
 
     //Using a DeferredCommand allows you to create command on runtime so dont have to use schedule and it wont mess up sequential or parellel command groups
-    runPathPlannerButton.onTrue(
-      new DeferredCommand(() -> {
-        Command selected = pathChooser.getSelected();
-        return selected != null ? selected : new InstantCommand();
-      }, Set.of()) //this is kind of like addRequirements not sure if this is needed
-    );
+    runPathPlannerButton.onTrue(new InstantCommand(()->pathChooser.getSelected().schedule()));
+    // runPathPlannerButton.onTrue(new SequentialCommandGroup(
+    //   new InstantCommand(()->m_drivetrainSubsystem.setFollowJoystick(false)),
+    //   new PathPlannerAuto("Straight_1M")));
+    // runPathPlannerButton.onTrue(
+    //   new DeferredCommand(() -> {
+    //     Command selected = pathChooser.getSelected();
+    //     return selected != null ? selected : new InstantCommand();
+    //   }, Set.of()) //this is kind of like addRequirements not sure if this is needed
+    // );
     elevatorUpButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.upTargetPos(2000/3)));
     elevatorDownButton.onTrue(new InstantCommand(()-> m_elevatorSubsystem.downTargetPos(2000/3)));
     algaeUpButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmUp()));
@@ -212,16 +218,17 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    String autoEntry = m_streamDeckSubsystem.getAutoEntry();
-    switch (autoEntry) {
-      case "C": //auto for picking up the algae in the middle and score barge
-        return m_autos.centerReef();
-      case "CS": // auto for one algae on the front and one algae on the side
-        return m_autos.autoReefAndBarge(); 
-      case "SS": // auto for the two algae on the side of the reef, starts back left corner of bot on line, 6 ft from the wall, facing the reef
-        return m_autos.autoReefAndBargeRight();
-      default:
-        return m_autos.autoReefAndBarge();
-    } 
+    // String autoEntry = m_streamDeckSubsystem.getAutoEntry();
+    // switch (autoEntry) {
+    //   case "C": //auto for picking up the algae in the middle and score barge
+    //     return m_autos.centerReef();
+    //   case "CS": // auto for one algae on the front and one algae on the side
+    //     return m_autos.autoReefAndBarge(); 
+    //   case "SS": // auto for the two algae on the side of the reef, starts back left corner of bot on line, 6 ft from the wall, facing the reef
+    //     return m_autos.autoReefAndBargeRight();
+    //   default:
+    //     return m_autos.autoReefAndBarge();
+    // } 
+    return new PathPlannerAuto("FR Diag Curve 1M 45");
   }
 }

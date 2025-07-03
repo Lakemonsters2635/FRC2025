@@ -19,7 +19,7 @@ import frc.robot.Constants;
 public class AlgaeArmSubsystem extends SubsystemBase {
   private final SparkMax m_algaeArmMotor;
   private final SparkMaxConfig m_algaeArmConfig;
-  double ff, fb, motorPower, theta, m_poseTarget = 25;
+  double ff, fb, motorPower, theta, m_poseTarget = 2; //originally 25
   double GAIN = - 0.412; // TODO: Measure this value
   double GAIN_ALGAE = - 0.78;
   PIDController m_algaeArmController;
