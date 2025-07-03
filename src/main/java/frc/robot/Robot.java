@@ -100,6 +100,7 @@ public class Robot extends TimedRobot {
     }
     RobotContainer.m_drivetrainSubsystem.setFollowJoystick(true);
     RobotContainer.m_drivetrainSubsystem.setAntiTipOffsets();
+    SmartDashboard.putData("algae outake", RobotContainer.m_algaeIntakeOutCommand);
   }
 
   /** This function is called periodically during operator control. */

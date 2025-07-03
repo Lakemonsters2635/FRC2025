@@ -43,6 +43,7 @@ public class AlgaeArmSubsystem extends SubsystemBase {
     );
 
     m_algaeArmController = new PIDController(0.12,0,0); // TODO: Tune these values
+    SmartDashboard.putData(m_algaeArmController);
     // m_algaeArmController = new PIDController(0.02,0,0); // TODO: Tune these values
 
     resetEncoder(); // Reset encoder, since we start from the 0 position
