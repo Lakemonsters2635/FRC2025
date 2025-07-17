@@ -303,6 +303,7 @@ public final class Constants {
   public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;   // Elevator up
   public static final int SWERVE_RESET_BUTTON = 9;
   public static final int ZERO_ODOMETRY_BUTTON = 11;
+  public static final int PID_AUTO_BUTTON = 8;
 
 
   // clean left buttons

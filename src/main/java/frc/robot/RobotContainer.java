@@ -79,7 +79,7 @@ public class RobotContainer {
   }
 
   public void addPidAutos(){
-    pidAutoChooser.addOption("Go to april tag # ", new PidAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 0, 0, 40, 0, true, null)); //specify april tag number later
+    pidAutoChooser.addOption("Go to april tag # ", new PidAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 0, 0, 40, 0, true, " ")); //specify april tag number later
     pidAutoChooser.addOption("1M Y 90", new PidAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 0, 1, 90));
     pidAutoChooser.setDefaultOption("Nothing", new PidAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 0, 0, 0));
     SmartDashboard.putData(pidAutoChooser);
@@ -102,7 +102,7 @@ public class RobotContainer {
     Trigger moveAlgaeToPose = new JoystickButton(rightJoystick, 4);
     // cancelTeleAuto button on VisionPureAutoCommand: rightJoystick, buttonNumber: 6
     Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
-    
+    Trigger pidAutoButton = new JoystickButton(rightJoystick, Constants.PID_AUTO_BUTTON);
 
     // LEFT BUTTONS
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
@@ -131,6 +131,8 @@ public class RobotContainer {
     // tipCorrectionDisableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(true)));
     // tipCorrectionDisableButton.onFalse(new InstantCommand(()->m_drivetrainSubsystem.setTriggerAntiTip(false)));
     // tipCorrectionEnableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setEnableAntiTip()));
+    // pidAutoButton.onTrue(pidAutoChooser.getSelected());
+    pidAutoButton.onTrue(new PidAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 8, 0, 40, 0, true, " "));
 
     tipCorrectionDisableButton.onTrue(new InstantCommand(()->m_drivetrainSubsystem.setAntiTip(false)));
     tipCorrectionEnableButton.onTrue(new InstantCommand(()-> m_drivetrainSubsystem.setAntiTip(true)));
@@ -140,6 +142,7 @@ public class RobotContainer {
     // algaeIntakeOutButton.onTrue(new InstantCommand(()->m_algaeArmSubsystem.moveArmDown()));
     algaeIntakeInButton.whileTrue(m_algaeIntakeInCommand);
     algaeIntakeOutButton.whileTrue(m_algaeIntakeOutCommand);
+
 
 
     //climberTestButton.whileTrue(new InstantCommand(()->m_climberSubsystem.configure()));
