@@ -92,6 +92,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Bot to Drive", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_DRIVE));
     NamedCommands.registerCommand("outake", m_algaeIntakeOutCommand);
     NamedCommands.registerCommand("stopOutake", new InstantCommand(()->m_algaeIntakeSubsystem.stopAlgaeIntake()));
+    NamedCommands.registerCommand("stopSwerve", new InstantCommand(()->m_drivetrainSubsystem.stopMotors()));
   }
   public void createPathChooser(){
     pathChooser.setDefaultOption("Do Nothing", new PathPlannerAuto("Do Nothing"));
@@ -229,6 +230,6 @@ public class RobotContainer {
     //   default:
     //     return m_autos.autoReefAndBarge();
     // } 
-    return new PathPlannerAuto("FR Diag Curve 1M 45");
+    return new PathPlannerAuto("test");
   }
 }

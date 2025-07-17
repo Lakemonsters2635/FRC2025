@@ -147,7 +147,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       e.printStackTrace();
     }
     AutoBuilder.configure(
-            this::getPose, // Robot pose supplier
+            // this::getPosePathPlanner, // Robot pose supplier
+            this::getPose,
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> setDesiredStates(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
@@ -648,6 +649,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
 
+  public Pose2d getPosePathPlanner(){
+    Pose2d rawPose = m_odometry.getPoseMeters();
+    
+    Translation2d adjTranslation = rawPose.getTranslation().rotateBy(Rotation2d.fromDegrees(90));
+    Rotation2d adjRotation = rawPose.getRotation().plus(Rotation2d.fromDegrees(90));
+    
+    return new Pose2d(adjTranslation, adjRotation);
+  }
   // public Pose2d getPoseMeters() {
   //   Pose2d currentPose = getPose();
   //   return new Pose2d(currentPose.getTranslation().div(39.37), currentPose.getRotation());

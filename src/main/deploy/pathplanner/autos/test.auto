@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FR Diag 1M"
+            "pathName": "Straight_2M"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left_1M"
           }
         }
       ]
