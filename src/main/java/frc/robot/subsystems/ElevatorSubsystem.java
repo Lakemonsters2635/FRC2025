@@ -48,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public ElevatorSubsystem() {
     m_elevatorMotor = new TalonFX(Constants.ElEVATOR_MOTOR_ID, new CANBus("CANivore"));
     m_elevatorMotor.setNeutralMode(NeutralModeValue.Brake);
-
+    m_poseTarget = 0;
     m_elevatorController = new PIDController(0.001, 0, 0);
 
     
@@ -109,7 +109,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean isAtPosition(){
-    if (Math.abs(elevatorHeight()-m_poseTarget) < 2000) {
+    if (Math.abs(elevatorHeight()-m_poseTarget) < 1000) {
       return true;
     }
 

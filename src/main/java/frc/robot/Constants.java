@@ -98,8 +98,8 @@ public final class Constants {
   public static final ElevatorState E_STATE_ALGAE_PICKUP_GROUND = new Constants.ElevatorState(247, 0, 115); // origionally 110
   
   public static final ElevatorState E_STATE_ALGAE_CARRY = new Constants.ElevatorState(2000, 0, 30);
-  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11) + 1500, 0, 100);
-  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(32500-4000+9000-((2000/3) * 11) + 3000, 0, 100);
+  public static final ElevatorState E_STATE_ALGAE_LOW = new Constants.ElevatorState(20000, 0, 100);
+  public static final ElevatorState E_STATE_ALGAE_HIGH = new Constants.ElevatorState(35500, 0, 100);
   public static final ElevatorState E_STATE_ALGAE_LOW_TELE = new Constants.ElevatorState(16395-1500+9000-((2000/3) * 11) + 1500, 0, 100+7);
   public static final ElevatorState E_STATE_ALGAE_HIGH_TELE = new Constants.ElevatorState(32500-4000+9000-((2000/3) * 11) + 3000, 0, 100+7);
   public static final ElevatorState E_STATE_ALGAE_PROCESSOR = new Constants.ElevatorState(0, 0, 90);
@@ -303,8 +303,8 @@ public final class Constants {
   public static final int ELEVATOR_FIRST_STAGE_UP_BUTTON = 5;   // Elevator up
   public static final int SWERVE_RESET_BUTTON = 9;
   public static final int ZERO_ODOMETRY_BUTTON = 11;
-  public static final int RUN_PATH_PLANNER_BUTTON = 7;
-
+  //public static final int RUN_PATH_PLANNER_BUTTON = 7;
+  public static final int SOME_BUTTON = 7;
 
   // clean left buttons
   public static final int ALGAE_INTAKE_OUT_BUTTON = 1;

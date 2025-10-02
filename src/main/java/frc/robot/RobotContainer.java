@@ -4,13 +4,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-import java.time.InstantSource;
 import java.util.Set;
-
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +28,7 @@ import frc.robot.commands.MoveClimbPos;
 import frc.robot.commands.MoveElevatorAndALgae;
 import frc.robot.commands.RunAutoCommand;
 import frc.robot.commands.VisionAutoCommand;
+import frc.robot.commands.VisionPureAutoCommand;
 import frc.robot.subsystems.AlgaeArmSubsystem;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -81,34 +76,32 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    registerCommands();
-    createPathChooser();
+    // registerCommands();
+    // createPathChooser();
     configureBindings();
   }
 
- 
-  public void registerCommands(){
-    NamedCommands.registerCommand("Bot to Processor", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_ALGAE_PROCESSOR));
-    NamedCommands.registerCommand("Bot to Drive", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_DRIVE));
-    NamedCommands.registerCommand("outake", m_algaeIntakeOutCommand);
-    NamedCommands.registerCommand("stopOutake", new InstantCommand(()->m_algaeIntakeSubsystem.stopAlgaeIntake()));
-    NamedCommands.registerCommand("stopSwerve", new InstantCommand(()->m_drivetrainSubsystem.stopMotors()));
-  }
-  public void createPathChooser(){
-    pathChooser.setDefaultOption("Do Nothing", new PathPlannerAuto("Do Nothing"));
-    pathChooser.addOption("FR Diag 1M", new PathPlannerAuto("Diag"));
-    pathChooser.addOption("Right 1M", new PathPlannerAuto("Right 1M"));
-    pathChooser.addOption("Straight 1M", new PathPlannerAuto("Str1M"));
-    pathChooser.addOption("Back 1M", new PathPlannerAuto("Back 1M"));
-    pathChooser.addOption("Straight 180 1.5M", new PathPlannerAuto("Straight 180 1.5M"));
-    pathChooser.addOption("FR Diag 45 1M", new PathPlannerAuto("FR Diag Curve 1M 45"));
-    pathChooser.addOption("Processor 1M", new PathPlannerAuto("Processor 1M"));
+  // public void registerCommands(){
+  //   NamedCommands.registerCommand("Bot to Processor", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_ALGAE_PROCESSOR));
+  //   NamedCommands.registerCommand("Bot to Drive", new MoveElevatorAndALgae(m_algaeArmSubsystem, m_elevatorSubsystem, Constants.E_STATE_DRIVE));
+  //   NamedCommands.registerCommand("outake", m_algaeIntakeOutCommand);
+  //   NamedCommands.registerCommand("stopOutake", new InstantCommand(()->m_algaeIntakeSubsystem.stopAlgaeIntake()));
+  // }
+  // public void createPathChooser(){
+  //   pathChooser.setDefaultOption("Do Nothing", new PathPlannerAuto("Do Nothing"));
+  //   pathChooser.addOption("FR Diag 1M", new PathPlannerAuto("FR Diag 1M"));
+  //   pathChooser.addOption("Right 1M", new PathPlannerAuto("Right 1M"));
+  //   pathChooser.addOption("Straight 1M", new PathPlannerAuto("Straight 1M"));
+  //   pathChooser.addOption("Back 1M", new PathPlannerAuto("Back 1M"));
+  //   pathChooser.addOption("Straight 180 1.5M", new PathPlannerAuto("Straight 180 1.5M"));
+  //   pathChooser.addOption("FR Diag 45 1M", new PathPlannerAuto("FR Diag 45 1M"));
+  //   pathChooser.addOption("Processor 1M", new PathPlannerAuto("Processor 1M"));
 
 
 
 
-    SmartDashboard.putData("PathPlanner Chooser",pathChooser);
-  }
+  //   SmartDashboard.putData("PathPlanner Chooser",pathChooser);
+  // }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -120,6 +113,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // RIGHT BUTTONS
+    Trigger someRightButton = new JoystickButton(rightJoystick, Constants.SOME_BUTTON);
     Trigger algaeIntakeInButton = new JoystickButton(rightJoystick, Constants.ALGAE_INTAKE_IN_BUTTON);
     Trigger elevatorUpButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_UP_BUTTON);
     Trigger elevatorDownButton = new JoystickButton(rightJoystick, Constants.ELEVATOR_FIRST_STAGE_DOWN_BUTTON);
@@ -127,7 +121,7 @@ public class RobotContainer {
     // cancelTeleAuto button on VisionPureAutoCommand: rightJoystick, buttonNumber: 6
     Trigger resetButton = new JoystickButton(rightJoystick, Constants.SWERVE_RESET_BUTTON);
     Trigger runVisionAuto = new JoystickButton(rightJoystick, 8);
-    Trigger runPathPlannerButton = new JoystickButton(rightJoystick, Constants.RUN_PATH_PLANNER_BUTTON);
+    //Trigger runPathPlannerButton = new JoystickButton(rightJoystick, Constants.RUN_PATH_PLANNER_BUTTON);
 
     // LEFT BUTTONS
     Trigger algaeIntakeOutButton = new JoystickButton(leftJoystick, Constants.ALGAE_INTAKE_OUT_BUTTON);
@@ -185,10 +179,6 @@ public class RobotContainer {
     //runPathPlannerButton.onTrue(pathChooser.getSelected()); //in theory this gets built on robot startup so doesnt allow for live change
 
     //Using a DeferredCommand allows you to create command on runtime so dont have to use schedule and it wont mess up sequential or parellel command groups
-    runPathPlannerButton.onTrue(new InstantCommand(()->pathChooser.getSelected().schedule()));
-    // runPathPlannerButton.onTrue(new SequentialCommandGroup(
-    //   new InstantCommand(()->m_drivetrainSubsystem.setFollowJoystick(false)),
-    //   new PathPlannerAuto("Straight_1M")));
     // runPathPlannerButton.onTrue(
     //   new DeferredCommand(() -> {
     //     Command selected = pathChooser.getSelected();
@@ -230,6 +220,6 @@ public class RobotContainer {
     //   default:
     //     return m_autos.autoReefAndBarge();
     // } 
-    return new PathPlannerAuto("test");
+    return new VisionPureAutoCommand(m_drivetrainSubsystem, m_objectTrackerSubsystem, 0, 2, 0);
   }
 }
